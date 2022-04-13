@@ -27,7 +27,7 @@ class GoogleHelper {
   StreamSubscription<GoogleSignInAccount?>? _registraCambioGoogle() {
     return googleSignIn.onCurrentUserChanged.listen(
       (GoogleSignInAccount? account) {
-        print("cambio en Google: $account");
+        print("compo cambio en Google: $account");
         if (account != null) {
           //print(_currentUser?.email);
           String email = account.email;
@@ -63,3 +63,5 @@ class GoogleHelper {
     );
   }
 }
+
+GoogleHelper? google;

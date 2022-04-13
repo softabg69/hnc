@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/components/google_sign_in.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
@@ -37,7 +38,7 @@ class AppState extends StatelessWidget {
 
 Map<int, Color> colorCodes = {
   50: const Color.fromRGBO(147, 205, 72, .1),
-  100: const Color.fromRGBO(147, 205, 72, .2),
+  100: Color.fromARGB(51, 98, 110, 83),
   200: const Color.fromRGBO(147, 205, 72, .3),
   300: const Color.fromRGBO(147, 205, 72, .4),
   400: const Color.fromRGBO(147, 205, 72, .5),
@@ -54,6 +55,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    google = GoogleHelper(
+        hncRepository: context.read<HncRepository>(),
+        session: context.read<SessionBloc>());
+    google!.init();
     return MaterialApp(
       title: 'Helpncare bloc',
       theme: ThemeData(
