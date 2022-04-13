@@ -15,3 +15,5 @@ class SubmissionFailed extends FormSubmissionStatus {
 
   SubmissionFailed(this.exception);
 }
+
+class ExternalLoginGoogle extends FormSubmissionStatus {}

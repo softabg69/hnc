@@ -32,6 +32,9 @@ dependencies:
   http: ^0.13.4
   flutter_dotenv: ^5.0.2
   flutter_bloc: ^8.0.1
+  equatable:
+  jaguar_jwt:
+  google_sign_in: ^5.2.4
 
 
   # The following adds the Cupertino Icons font to your application.

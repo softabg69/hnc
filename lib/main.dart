@@ -1,14 +1,20 @@
-import 'dart:html';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
-import 'package:hnc/screens/login/recover_password.dart';
 
 import 'screens/login/login.dart';
 
-void main() {
+Future main() async {
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    print("dotEnv error: $e");
+  }
   runApp(const AppState());
 }
 
@@ -18,7 +24,13 @@ class AppState extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider<HncRepository>(
       create: (context) => HncRepository(service: HncService()),
-      child: const MyApp(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+              create: (context) => SessionBloc()..add(SessionInitEvent())),
+        ],
+        child: const MyApp(),
+      ),
     );
   }
 }
@@ -51,6 +63,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
       ),
       home: Login(),
+      routes: {},
     );
   }
 }

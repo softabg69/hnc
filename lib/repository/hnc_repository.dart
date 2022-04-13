@@ -8,8 +8,12 @@ class HncRepository {
   final HncService service;
 
   Future<void> authenticate(String user, String pwd) async {
-    print("auth: $user, $pwd");
-    Future.delayed(const Duration(seconds: 8));
-    print("looged in");
+    await Future.delayed(const Duration(seconds: 2));
+    //print("looged in");
+  }
+
+  Future<String> politica() async {
+    //print("repository politica");
+    return await service.politica();
   }
 }
