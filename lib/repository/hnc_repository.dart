@@ -7,8 +7,9 @@ class HncRepository {
 
   final HncService service;
 
-  Future<void> authenticate(String user, String pwd) async {
-    await Future.delayed(const Duration(seconds: 2));
+  Future<String> authenticate(String email, String pwd) async {
+    print("autenticar: $email,$pwd");
+    return await service.autenticar(email, pwd);
     //print("looged in");
   }
 

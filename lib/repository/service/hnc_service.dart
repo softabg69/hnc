@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import '../models/contenido.dart';
+//import '../models/contenido.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/error_exceptions.dart';
+import '../../components/jwt_token.dart';
 
 class HncService {
   HncService({
@@ -12,52 +13,15 @@ class HncService {
     //this.baseUrl = 'https://api.rawg.io/api',
   }) : _httpClient = httpClient ?? http.Client();
 
-  //final String baseUrl;
   final Client _httpClient;
+  String token = '';
 
-  Uri getUrl({
-    required String url,
-    Map<String, String>? extraParameters,
-  }) {
-    // final queryParameters = <String, String>{
-    //   'key': dotenv.get('GAMES_API_KEY')
-    // };
-    // if (extraParameters != null) {
-    //   queryParameters.addAll(extraParameters);
-    // }
-    //print('getURL: ${dotenv.get('BASE_URL_SERVICIOS')}$url');
-
-    return Uri.parse('${dotenv.get('BASE_URL_SERVICIOS')}$url');
-    // .replace(
-    //   queryParameters: queryParameters,
-    // );
+  void setToken(String token) {
+    this.token = token;
   }
 
-  Map parameters = <String, String>{
-    'content-type': 'application/json',
-    'accept': 'application/json',
-    //'authorization': 'Bearer $token'
-  };
-
-  Future<dynamic> _request(
-      {required String url,
-      Map<String, String>? extra,
-      Function(String)? resp}) async {
-    print("_request");
-    final response = await _httpClient.get(
-      getUrl(url: url, extraParameters: extra),
-    );
-    print("después");
-    if (response.statusCode == 200) {
-      if (response.body.isNotEmpty) {
-        print("OK 200");
-        return resp != null ? resp(response.body) : null;
-      } else {
-        throw ErrorEmptyResponse();
-      }
-    } else {
-      throw ErrorGettingData('Error recuperando Stories');
-    }
+  Uri getUrl(String url) {
+    return Uri.parse('${dotenv.get('BASE_URL_SERVICIOS')}$url');
   }
 
   // Future<List<Contenido>> getStories(List<int> categorias) async {
@@ -71,19 +35,48 @@ class HncService {
   //       });
   // }
 
+  Map<String, String> get headers => <String, String>{
+        'content-type': 'application/json',
+        'accept': 'application/json',
+        'authorization': 'Bearer $token'
+      };
+
   Future<String> politica() async {
     final response = await _httpClient.get(
-      getUrl(url: 'politica'),
+      getUrl('politica'),
     );
     if (response.statusCode == 200) {
       if (response.body.isNotEmpty) {
-        var tt = json.decode(response.body);
-        return tt['politica'];
+        var data = json.decode(response.body);
+        return data['politica'];
       } else {
         throw ErrorEmptyResponse();
       }
     } else {
       throw ErrorGettingData('Error recuperando Stories');
+    }
+  }
+
+  Future<String> autenticar(String email, String pwd) async {
+    print("autenticar2: $email,$pwd");
+    final token = JwtToken.generarToken(email, pwd, 'local', 'autenticar');
+    print("token: $token");
+    //print("token: $token");
+    final response = await _httpClient.post(getUrl('data/autenticar'),
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: json.encode({'token': token}));
+    print("status: ${response.statusCode}");
+    if (response.statusCode == 200) {
+      if (response.body.isNotEmpty) {
+        return response.body;
+      } else {
+        throw ErrorEmptyResponse();
+      }
+    } else {
+      throw ErrorGettingData('Error al autenticar usuario');
     }
   }
 

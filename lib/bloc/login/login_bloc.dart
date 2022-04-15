@@ -36,10 +36,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginButtonPressEvent event, Emitter<LoginState> emit) async {
     emit(state.copyWith(formStatus: FormSubmitting()));
     try {
+      print("antes");
       final token = await hncRepository.authenticate(state.email, state.pwd);
       //emit(state.copyWith(formStatus: SubmittingSuccess()));
-      session.add(SessionLocalAuthenticationEvent(
-          email: state.email, token: 'dfgdfgdfDFGdf'));
+      print("token recibido: $token");
+      session.add(
+          SessionLocalAuthenticationEvent(email: state.email, token: token));
     } catch (e) {
       emit(state.copyWith(formStatus: SubmissionFailed(e as Exception)));
     }
