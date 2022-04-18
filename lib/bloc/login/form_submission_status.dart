@@ -17,3 +17,5 @@ class SubmissionFailed extends FormSubmissionStatus {
 }
 
 class ExternalLoginGoogle extends FormSubmissionStatus {}
+
+class ExternalLoginGoogleError extends FormSubmissionStatus {}

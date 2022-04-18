@@ -3,7 +3,7 @@ import 'dart:convert';
 //import '../models/contenido.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../../components/configuracion.dart';
 import '../models/error_exceptions.dart';
 import '../../components/jwt_token.dart';
 
@@ -21,7 +21,7 @@ class HncService {
   }
 
   Uri getUrl(String url) {
-    return Uri.parse('${dotenv.get('BASE_URL_SERVICIOS')}$url');
+    return Uri.parse('${Environment().config!.baseUrlServicios}$url');
   }
 
   // Future<List<Contenido>> getStories(List<int> categorias) async {

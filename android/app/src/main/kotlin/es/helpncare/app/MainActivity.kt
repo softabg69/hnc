@@ -1,4 +1,4 @@
-package com.example.hnc
+package es.helpncare.app
 
 import io.flutter.embedding.android.FlutterActivity
 

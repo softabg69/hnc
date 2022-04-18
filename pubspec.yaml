@@ -29,12 +29,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.13.4
-  flutter_dotenv: ^5.0.2
+  http: ^0.13.4  
+  google_sign_in: 
   flutter_bloc: ^8.0.1
   equatable:
   jaguar_jwt:
-  google_sign_in: ^5.2.4
+  package_info_plus: 
+  # change_app_package_name: ^1.0.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -66,8 +68,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-    - assets/video/
-    - .env
+    - assets/video/   
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

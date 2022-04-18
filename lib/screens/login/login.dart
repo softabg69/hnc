@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/login/form_submission_status.dart';
 import 'package:hnc/bloc/login/login_bloc.dart';
+import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/components/dialog.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -162,32 +164,37 @@ class Login extends StatelessWidget {
         return Center(
           child: state.formStatus is ExternalLoginGoogle
               ? const CircularProgressIndicator()
-              : InkWell(
-                  onTap: () {
-                    context.read<LoginBloc>().add(LoginGoogleEvent());
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(3),
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.grey)),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            clipBehavior: Clip.antiAlias,
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              'assets/images/google_icon.png',
-                              width: 30,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          const Text('Identifícate con Google'),
-                        ]),
-                  ),
-                ),
+              : state.formStatus is ExternalLoginGoogleError
+                  ? const Text(
+                      'Error',
+                      style: TextStyle(color: Colors.red),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        context.read<LoginBloc>().add(LoginGoogleEvent());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey)),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                clipBehavior: Clip.antiAlias,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  'assets/images/google_icon.png',
+                                  width: 30,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text('Identifícate con Google'),
+                            ]),
+                      ),
+                    ),
         );
       },
     );
@@ -208,6 +215,31 @@ class Login extends StatelessWidget {
             );
           },
       ),
+    );
+  }
+
+  Widget _logo() {
+    return BlocBuilder<PlatformBloc, PlatformState>(
+      builder: (context, platform) {
+        return GestureDetector(
+          onTap: () {
+            Dialogs.informacion(
+                context,
+                const Text('Info'),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('appName: ${platform.appName}'),
+                    Text('packageName: ${platform.packageName}'),
+                    Text('version: ${platform.version}'),
+                    Text('buildNumber: ${platform.buildNumber}'),
+                    Text('buildSignature: ${platform.buildSignature}')
+                  ],
+                ));
+          },
+          child: Image.asset('assets/images/helpncare_logo.png'),
+        );
+      },
     );
   }
 
@@ -241,7 +273,7 @@ class Login extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        Image.asset('assets/images/helpncare_logo.png'),
+                        _logo(),
                         const SizedBox(
                           height: 10,
                         ),
