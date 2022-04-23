@@ -21,7 +21,6 @@ class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print("Config: ${Environment().config!.googleAndroid}");
     return RepositoryProvider<HncRepository>(
       create: (context) => HncRepository(service: HncService()),
       child: MultiBlocProvider(

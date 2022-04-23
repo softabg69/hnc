@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
 
 class JwtToken {
-  static String GenerarToken(
+  static String generarToken(
       String email, String pwd, String origen, String issuer) {
     const String key = "4j67La/29bDmFE32ds";
 

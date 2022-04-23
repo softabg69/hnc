@@ -2,18 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hnc/bloc/login/form_submission_status.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/components/configuracion.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(
-  clientId: kIsWeb
-      ? Environment().config!.googleWeb
-      : '177362842463-mq4d4dfb0t5j6hvs1s1mr9oh8d5hak1c.apps.googleusercontent.com', // Environment().config!.googleAndroid,
   scopes: <String>[
     'email',
   ],
@@ -43,21 +38,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _loginSubmitted(
       LoginButtonPressEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(formStatus: FormSubmitting()));
+    emit(state.copyWith(estado: EstadoLogin.autenticandoLocal));
     try {
-      print("antes");
-      final token = await hncRepository.authenticate(state.email, state.pwd);
+      await hncRepository.authenticate(state.email, state.pwd);
       //emit(state.copyWith(formStatus: SubmittingSuccess()));
-      print("token recibido: $token");
-      session.add(
-          SessionLocalAuthenticationEvent(email: state.email, token: token));
+      print("autenticado: ${state.email}");
+      session.add(SessionLocalAuthenticationEvent(state.email));
     } catch (e) {
-      emit(state.copyWith(formStatus: SubmissionFailed(e as Exception)));
+      emit(state.copyWith(
+          estado: EstadoLogin.localError,
+          mensaje: (e as Exception).toString()));
     }
   }
 
   void _loginGoogle(LoginGoogleEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(formStatus: ExternalLoginGoogle()));
+    emit(state.copyWith(estado: EstadoLogin.autenticandoGoogle));
     //print("config: ${googleSignIn.clientId}");
     try {
       final auth = await googleSignIn.isSignedIn();
@@ -65,17 +60,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         print("ya autenticado");
         await googleSignIn.disconnect();
       }
-      print("previo");
       final res = await googleSignIn.signIn();
-      print("ya");
-      if (res != null && res.email != '') {
-        session.add(
-            SessionGoogleSignInEvent(email: res.email, token: 'sSDFSDFsdfsdf'));
+      if (res != null && res.email.isNotEmpty) {
+        await hncRepository.iniciarGoogle(res.email);
+        session.add(SessionGoogleSignInEvent(res.email));
       } else {
-        session.add(SessionGoogleSignInEvent(email: '', token: ''));
+        emit(state.copyWith(estado: EstadoLogin.googleError));
       }
     } catch (e) {
-      emit(state.copyWith(formStatus: ExternalLoginGoogleError()));
+      emit(state.copyWith(estado: EstadoLogin.googleError));
       print("Error: ${e}");
     }
 
@@ -92,6 +85,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _loginGoogleError(
       LoginGoogleError event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(formStatus: ExternalLoginGoogleError()));
+    emit(state.copyWith(estado: EstadoLogin.googleError));
   }
 }

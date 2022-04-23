@@ -14,19 +14,17 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   }
 
   void _init(SessionInitEvent event, Emitter<SessionState> emit) async {
-    emit(state.copyWith());
+    emit(state.copyWith(email: ''));
   }
 
   void _local(
       SessionLocalAuthenticationEvent event, Emitter<SessionState> emit) async {
-    emit(state.copyWith(
-        email: event.email, token: event.token, authMethod: AuthMethod.local));
+    emit(state.copyWith(email: event.email, authMethod: AuthMethod.local));
   }
 
   void _googleSignIn(
       SessionGoogleSignInEvent event, Emitter<SessionState> emit) async {
-    emit(state.copyWith(
-        email: event.email, token: event.token, authMethod: AuthMethod.google));
+    emit(state.copyWith(email: event.email, authMethod: AuthMethod.google));
   }
 
   void _closeSession(SessionClosing event, Emitter<SessionState> emit) async {

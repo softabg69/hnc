@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:hnc/repository/service/custom_exceptions.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+
+import '../resources/jwt_token.dart';
 
 class HncRepository {
   const HncRepository({
@@ -8,14 +12,22 @@ class HncRepository {
 
   final HncService service;
 
-  Future<String> authenticate(String email, String pwd) async {
-    print("autenticar: $email,$pwd");
-    return await service.autenticar(email, pwd);
-    //print("looged in");
+  Future<void> authenticate(String email, String pwd) async {
+    final token = JwtToken.generarToken(email, pwd, 'local', 'autenticar');
+    final resp = await service.autenticar(json.encode({'token': token}));
+    if (resp == null) throw UnauthorizedException();
+    service.setToken(resp["token"]);
+  }
+
+  Future<void> iniciarGoogle(String email) async {
+    final token = JwtToken.generarToken(email, 'pass', 'google', 'iniciar');
+    final resp = await service.iniciarGoogle(json.encode({'token': token}));
+    if (resp == null) throw UnauthorizedException();
+    service.setToken(resp["token"]);
   }
 
   Future<String> politica() async {
-    //print("repository politica");
-    return await service.politica();
+    final resp = await service.politica();
+    return resp["politica"];
   }
 }

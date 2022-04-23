@@ -5,8 +5,10 @@ class Perfil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
-      child: Text('perfil'),
+    return const Scaffold(
+      body: SafeArea(
+        child: Center(child: Text('perfil')),
+      ),
     );
   }
 }

@@ -9,22 +9,20 @@ abstract class SessionEvent extends Equatable {
 class SessionInitEvent extends SessionEvent {}
 
 class SessionLocalAuthenticationEvent extends SessionEvent {
-  SessionLocalAuthenticationEvent({required this.email, required this.token});
+  SessionLocalAuthenticationEvent(this.email);
 
   final String email;
-  final String token;
 
   @override
-  List<Object?> get props => [email, token];
+  List<Object?> get props => [email];
 }
 
 class SessionGoogleSignInEvent extends SessionEvent {
-  SessionGoogleSignInEvent({required this.email, required this.token});
+  SessionGoogleSignInEvent(this.email);
   final String email;
-  final String token;
 
   @override
-  List<Object?> get props => [email, token];
+  List<Object?> get props => [email];
 }
 
 class SessionClosing extends SessionEvent {}

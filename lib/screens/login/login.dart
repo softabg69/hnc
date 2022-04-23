@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/login/form_submission_status.dart';
 import 'package:hnc/bloc/login/login_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
@@ -55,7 +54,7 @@ class Login extends StatelessWidget {
   Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
-        return state.formStatus is FormSubmitting
+        return state.estado == EstadoLogin.autenticandoLocal
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 onPressed: () {
@@ -162,9 +161,9 @@ class Login extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return Center(
-          child: state.formStatus is ExternalLoginGoogle
+          child: state.estado == EstadoLogin.autenticandoGoogle
               ? const CircularProgressIndicator()
-              : state.formStatus is ExternalLoginGoogleError
+              : state.estado == EstadoLogin.googleError
                   ? const Text(
                       'Error',
                       style: TextStyle(color: Colors.red),
@@ -249,13 +248,13 @@ class Login extends StatelessWidget {
         return Center(
           child: SingleChildScrollView(
             child: AbsorbPointer(
-              absorbing: state.formStatus is FormSubmitting ||
-                  state.formStatus is ExternalLoginGoogle,
+              absorbing: state.estado == EstadoLogin.autenticandoLocal ||
+                  state.estado == EstadoLogin.autenticandoGoogle,
               child: BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
-                  final formStatus = state.formStatus;
-                  if (formStatus is SubmissionFailed) {
-                    _showSnackBar(context, formStatus.exception.toString());
+                  if (state.estado == EstadoLogin.googleError ||
+                      state.estado == EstadoLogin.localError) {
+                    _showSnackBar(context, state.mensajeError);
                   }
                 },
                 child: Form(
@@ -338,6 +337,7 @@ class Login extends StatelessWidget {
     return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
         if (state.isAuthenticated) {
+          print("listener autenticado");
           Navigator.push(
             context,
             MaterialPageRoute(
