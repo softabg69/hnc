@@ -12,6 +12,8 @@ enum EstadoLogin {
 class LoginState {
   final String email;
   bool get isValidEmail => email.contains('@');
+  bool get datosCandidatos => isValidEmail && isValidPwd;
+
   final String pwd;
   bool get isValidPwd => pwd.length > 3;
   final EstadoLogin estado;

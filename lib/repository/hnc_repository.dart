@@ -15,7 +15,9 @@ class HncRepository {
   Future<void> authenticate(String email, String pwd) async {
     final token = JwtToken.generarToken(email, pwd, 'local', 'autenticar');
     final resp = await service.autenticar(json.encode({'token': token}));
-    if (resp == null) throw UnauthorizedException();
+    if (resp == null || resp['token'].toString().isEmpty) {
+      throw UnauthorizedException();
+    }
     service.setToken(resp["token"]);
   }
 

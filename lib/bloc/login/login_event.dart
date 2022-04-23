@@ -24,6 +24,8 @@ class PasswordChangedEvent extends LoginEvent {
   List<Object?> get props => [pwd];
 }
 
+class LoginEstadoInicial extends LoginEvent {}
+
 class LoginButtonPressEvent extends LoginEvent {}
 
 class LoginGoogleEvent extends LoginEvent {}

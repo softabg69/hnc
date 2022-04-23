@@ -58,11 +58,27 @@ class Login extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    context.read<LoginBloc>().add(LoginButtonPressEvent());
+                  if (state.datosCandidatos) {
+                    if (_formKey.currentState!.validate()) {
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      context.read<LoginBloc>().add(LoginButtonPressEvent());
+                    }
                   }
                 },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    // If the button is pressed, return green, otherwise blue
+                    // if (states.contains(MaterialState.pressed)) {
+                    //   return Colors.green;
+                    // }
+                    // return Colors.blue;
+                    if (state.datosCandidatos) {
+                      return Theme.of(context).primaryColor;
+                    } else {
+                      return Colors.grey;
+                    }
+                  }),
+                ),
                 child: const Text('Login'),
               );
       },
@@ -255,6 +271,7 @@ class Login extends StatelessWidget {
                   if (state.estado == EstadoLogin.googleError ||
                       state.estado == EstadoLogin.localError) {
                     _showSnackBar(context, state.mensajeError);
+                    context.read<LoginBloc>().add(LoginEstadoInicial());
                   }
                 },
                 child: Form(

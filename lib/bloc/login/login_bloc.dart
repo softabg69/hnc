@@ -22,6 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginButtonPressEvent>(_loginSubmitted);
     on<LoginGoogleEvent>(_loginGoogle);
     on<LoginGoogleError>(_loginGoogleError);
+    on<LoginEstadoInicial>(_estadoInicial);
   }
 
   final HncRepository hncRepository;
@@ -86,5 +87,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _loginGoogleError(
       LoginGoogleError event, Emitter<LoginState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.googleError));
+  }
+
+  void _estadoInicial(
+      LoginEstadoInicial event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(estado: EstadoLogin.inicial));
   }
 }
