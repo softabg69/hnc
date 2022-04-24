@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 
+import '../components/log.dart';
+
 @immutable
 class Session extends StatelessWidget {
   const Session({Key? key, required this.child}) : super(key: key);
@@ -12,10 +14,10 @@ class Session extends StatelessWidget {
     return BlocBuilder<SessionBloc, SessionState>(
       builder: (context, state) {
         if (!state.isAuthenticated) {
-          print("No identificado");
+          Log.registra("No identificado");
           return const Text('No identificado');
         } else {
-          print("No identifi else");
+          Log.registra("No identifi else");
           return child!;
         }
       },

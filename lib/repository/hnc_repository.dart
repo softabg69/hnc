@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hnc/repository/service/custom_exceptions.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
-import '../resources/jwt_token.dart';
+import '../components/jwt_token.dart';
 
 class HncRepository {
   const HncRepository({
@@ -31,5 +31,10 @@ class HncRepository {
   Future<String> politica() async {
     final resp = await service.politica();
     return resp["politica"];
+  }
+
+  Future<void> recuperarPwd(String email) async {
+    final token = JwtToken.generarToken(email, 'pass', 'local', 'recuperar');
+    await service.recuperarPwd(json.encode({'token': token}));
   }
 }

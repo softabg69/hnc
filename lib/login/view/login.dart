@@ -1,15 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/login/login_bloc.dart';
+import '../../components/log.dart';
+import '../bloc/login_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/dialog.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:hnc/recuperar_password/view/recuperar_pwd.dart';
 
-import '../perfil/perfil.dart';
-import '../varios/politica.dart';
+import '../../perfil/view/perfil.dart';
+import '../../politica_privacidad/view/politica.dart';
 
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
@@ -88,26 +90,9 @@ class Login extends StatelessWidget {
   Widget _recuperarPassword(BuildContext context) {
     return TextButton(
       onPressed: () {
-        // Navigator.push<bool>(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       return const Registro();
-        //     },
-        //   ),
-        // ).then((value) {
-        //   //print("Vuelta: $value");
-        //   if (value != null && value) {
-        //     _showDialog(context);
-        //   }
-        //   /*
-        //   if (value != null && value) {
-        //     final snackBar = SnackBar(
-        //     content: const Text('Revisa el correo para activar la cuenta'),
-        //   );
-        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        //   */
-        // });
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return RecoverPassword();
+        }));
       },
       child: RichText(
         text: TextSpan(
@@ -354,8 +339,8 @@ class Login extends StatelessWidget {
     return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
         if (state.isAuthenticated) {
-          print("listener autenticado");
-          Navigator.push(
+          Log.registra("listener autenticado");
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (BuildContext context) => const Perfil(),

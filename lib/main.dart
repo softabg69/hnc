@@ -6,7 +6,7 @@ import 'package:hnc/components/configuracion.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
-import 'screens/login/login.dart';
+import 'login/view/login.dart';
 
 void main() {
   const String environment = String.fromEnvironment(

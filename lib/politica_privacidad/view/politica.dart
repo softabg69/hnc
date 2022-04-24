@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/request_status.dart';
 import 'package:hnc/widgets/error.dart';
-import 'package:hnc/widgets/session.dart';
+//import 'package:hnc/widgets/session.dart';
 import 'package:hnc/widgets/una_columna.dart';
-
-import '../../bloc/politica/politica_bloc.dart';
+import '../bloc/politica_bloc.dart';
 import '../../repository/hnc_repository.dart';
 
 class Politica extends StatefulWidget {

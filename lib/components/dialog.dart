@@ -27,9 +27,12 @@ class Dialogs {
   static void snackBar(
       {required BuildContext context,
       required Widget content,
-      Color? color = Colors.red}) {
+      Color? color = Colors.red,
+      Future<bool>? callback}) {
     final snackBar = SnackBar(
-      content: content,
+      content: callback != null
+          ? WillPopScope(child: content, onWillPop: () => callback)
+          : content,
       backgroundColor: color,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

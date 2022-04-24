@@ -9,7 +9,7 @@ class JwtToken {
     final claimSet = JwtClaim(
       issuer: issuer,
       subject: 'kleak',
-      audience: <String>['es.helpncare.application'],
+      audience: <String>['com.coeptalis.helpncare'],
       jwtId: _randomString(32),
       otherClaims: <String, dynamic>{
         'email': email,

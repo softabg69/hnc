@@ -1,6 +1,8 @@
 abstract class BaseConfig {
   String get baseUrlServicios;
   String get baseUrlWeb;
+
+  bool get esDesarrollo => true;
 }
 
 class DevConfig implements BaseConfig {
@@ -8,6 +10,8 @@ class DevConfig implements BaseConfig {
   String get baseUrlServicios => 'https://oesvrhnc.azurewebsites.net';
   @override
   String get baseUrlWeb => 'https://hnc.coeptalis.es/';
+  @override
+  bool get esDesarrollo => true;
 }
 
 class ProdConfig implements BaseConfig {
@@ -15,6 +19,8 @@ class ProdConfig implements BaseConfig {
   String get baseUrlServicios => 'https://oesvrhnc.azurewebsites.net';
   @override
   String get baseUrlWeb => 'https://hnc.coeptalis.es/';
+  @override
+  bool get esDesarrollo => false;
 }
 
 class Environment {

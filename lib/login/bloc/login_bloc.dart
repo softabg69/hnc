@@ -3,7 +3,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/components/validaciones.dart';
 import 'package:hnc/repository/hnc_repository.dart';
+import '../../components/log.dart';
+import '../../components/validaciones.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -42,8 +45,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(estado: EstadoLogin.autenticandoLocal));
     try {
       await hncRepository.authenticate(state.email, state.pwd);
-      //emit(state.copyWith(formStatus: SubmittingSuccess()));
-      print("autenticado: ${state.email}");
       session.add(SessionLocalAuthenticationEvent(state.email));
     } catch (e) {
       emit(state.copyWith(
@@ -54,11 +55,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _loginGoogle(LoginGoogleEvent event, Emitter<LoginState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.autenticandoGoogle));
-    //print("config: ${googleSignIn.clientId}");
     try {
       final auth = await googleSignIn.isSignedIn();
       if (auth) {
-        print("ya autenticado");
+        Log.registra("ya autenticado");
         await googleSignIn.disconnect();
       }
       final res = await googleSignIn.signIn();
@@ -70,7 +70,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       emit(state.copyWith(estado: EstadoLogin.googleError));
-      print("Error: ${e}");
+      Log.registra("Error: ${e}");
     }
 
     // Future estaConectado = googleSignIn.isSignedIn();
