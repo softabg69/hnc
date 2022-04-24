@@ -114,4 +114,9 @@ class HncService {
     Log.registra("recuperarPwd");
     return await _post('/data/recuperarPwd', token, headers);
   }
+
+  Future<dynamic> registro(String token) async {
+    Log.registra("registro");
+    return await _post('/data/registro', token, headers);
+  }
 }

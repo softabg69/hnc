@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../components/log.dart';
+import '../../registro/view/registro.dart';
 import '../bloc/login_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
@@ -17,7 +18,7 @@ class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
   final _formKey = GlobalKey<FormState>();
 
-  Widget _loginField() {
+  Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
@@ -117,26 +118,14 @@ class Login extends StatelessWidget {
   Widget _registrate(BuildContext context) {
     return TextButton(
       onPressed: () {
-        // Navigator.push<bool>(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       return const Registro();
-        //     },
-        //   ),
-        // ).then((value) {
-        //   //print("Vuelta: $value");
-        //   if (value != null && value) {
-        //     _showDialog(context);
-        //   }
-        //   /*
-        //   if (value != null && value) {
-        //     final snackBar = SnackBar(
-        //     content: const Text('Revisa el correo para activar la cuenta'),
-        //   );
-        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        //   */
-        // });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Registro();
+            },
+          ),
+        );
       },
       child: RichText(
         text: TextSpan(
@@ -278,7 +267,7 @@ class Login extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        _loginField(),
+                        _emailField(),
                         _passwordField(),
                         const SizedBox(height: 20),
                         _loginButton(),

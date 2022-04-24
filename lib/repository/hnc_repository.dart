@@ -37,4 +37,9 @@ class HncRepository {
     final token = JwtToken.generarToken(email, 'pass', 'local', 'recuperar');
     await service.recuperarPwd(json.encode({'token': token}));
   }
+
+  Future<void> registro(String email, String pwd) async {
+    final token = JwtToken.generarToken(email, pwd, 'local', 'registrar');
+    await service.registro(json.encode({'token': token}));
+  }
 }
