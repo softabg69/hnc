@@ -244,8 +244,12 @@ class Login extends StatelessWidget {
                 listener: (context, state) {
                   if (state.estado == EstadoLogin.googleError ||
                       state.estado == EstadoLogin.localError) {
-                    _showSnackBar(context, state.mensajeError);
-                    context.read<LoginBloc>().add(LoginEstadoInicial());
+                    Dialogs.snackBar(
+                        context: context,
+                        content: Text(state.mensajeError.isEmpty
+                            ? 'Se ha producido un error'
+                            : state.mensajeError),
+                        color: Colors.red);
                   }
                 },
                 child: Form(
@@ -272,29 +276,7 @@ class Login extends StatelessWidget {
                         const SizedBox(height: 20),
                         _loginButton(),
                         const SizedBox(height: 20),
-                        // Text(
-                        //   "o accede con",
-                        //   style: TextStyle(
-                        //       color: Theme.of(context).colorScheme.primary),
-                        // ),
-                        const SizedBox(height: 10.0),
                         google(),
-                        // InkWell(
-                        //   onTap: () {},
-                        //   child: CircleAvatar(
-                        //     radius: 25,
-                        //     backgroundColor:
-                        //         Theme.of(context).colorScheme.primary,
-                        //     child: ClipRRect(
-                        //       clipBehavior: Clip.antiAlias,
-                        //       borderRadius: BorderRadius.circular(20),
-                        //       child: Image.asset(
-                        //         'assets/images/google_icon.png',
-                        //         width: 40,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         const SizedBox(height: 15),
                         _recuperarPassword(context),
                         (kIsWeb
