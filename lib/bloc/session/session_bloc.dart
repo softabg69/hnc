@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+
+import '../../components/log.dart';
 
 part 'session_event.dart';
 part 'session_state.dart';
@@ -11,6 +15,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<SessionLocalAuthenticationEvent>(_local);
     on<SessionGoogleSignInEvent>(_googleSignIn);
     on<SessionClosing>(_closeSession);
+    on<SessionActualizarAvatarEvent>(_actualizarAvatar);
   }
 
   void _init(SessionInitEvent event, Emitter<SessionState> emit) async {
@@ -24,10 +29,19 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   void _googleSignIn(
       SessionGoogleSignInEvent event, Emitter<SessionState> emit) async {
-    emit(state.copyWith(email: event.email, authMethod: AuthMethod.google));
+    emit(state.copyWith(
+        email: event.email,
+        avatar: event.avatar,
+        authMethod: AuthMethod.google));
   }
 
   void _closeSession(SessionClosing event, Emitter<SessionState> emit) async {
     if (state.authMethod == AuthMethod.google) {}
+  }
+
+  void _actualizarAvatar(
+      SessionActualizarAvatarEvent event, Emitter<SessionState> emit) async {
+    Log.registra("Actualizado avatar: ${event.avatar}");
+    emit(state.copyWith(avatar: event.avatar));
   }
 }

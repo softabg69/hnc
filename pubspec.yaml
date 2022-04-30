@@ -35,6 +35,7 @@ dependencies:
   equatable:
   jaguar_jwt:
   package_info_plus: 
+  image_picker:
   # change_app_package_name: ^1.0.0
 
 

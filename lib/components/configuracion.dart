@@ -7,7 +7,7 @@ abstract class BaseConfig {
 
 class DevConfig implements BaseConfig {
   @override
-  String get baseUrlServicios => 'https://oesvrhnc.azurewebsites.net';
+  String get baseUrlServicios => 'https://tinyHNC.azurewebsites.net';
   @override
   String get baseUrlWeb => 'https://hnc.coeptalis.es/';
   @override

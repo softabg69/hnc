@@ -18,8 +18,9 @@ class SessionLocalAuthenticationEvent extends SessionEvent {
 }
 
 class SessionGoogleSignInEvent extends SessionEvent {
-  SessionGoogleSignInEvent(this.email);
+  SessionGoogleSignInEvent(this.email, this.avatar);
   final String email;
+  final String avatar;
 
   @override
   List<Object?> get props => [email];
@@ -28,3 +29,11 @@ class SessionGoogleSignInEvent extends SessionEvent {
 class SessionClosing extends SessionEvent {}
 
 class SessionClose extends SessionEvent {}
+
+class SessionActualizarAvatarEvent extends SessionEvent {
+  SessionActualizarAvatarEvent(this.avatar);
+  final String avatar;
+
+  @override
+  List<Object?> get props => [avatar];
+}

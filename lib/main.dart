@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/app_bloc_observer.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
@@ -13,8 +14,13 @@ void main() {
     'ENVIRONMENT',
     defaultValue: Environment.DEV,
   );
-  Environment().initConfig(environment);
-  runApp(const AppState());
+  BlocOverrides.runZoned(
+    () {
+      Environment().initConfig(environment);
+      runApp(const AppState());
+    },
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class AppState extends StatelessWidget {
@@ -57,6 +63,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Helpncare bloc',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: MaterialColor(0xFF2B73B6, colorCodes),

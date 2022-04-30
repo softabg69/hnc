@@ -63,8 +63,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
       final res = await googleSignIn.signIn();
       if (res != null && res.email.isNotEmpty) {
-        await hncRepository.iniciarGoogle(res.email);
-        session.add(SessionGoogleSignInEvent(res.email));
+        final avatar =
+            await hncRepository.iniciarGoogle(res.email, res.photoUrl ?? '');
+        session.add(SessionGoogleSignInEvent(res.email, avatar));
       } else {
         emit(state.copyWith(estado: EstadoLogin.googleError));
       }

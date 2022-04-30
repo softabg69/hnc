@@ -29,11 +29,11 @@ class HncService {
     return Uri.parse('${Environment().config!.baseUrlServicios}$url');
   }
 
-  Future<dynamic> _get(String url) async {
+  Future<dynamic> _get(String url, Map<String, String>? headers) async {
     Log.registra("get: $url");
     dynamic responseJson;
     try {
-      final response = await _httpClient.get(_getUrl(url));
+      final response = await _httpClient.get(_getUrl(url), headers: headers);
       responseJson = _response(response);
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');
@@ -97,7 +97,7 @@ class HncService {
       };
 
   Future<dynamic> politica() async {
-    return await _get('/data/politica');
+    return await _get('/data/politica', null);
   }
 
   Future<dynamic> autenticar(String token) async {
@@ -118,5 +118,15 @@ class HncService {
   Future<dynamic> registro(String token) async {
     Log.registra("registro");
     return await _post('/data/registro', token, headers);
+  }
+
+  Future<dynamic> getPerfil() async {
+    Log.registra('perfil');
+    return await _get('/data/getPerfil', headersToken);
+  }
+
+  Future<dynamic> actualizarPerfil(String body) async {
+    Log.registra('actualizarPerfil');
+    return await _post('/data/actualizarPerfil', body, headersToken);
   }
 }
