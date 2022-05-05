@@ -6,7 +6,10 @@ enum EstadoLogin {
   autenticandoLocal,
   autenticandoGoogle,
   localError,
-  googleError
+  googleError,
+  procesado,
+  perfilDefinido,
+  definirPerfil
 }
 
 class LoginState {

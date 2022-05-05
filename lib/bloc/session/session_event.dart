@@ -37,3 +37,19 @@ class SessionActualizarAvatarEvent extends SessionEvent {
   @override
   List<Object?> get props => [avatar];
 }
+
+class SessionEstablecerCategoriasUsuarioEvent extends SessionEvent {
+  SessionEstablecerCategoriasUsuarioEvent(this.categorias);
+  final List<Categoria> categorias;
+  @override
+  List<Object?> get props => [categorias];
+}
+
+class SessionEstablecerFiltroCategoriasEvent extends SessionEvent {
+  SessionEstablecerFiltroCategoriasEvent(this.categorias);
+  final List<int> categorias;
+  @override
+  List<Object?> get props => [categorias];
+}
+
+class SessionProcesadoEvent extends SessionEvent {}

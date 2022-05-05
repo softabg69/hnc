@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../components/log.dart';
+import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import '../../registro/view/registro.dart';
 import '../bloc/login_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
@@ -14,9 +14,16 @@ import 'package:hnc/recuperar_password/view/recuperar_pwd.dart';
 import '../../perfil/view/perfil.dart';
 import '../../politica_privacidad/view/politica.dart';
 
-class Login extends StatelessWidget {
-  Login({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  bool navegado = false;
 
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -297,20 +304,13 @@ class Login extends StatelessWidget {
     );
   }
 
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
-        if (state.isAuthenticated) {
-          Log.registra("listener autenticado");
+        if (state.isAuthenticated && !navegado) {
+          navegado = true;
+          context.read<PerfilBloc>().add(PerfilCargarEvent());
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

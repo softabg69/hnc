@@ -5,10 +5,12 @@ enum EstadoPerfil {
   cargando,
   cargado,
   error,
-  guardamdo,
+  guardando,
   guardado,
   errorGuardar,
-  errorSeleccion
+  errorSeleccion,
+  intentoSinSeleccion,
+  yaTienePerfil
 }
 enum OrigenImagen { network, bytes }
 
@@ -35,6 +37,15 @@ class PerfilState extends Equatable {
     for (var cat in categorias) {
       if (cat.seleccionada) res.add(cat.id);
     }
+    return res;
+  }
+
+  List<Categoria> get categoriasSelecciondas {
+    final List<Categoria> res = [];
+    for (var cat in categorias) {
+      if (cat.seleccionada) res.add(cat);
+    }
+    Log.registra('categorias seleccionadas: $res');
     return res;
   }
 

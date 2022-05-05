@@ -26,14 +26,25 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
   final HncRepository hncRepository;
 
   void _cargar(PerfilCargarEvent event, Emitter<PerfilState> emit) async {
+    if (state.estado == EstadoPerfil.cargando) return;
     emit(state.copyWith(estado: EstadoPerfil.cargando));
     try {
       final categorias = await hncRepository.getPerfil();
-      emit(state.copyWith(
-          email: sesionBloc.state.email,
-          avatar: sesionBloc.state.avatar,
-          categorias: categorias,
-          estado: EstadoPerfil.cargado));
+      sesionBloc.add(SessionEstablecerCategoriasUsuarioEvent(
+          [...categorias.where((cat) => cat.seleccionada)]));
+      if (categorias.any((cat) => cat.seleccionada)) {
+        emit(state.copyWith(
+            email: sesionBloc.state.email,
+            avatar: sesionBloc.state.avatar,
+            categorias: categorias,
+            estado: EstadoPerfil.yaTienePerfil));
+      } else {
+        emit(state.copyWith(
+            email: sesionBloc.state.email,
+            avatar: sesionBloc.state.avatar,
+            categorias: categorias,
+            estado: EstadoPerfil.cargado));
+      }
     } catch (e) {
       emit(state.copyWith(estado: EstadoPerfil.error));
       Log.registra("Error: $e");
@@ -71,14 +82,15 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
       emit(state.copyWith(estado: EstadoPerfil.errorSeleccion));
       return;
     }
-    emit(state.copyWith(estado: EstadoPerfil.guardamdo));
+    emit(state.copyWith(estado: EstadoPerfil.guardando));
     try {
       final resp =
           await hncRepository.actualizarPerfil(seleccionadas, state.bytesImg);
       if (resp.isNotEmpty) {
         sesionBloc.add(SessionActualizarAvatarEvent(resp));
       }
-      Log.registra("Actualizado perfil $resp");
+      sesionBloc.add(SessionEstablecerCategoriasUsuarioEvent(
+          [...state.categoriasSelecciondas]));
       emit(state.copyWith(estado: EstadoPerfil.guardado));
     } catch (e) {
       Log.registra("Error al actualizar perfil: $e");
@@ -88,6 +100,6 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
 
   void _procesadoError(
       PerfilProcesadoErrorEvent event, Emitter<PerfilState> emit) async {
-    emit(state.copyWith(estado: EstadoPerfil.cargado));
+    emit(state.copyWith(estado: EstadoPerfil.intentoSinSeleccion));
   }
 }

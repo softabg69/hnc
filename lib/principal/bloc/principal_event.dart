@@ -6,3 +6,7 @@ abstract class PrincipalEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class PrincipalDrawerOpen extends PrincipalEvent {}
+
+class PrincipalDrawerClose extends PrincipalEvent {}

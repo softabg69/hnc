@@ -129,4 +129,12 @@ class HncService {
     Log.registra('actualizarPerfil');
     return await _post('/data/actualizarPerfil', body, headersToken);
   }
+
+  Future<dynamic> getContenidos(
+      String idscategorias, int dias, int offset) async {
+    Log.registra('getContenidos');
+    return await _get(
+        '/data/getContenidos?idscategorias=$idscategorias&dias=-$dias&offset=$offset',
+        headersToken);
+  }
 }

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:hnc/repository/models/categoria.dart';
+import 'package:hnc/repository/models/contenido.dart';
 import 'package:hnc/repository/service/custom_exceptions.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
 import '../components/jwt_token.dart';
-import '../components/log.dart';
 
 class HncRepository {
   const HncRepository({
@@ -59,5 +59,14 @@ class HncRepository {
     if (avatar != null && avatar.isNotEmpty) body['avatar'] = avatar;
     final res = await service.actualizarPerfil(json.encode(body));
     return res['avatar'];
+  }
+
+  Future<List<Contenido>> getContenidos(
+      List<int> idsCategorias, int dias, int? offset) async {
+    offset ??= 0;
+    final String categorias = json.encode(idsCategorias);
+    final jsn = await service.getContenidos(categorias, dias, offset);
+    return List<Contenido>.from(jsn.map((model) => Contenido.fromJson(model)))
+        .toList();
   }
 }

@@ -1,10 +1,16 @@
 part of 'principal_bloc.dart';
 
-abstract class PrincipalState extends Equatable {
-  const PrincipalState();
-  
-  @override
-  List<Object> get props => [];
-}
+enum EstadoPrincipal { inicial, cargando, cargado, errorCarga }
+enum FiltroFechas { ultimos5dias, todos }
 
-class PrincipalInitial extends PrincipalState {}
+class PrincipalState extends Equatable {
+  const PrincipalState(
+      {this.estado = EstadoPrincipal.inicial,
+      this.filtroFechas = FiltroFechas.ultimos5dias});
+
+  final EstadoPrincipal estado;
+  final FiltroFechas filtroFechas;
+
+  @override
+  List<Object> get props => [estado, filtroFechas];
+}

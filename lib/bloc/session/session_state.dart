@@ -6,7 +6,10 @@ class SessionState {
   final String email;
   final AuthMethod authMethod;
   final String avatar;
+  final List<Categoria> categoriasUsuario;
   final List<int> filtroCategorias;
+  final int dias;
+  final EstadoLogin estado;
 
   bool get isAuthenticated => email.isNotEmpty;
 
@@ -14,17 +17,26 @@ class SessionState {
       {this.email = '',
       this.authMethod = AuthMethod.ninguno,
       this.avatar = '',
-      this.filtroCategorias = const []});
+      this.categoriasUsuario = const [],
+      this.filtroCategorias = const [],
+      this.dias = 5,
+      this.estado = EstadoLogin.inicial});
 
   SessionState copyWith(
       {String? email,
       AuthMethod? authMethod,
       String? avatar,
-      List<int>? filtroCategorias}) {
+      List<Categoria>? categoriasUsuario,
+      List<int>? filtroCategorias,
+      int? dias,
+      EstadoLogin? estado}) {
     return SessionState(
         email: email ?? this.email,
         authMethod: authMethod ?? this.authMethod,
         avatar: avatar ?? this.avatar,
-        filtroCategorias: filtroCategorias ?? this.filtroCategorias);
+        categoriasUsuario: categoriasUsuario ?? this.categoriasUsuario,
+        filtroCategorias: filtroCategorias ?? this.filtroCategorias,
+        dias: dias ?? this.dias,
+        estado: estado ?? this.estado);
   }
 }
