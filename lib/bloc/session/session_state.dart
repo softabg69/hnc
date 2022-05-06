@@ -8,7 +8,7 @@ class SessionState {
   final String avatar;
   final List<Categoria> categoriasUsuario;
   final List<int> filtroCategorias;
-  final int dias;
+  final FiltroFechas dias;
   final EstadoLogin estado;
 
   bool get isAuthenticated => email.isNotEmpty;
@@ -19,7 +19,7 @@ class SessionState {
       this.avatar = '',
       this.categoriasUsuario = const [],
       this.filtroCategorias = const [],
-      this.dias = 5,
+      this.dias = FiltroFechas.ultimos5dias,
       this.estado = EstadoLogin.inicial});
 
   SessionState copyWith(
@@ -28,7 +28,7 @@ class SessionState {
       String? avatar,
       List<Categoria>? categoriasUsuario,
       List<int>? filtroCategorias,
-      int? dias,
+      FiltroFechas? dias,
       EstadoLogin? estado}) {
     return SessionState(
         email: email ?? this.email,

@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:hnc/repository/models/categoria.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/log.dart';
+import '../../enumerados.dart';
 import '../../login/bloc/login_bloc.dart';
 
 part 'session_event.dart';
@@ -20,6 +24,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<SessionEstablecerFiltroCategoriasEvent>(_establecerFiltroCategorias);
     on<SessionProcesadoEvent>(
         (event, emit) => emit(state.copyWith(estado: EstadoLogin.procesado)));
+    on<SessionCambioFiltroCategoria>(_cambioFiltroCategoria);
+    on<SessionCambioDias>(_cambioDias);
   }
 
   void _init(SessionInitEvent event, Emitter<SessionState> emit) async {
@@ -61,5 +67,21 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   void _establecerFiltroCategorias(SessionEstablecerFiltroCategoriasEvent event,
       Emitter<SessionState> emit) async {
     emit(state.copyWith(filtroCategorias: event.categorias));
+  }
+
+  FutureOr<void> _cambioFiltroCategoria(
+      SessionCambioFiltroCategoria event, Emitter<SessionState> emit) async {
+    final List<int> nuevoFiltro = state.filtroCategorias;
+    if (!state.filtroCategorias.contains(event.idCategoria)) {
+      nuevoFiltro.add(event.idCategoria);
+    } else {
+      nuevoFiltro.remove(event.idCategoria);
+    }
+    emit(state.copyWith(filtroCategorias: nuevoFiltro));
+  }
+
+  FutureOr<void> _cambioDias(
+      SessionCambioDias event, Emitter<SessionState> emit) async {
+    emit(state.copyWith(dias: event.dias));
   }
 }

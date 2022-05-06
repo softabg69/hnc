@@ -38,11 +38,11 @@ class AppState extends StatelessWidget {
           BlocProvider(
             create: (context) => PlatformBloc()..add(PlatformLoadEvent()),
           ),
-          BlocProvider(
-            create: (context) => PrincipalBloc(
-                hncRepository: context.read<HncRepository>(),
-                session: context.read<SessionBloc>()),
-          ),
+          // BlocProvider(
+          //   create: (context) => PrincipalBloc(
+          //       hncRepository: context.read<HncRepository>(),
+          //       session: context.read<SessionBloc>()),
+          // ),
           BlocProvider(
             create: (context) => PerfilBloc(
                 sesionBloc: context.read<SessionBloc>(),

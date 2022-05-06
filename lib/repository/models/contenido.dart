@@ -2,7 +2,7 @@ class Contenido {
   final String idContenido;
   final String titulo;
   final String cuerpo;
-  final int idCreador;
+  final String avatar;
   final String creador;
   final String fecha;
   final String cuando;
@@ -18,7 +18,7 @@ class Contenido {
       {this.idContenido = '',
       this.titulo = '',
       this.cuerpo = '',
-      this.idCreador = 0,
+      this.avatar = '',
       this.creador = '',
       this.fecha = '',
       this.cuando = '',
@@ -32,16 +32,16 @@ class Contenido {
 
   Contenido.fromMap(Map map)
       : idContenido = map['idContenido'] ?? '',
-        titulo = map['titulo'] ?? "",
-        cuerpo = map['cuerpo'] ?? "",
-        idCreador = map['idCreador'] ?? 0,
-        creador = map['creador'] ?? "",
-        fecha = map['fecha'] ?? "",
-        cuando = map['cuando'] ?? "",
-        multimedia = map['multimedia'] ?? "",
-        url = map['url'] ?? "",
+        titulo = map['titulo'] ?? '',
+        cuerpo = map['cuerpo'] ?? '',
+        avatar = map['avatar'] ?? '',
+        creador = map['creador'] ?? '',
+        fecha = map['fecha'] ?? '',
+        cuando = map['cuando'] ?? '',
+        multimedia = map['multimedia'] ?? '',
+        url = map['url'] ?? '',
         idscategorias = (map['idscategorias']).cast<int>(),
-        categorias = map['categorias'] ?? "",
+        categorias = map['categorias'] ?? '',
         gusta = map['gusta'] ?? false,
         modo = map['modo'] ?? 1,
         propietario = map['propietario'];
@@ -55,7 +55,7 @@ class Contenido {
       cuerpo: json['cuerpo'] ?? '',
       multimedia: json['multimedia'] ?? '',
       url: json['url'] ?? '',
-      idCreador: json['idCreador'] ?? 0,
+      avatar: json['avatar'] ?? '',
       creador: json['creador'] ?? '',
       fecha: json['fecha'] ?? '',
       cuando: json['cuando'] ?? '',
@@ -71,7 +71,7 @@ class Contenido {
       String? cuerpo,
       String? multimedia,
       String? url,
-      int? idCreador,
+      String? avatar,
       String? creador,
       String? fecha,
       String? cuando,
@@ -86,7 +86,7 @@ class Contenido {
         cuerpo: cuerpo ?? this.cuerpo,
         multimedia: multimedia ?? this.multimedia,
         url: url ?? this.url,
-        idCreador: idCreador ?? this.idCreador,
+        avatar: avatar ?? this.avatar,
         fecha: fecha ?? this.fecha,
         cuando: cuando ?? this.cuando,
         idscategorias: idsCategorias ?? idscategorias,

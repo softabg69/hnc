@@ -5,6 +5,7 @@ import 'package:hnc/principal/bloc/principal_bloc.dart';
 import 'package:hnc/principal/widgets/categoria_horizontal.dart';
 
 import '../../components/log.dart';
+import '../../enumerados.dart';
 
 class DrawerPrincipal extends StatelessWidget {
   const DrawerPrincipal({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class DrawerPrincipal extends StatelessWidget {
   Widget rangoFechas(BuildContext context) {
     //final _contenidoProvider = Provider.of<ContenidoProvider>(context);
 
-    return BlocBuilder<PrincipalBloc, PrincipalState>(
+    return BlocBuilder<SessionBloc, SessionState>(
       builder: (context, state) {
         return Column(
           children: [
@@ -57,8 +58,11 @@ class DrawerPrincipal extends StatelessWidget {
             RadioListTile<FiltroFechas>(
               title: const Text('Últimos 5 días'),
               value: FiltroFechas.ultimos5dias,
-              groupValue: state.filtroFechas,
+              groupValue: state.dias,
               onChanged: (FiltroFechas? value) {
+                context
+                    .read<SessionBloc>()
+                    .add(SessionCambioDias(FiltroFechas.ultimos5dias));
                 //_contenidoProvider.setDias(context, FiltroFechas.cincoDias);
                 //Navigator.pop(context);
               },
@@ -66,10 +70,14 @@ class DrawerPrincipal extends StatelessWidget {
             RadioListTile<FiltroFechas>(
               title: const Text('Todo'),
               value: FiltroFechas.todos,
-              groupValue: state.filtroFechas,
+              groupValue: state.dias,
               onChanged: (FiltroFechas? value) {
+                context
+                    .read<SessionBloc>()
+                    .add(SessionCambioDias(FiltroFechas.todos));
+
                 //_contenidoProvider.setDias(context, FiltroFechas.todo);
-                Navigator.pop(context);
+                //Navigator.pop(context);
               },
             ),
           ],
@@ -89,12 +97,15 @@ class DrawerPrincipal extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             final categoria = state.categoriasUsuario[index];
             return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: CategoriaHorizontal(
                   key: Key('C${categoria.id}'),
                   categoria: categoria,
+                  seleccionada: state.filtroCategorias.contains(categoria.id),
                   callback: (c) {
+                    context
+                        .read<SessionBloc>()
+                        .add(SessionCambioFiltroCategoria(categoria.id));
                     Log.registra('Categoria filtro cambiada: $c');
                   },
                 )

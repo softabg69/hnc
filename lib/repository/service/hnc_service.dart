@@ -134,7 +134,7 @@ class HncService {
       String idscategorias, int dias, int offset) async {
     Log.registra('getContenidos');
     return await _get(
-        '/data/getContenidos?idscategorias=$idscategorias&dias=-$dias&offset=$offset',
+        '/data/getContenidos?idscategorias=$idscategorias&dias=$dias&offset=$offset',
         headersToken);
   }
 }

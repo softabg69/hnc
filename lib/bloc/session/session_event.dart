@@ -53,3 +53,15 @@ class SessionEstablecerFiltroCategoriasEvent extends SessionEvent {
 }
 
 class SessionProcesadoEvent extends SessionEvent {}
+
+class SessionCambioFiltroCategoria extends SessionEvent {
+  SessionCambioFiltroCategoria(this.idCategoria) : super();
+  final int idCategoria;
+  @override
+  List<Object?> get props => [idCategoria];
+}
+
+class SessionCambioDias extends SessionEvent {
+  SessionCambioDias(this.dias) : super();
+  final FiltroFechas dias;
+}

@@ -7,10 +7,14 @@ typedef CategoriaCambiada = Function(Categoria categoria);
 
 class CategoriaHorizontal extends StatelessWidget {
   const CategoriaHorizontal(
-      {Key? key, required this.categoria, required this.callback})
+      {Key? key,
+      required this.categoria,
+      required this.seleccionada,
+      required this.callback})
       : super(key: key);
 
   final Categoria categoria;
+  final bool seleccionada;
   final CategoriaCambiada callback;
 
   @override
@@ -19,7 +23,7 @@ class CategoriaHorizontal extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SwitchListTile(
         title: Text(categoria.descripcion),
-        value: categoria.seleccionada,
+        value: seleccionada,
         onChanged: (bool value) {
           callback(categoria);
           //print("switch");
