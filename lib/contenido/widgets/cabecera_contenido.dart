@@ -123,7 +123,7 @@ class CabeceraContenido extends StatelessWidget {
                       width: 3,
                     ),
                     Text(
-                      contenido!.fecha,
+                      contenido!.cuando,
                       //_fecha,
                       style: const TextStyle(fontSize: 14),
                     ),

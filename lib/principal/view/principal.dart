@@ -20,6 +20,7 @@ class Principal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const DrawerPrincipal(),
+      backgroundColor: Colors.grey,
       // onDrawerChanged: (bool isOpen) {
       //   if (isOpen) {
       //     context.read<PrincipalBloc>().add(PrincipalDrawerOpen());
@@ -32,11 +33,14 @@ class Principal extends StatelessWidget {
             hncRepository: context.read<HncRepository>(),
             session: context.read<SessionBloc>())
           ..add(ContenidoCargarEvent()),
-        child: const CustomScrollView(
-          slivers: [
-            AppBarPrincipal(),
-            Contenido(),
-          ],
+        child: InteractiveViewer(
+          maxScale: 5,
+          child: const CustomScrollView(
+            slivers: [
+              AppBarPrincipal(),
+              Contenido(),
+            ],
+          ),
         ),
       ),
     );

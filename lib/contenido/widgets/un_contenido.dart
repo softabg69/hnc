@@ -47,11 +47,15 @@ class UnContenido extends StatelessWidget {
               // widget.contenido!.creador,
               // widget.contenido!.idCreador,
               // widget.contenido!.idContenido),
-              Container(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                  alignment: Alignment.topLeft,
-                  child: Text(contenido.titulo,
-                      style: Theme.of(context).textTheme.headline6)),
+              contenido.titulo.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                      alignment: Alignment.topLeft,
+                      child: Text(contenido.titulo,
+                          style: Theme.of(context).textTheme.headline6))
+                  : const SizedBox(
+                      height: 0,
+                    ),
               Visibility(
                 visible: contenido.multimedia.isNotEmpty,
                 child: Image.network(

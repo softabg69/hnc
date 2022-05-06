@@ -19,7 +19,7 @@ class SessionState {
       this.avatar = '',
       this.categoriasUsuario = const [],
       this.filtroCategorias = const [],
-      this.dias = FiltroFechas.ultimos5dias,
+      this.dias = FiltroFechas.todos,
       this.estado = EstadoLogin.inicial});
 
   SessionState copyWith(
