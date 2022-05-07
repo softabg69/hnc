@@ -4,6 +4,7 @@ import 'package:hnc/bloc/app_bloc_observer.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
+import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import 'package:hnc/principal/bloc/principal_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
@@ -38,6 +39,10 @@ class AppState extends StatelessWidget {
           BlocProvider(
             create: (context) => PlatformBloc()..add(PlatformLoadEvent()),
           ),
+          BlocProvider(
+              create: (context) => ContenidoBloc(
+                  hncRepository: context.read<HncRepository>(),
+                  session: context.read<SessionBloc>())),
           // BlocProvider(
           //   create: (context) => PrincipalBloc(
           //       hncRepository: context.read<HncRepository>(),

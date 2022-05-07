@@ -30,68 +30,71 @@ class UnContenido extends StatelessWidget {
   }
 
   Widget tarjeta(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () {
-          _launchURL(contenido.url);
-        },
-        child: Card(
-          child: Column(
-            children: [
-              CabeceraContenido(
-                contenido: contenido,
-              ),
-              // widget.contenido!.categorias,
-              // widget.contenido!.fecha,
-              // widget.contenido!.creador,
-              // widget.contenido!.idCreador,
-              // widget.contenido!.idContenido),
-              contenido.titulo.isNotEmpty
-                  ? Container(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-                      alignment: Alignment.topLeft,
-                      child: Text(contenido.titulo,
-                          style: Theme.of(context).textTheme.headline6))
-                  : const SizedBox(
-                      height: 0,
-                    ),
-              Visibility(
-                visible: contenido.multimedia.isNotEmpty,
-                child: Image.network(
-                  '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
-                  width: double.infinity,
-                  fit: BoxFit.fitWidth,
+    return InteractiveViewer(
+      maxScale: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GestureDetector(
+          onTap: () {
+            _launchURL(contenido.url);
+          },
+          child: Card(
+            child: Column(
+              children: [
+                CabeceraContenido(
+                  contenido: contenido,
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  contenido.cuerpo,
-                  //style: GoogleFonts.openSans(textStyle: estiloTexto),
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    //   widget.contenido!.gusta = !widget.contenido!.gusta;
-                    //   //_gusta = !_gusta;
-                    // });
-                    // Llamadas.cambiarGusta(
-                    //     widget.contenido!.idContenido, widget.contenido!.gusta);
-                  },
-                  child: Icon(
-                    Icons.favorite,
-                    color: contenido.gusta ? Colors.red : Colors.grey,
+                // widget.contenido!.categorias,
+                // widget.contenido!.fecha,
+                // widget.contenido!.creador,
+                // widget.contenido!.idCreador,
+                // widget.contenido!.idContenido),
+                contenido.titulo.isNotEmpty
+                    ? Container(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+                        alignment: Alignment.topLeft,
+                        child: Text(contenido.titulo,
+                            style: Theme.of(context).textTheme.headline6))
+                    : const SizedBox(
+                        height: 0,
+                      ),
+                Visibility(
+                  visible: contenido.multimedia.isNotEmpty,
+                  child: Image.network(
+                    '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
+                    width: double.infinity,
+                    fit: BoxFit.fitWidth,
                   ),
                 ),
-              ),
-            ],
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    contenido.cuerpo,
+                    //style: GoogleFonts.openSans(textStyle: estiloTexto),
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      // setState(() {
+                      //   widget.contenido!.gusta = !widget.contenido!.gusta;
+                      //   //_gusta = !_gusta;
+                      // });
+                      // Llamadas.cambiarGusta(
+                      //     widget.contenido!.idContenido, widget.contenido!.gusta);
+                    },
+                    child: Icon(
+                      Icons.favorite,
+                      color: contenido.gusta ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

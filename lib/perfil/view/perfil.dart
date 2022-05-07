@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/widgets/perfil_screen.dart';
 import '../../principal/view/principal.dart';
 import '../bloc/perfil_bloc.dart';
@@ -28,7 +29,9 @@ class _PerfilState extends State<Perfil> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => Principal(),
+                  builder: (BuildContext context) => Principal(
+                    contenidoBloc: context.read<ContenidoBloc>(),
+                  ),
                 ),
               );
             }
