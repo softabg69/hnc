@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hnc/repository/models/contenido.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../components/configuracion.dart';
 import '../../widgets/una_columna.dart';
 import 'cabecera_contenido.dart';
@@ -31,7 +32,7 @@ class UnContenido extends StatelessWidget {
 
   Widget tarjeta(BuildContext context) {
     return InteractiveViewer(
-      maxScale: 5,
+      maxScale: kIsWeb ? 1 : 5,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GestureDetector(
@@ -44,11 +45,6 @@ class UnContenido extends StatelessWidget {
                 CabeceraContenido(
                   contenido: contenido,
                 ),
-                // widget.contenido!.categorias,
-                // widget.contenido!.fecha,
-                // widget.contenido!.creador,
-                // widget.contenido!.idCreador,
-                // widget.contenido!.idContenido),
                 contenido.titulo.isNotEmpty
                     ? Container(
                         padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
