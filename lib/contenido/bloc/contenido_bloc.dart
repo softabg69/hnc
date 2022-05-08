@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
@@ -28,7 +27,7 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
       : super(const ContenidoState()) {
     sessionSubscription = session.stream.listen((state) {
       Log.registra('cambio estado session en contenido bloc');
-      add(ContenidoCargarEvent());
+      add(const ContenidoCargarEvent(iniciar: true));
     });
     on<ContenidoEvent>((event, emit) {});
     on<ContenidoCargarEvent>(_cargar,
@@ -41,24 +40,41 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
 
   FutureOr<void> _cargar(
       ContenidoCargarEvent event, Emitter<ContenidoState> emit) async {
-    emit(state.copyWith(estado: EstadoContenido.cargando));
+    if (event.iniciar) {
+      emit(state.copyWith(
+          estado: EstadoContenido.cargando,
+          alcanzadoFinal: false,
+          contenidos: []));
+    } else {
+      emit(state.copyWith(estado: EstadoContenido.cargando));
+    }
+
     Log.registra('#################################');
     try {
       final resp = await hncRepository.getContenidos(
           session.state.filtroCategorias,
           session.state.dias == FiltroFechas.ultimos5dias ? 5 : 300,
-          state.contenidos.length);
+          event.iniciar ? 0 : state.contenidos.length);
       Log.registra('longitud respuesta: ${resp.length}');
       if (resp.isEmpty) {
         emit(state.copyWith(
             alcanzadoFinal: true, estado: EstadoContenido.cargado));
       } else {
-        emit(
-          state.copyWith(
-              alcanzadoFinal: false,
-              contenidos: List.of(state.contenidos)..addAll(resp),
-              estado: EstadoContenido.cargado),
-        );
+        if (!event.iniciar) {
+          emit(
+            state.copyWith(
+                alcanzadoFinal: false,
+                contenidos: List.of(state.contenidos)..addAll(resp),
+                estado: EstadoContenido.cargado),
+          );
+        } else {
+          emit(
+            state.copyWith(
+                alcanzadoFinal: false,
+                contenidos: resp,
+                estado: EstadoContenido.cargado),
+          );
+        }
         Log.registra('añadidos nuevos elementos');
       }
     } catch (e) {

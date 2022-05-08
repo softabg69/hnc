@@ -7,4 +7,8 @@ abstract class ContenidoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ContenidoCargarEvent extends ContenidoEvent {}
+class ContenidoCargarEvent extends ContenidoEvent {
+  const ContenidoCargarEvent({this.iniciar = false}) : super();
+
+  final bool iniciar;
+}

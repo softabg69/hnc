@@ -4,8 +4,6 @@ import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/contenido/widgets/block_loader.dart';
 import 'package:hnc/widgets/una_columna.dart';
 
-import '../../components/log.dart';
-import '../widgets/bottom_loader.dart';
 import '../widgets/un_contenido.dart';
 
 class Contenido extends StatefulWidget {
@@ -18,10 +16,10 @@ class Contenido extends StatefulWidget {
 class _ContenidoState extends State<Contenido> {
   @override
   Widget build(BuildContext context) {
-    Log.registra('Redibujando Contenido');
+    //Log.registra('Redibujando Contenido');
     return BlocBuilder<ContenidoBloc, ContenidoState>(
       builder: (context, state) {
-        Log.registra('elementos: ${state.contenidos.length}');
+        //Log.registra('elementos: ${state.contenidos.length}');
         return state.estado == EstadoContenido.cargando &&
                 state.contenidos.isEmpty
             ? const SliverToBoxAdapter(
