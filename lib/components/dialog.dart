@@ -37,4 +37,48 @@ class Dialogs {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  static void continuarCancelar(BuildContext context, String boton,
+      String titulo, String mensaje, Function? callback) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: const Text("Cancelar"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(boton),
+      onPressed: () {
+        Navigator.pop(context);
+        if (callback != null) callback();
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) {
+        //       EliminarContenido(idContenido: contenido!.idContenido),
+        //     },
+        //   ),
+        // ).then((value) {
+        //   Navigator.pop(context);
+        // });
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(titulo),
+      content: Text(mensaje),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

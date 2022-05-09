@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hnc/components/navegacion.dart';
 import 'package:hnc/repository/models/contenido.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -60,6 +59,28 @@ class UnContenido extends StatelessWidget {
           );
   }
 
+  Widget _gusta(BuildContext context, bool gusta) {
+    return InkWell(
+      onTap: () {},
+      child: Stack(children: [
+        CircleAvatar(
+          backgroundColor: Theme.of(context)
+              .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
+          radius: 30,
+        ),
+        Positioned(
+          left: 5,
+          top: 7,
+          child: Icon(
+            Icons.favorite,
+            size: 50,
+            color: !gusta ? Colors.red : Colors.white,
+          ),
+        ),
+      ]),
+    );
+  }
+
   Widget tarjeta(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -91,10 +112,17 @@ class UnContenido extends StatelessWidget {
                   : const SizedBox(
                       height: 0,
                     ),
-              Visibility(
-                visible: contenido.multimedia.isNotEmpty,
-                child: imagen(),
-              ),
+              Stack(clipBehavior: Clip.none, children: [
+                Visibility(
+                  visible: contenido.multimedia.isNotEmpty,
+                  child: imagen(),
+                ),
+                Positioned(
+                  top: -15,
+                  right: 20,
+                  child: _gusta(context, contenido.gusta),
+                )
+              ]),
               Container(
                 padding: const EdgeInsets.all(16),
                 alignment: Alignment.centerLeft,

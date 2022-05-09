@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hnc/components/configuracion.dart';
 
+import '../../components/dialog.dart';
 import '../../repository/models/contenido.dart';
 
 @immutable
@@ -28,46 +29,46 @@ class CabeceraContenido extends StatelessWidget {
   //                           cardData.idCreador,
   //                           cardData.idContenido),
 
-  muestraDialogoEliminar(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: const Text("Cancelar"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = TextButton(
-      child: const Text("Eliminar"),
-      onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       EliminarContenido(idContenido: contenido!.idContenido),
-        //     },
-        //   ),
-        // ).then((value) {
-        //   Navigator.pop(context);
-        // });
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Eliminar contenido"),
-      content: const Text("¿Seguro que quiere eliminar el contenido?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // muestraDialogoEliminar(BuildContext context) {
+  //   // set up the buttons
+  //   Widget cancelButton = TextButton(
+  //     child: const Text("Cancelar"),
+  //     onPressed: () {
+  //       Navigator.pop(context);
+  //     },
+  //   );
+  //   Widget continueButton = TextButton(
+  //     child: const Text("Eliminar"),
+  //     onPressed: () {
+  //       // Navigator.push(
+  //       //   context,
+  //       //   MaterialPageRoute(
+  //       //     builder: (context) {
+  //       //       EliminarContenido(idContenido: contenido!.idContenido),
+  //       //     },
+  //       //   ),
+  //       // ).then((value) {
+  //       //   Navigator.pop(context);
+  //       // });
+  //     },
+  //   );
+  //   // set up the AlertDialog
+  //   AlertDialog alert = AlertDialog(
+  //     title: const Text("Eliminar contenido"),
+  //     content: const Text("¿Seguro que quiere eliminar el contenido?"),
+  //     actions: [
+  //       cancelButton,
+  //       continueButton,
+  //     ],
+  //   );
+  //   // show the dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +136,17 @@ class CabeceraContenido extends StatelessWidget {
           contenido!.propietario
               ? IconButton(
                   onPressed: () async {
-                    muestraDialogoEliminar(context);
+                    Dialogs.continuarCancelar(
+                        context,
+                        'Eliminar',
+                        contenido!.modo == 1
+                            ? 'Eliminar contenido'
+                            : 'Eliminar story',
+                        contenido!.modo == 1
+                            ? '¿Seguro que quiere eliminar el contenido?'
+                            : '¿Seguro que quiere eliminar la story?',
+                        () {});
+                    //muestraDialogoEliminar(context);
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(

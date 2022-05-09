@@ -86,8 +86,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: MaterialColor(0xFF2B73B6, colorCodes),
         ).copyWith(secondary: const Color(0xFF99BE16)),
         fontFamily: 'Roboto',
+        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
-      home: Login(),
+      home: const Login(),
       //routes: {},
     );
   }
