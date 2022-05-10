@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hnc/components/configuracion.dart';
+import 'package:hnc/editor/views/editor.dart';
 
 import '../../components/dialog.dart';
 import '../../repository/models/contenido.dart';
@@ -166,15 +167,15 @@ class CabeceraContenido extends StatelessWidget {
           contenido!.propietario
               ? IconButton(
                   onPressed: () async {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (ctx) => NuevaStory(
-                    //       modo: 2,
-                    //       contenido: contenido,
-                    //     ),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => Editor(
+                          modo: 2,
+                          contenido: contenido!,
+                        ),
+                      ),
+                    );
                   },
                   icon: const Icon(Icons.edit),
                   color: Theme.of(context).primaryColor,

@@ -1,0 +1,286 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/editor/bloc/editor_bloc.dart';
+import 'package:hnc/repository/hnc_repository.dart';
+
+import '../../components/configuracion.dart';
+import '../../repository/models/categoria.dart';
+import '../../repository/models/contenido.dart';
+
+class Editor extends StatefulWidget {
+  const Editor({Key? key, required this.contenido, required this.modo})
+      : super(key: key);
+
+  final Contenido contenido;
+  final int modo;
+
+  @override
+  State<Editor> createState() => _EditorState();
+}
+
+class _EditorState extends State<Editor> {
+  final _titulo = TextEditingController();
+  final _texto = TextEditingController();
+  final _url = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  int textoLen = 100;
+  EditorBloc? _editorBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _titulo.text = widget.contenido.titulo;
+    _texto.text = widget.contenido.cuerpo;
+    _url.text = widget.contenido.url;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Form(
+        key: _formKey,
+        child: BlocProvider(
+          create: (context) => EditorBloc(
+            hncRepository: context.read<HncRepository>(),
+            session: context.read<SessionBloc>(),
+          ),
+          child: BlocBuilder<EditorBloc, EditorState>(
+            builder: (context, state) => CustomScrollView(
+              slivers: _formulario(context),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void guardar() async {
+    if (_formKey.currentState!.validate()) {
+      // if (widget.contenido != null) {
+      //   datos['idContenido'] = widget.contenido!.idContenido;
+      // }
+      // datos['titulo'] = _titulo.text;
+      // datos['texto'] = _texto.text;
+      // datos['url'] = _url.text;
+
+      // final categoriasSeleccionadas = [];
+      // for (var cat in datas) {
+      //   if (cat.seleccionada) {
+      //     categoriasSeleccionadas.add(cat.id);
+      //   }
+      // }
+      // datos['categorias'] = categoriasSeleccionadas;
+      // datos['modo'] = widget.modo;
+      // if (!imagenSeleccionada) datos['imagen'] = null;
+      // //print("Datos: $datos");
+
+      // Llamadas.guardarStory(datos, () {
+      //   recargar();
+      //   Navigator.pop(context);
+      // }, () {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(
+      //       content: Text('Se ha producido un error'),
+      //       backgroundColor: Colors.red,
+      //     ),
+      //   );
+      // });
+    }
+  }
+
+  List<Widget> _formulario(BuildContext context) {
+    return <Widget>[
+      appBar(context),
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: titulo(),
+        ),
+      ),
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: texto(),
+        ),
+      ),
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: url(),
+        ),
+      ),
+      // SliverToBoxAdapter(
+      //   child: imagePicker(),
+      // ),
+      SliverToBoxAdapter(
+        child: categorias(),
+      ),
+    ];
+  }
+
+  Widget appBar(BuildContext context) {
+    return SliverAppBar(
+      title: Text(widget.modo == 1
+          ? widget.contenido.idContenido.isEmpty
+              ? 'Crear contenido'
+              : 'Editar contenido'
+          : widget.contenido.idContenido.isEmpty
+              ? 'Crear story'
+              : 'Editar story'),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.save),
+          tooltip: 'Guardar',
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              context.read<EditorBloc>().add(EditorGuardarEvent());
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  // Widget imagePicker() {
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: ConstrainedBox(
+  //       constraints: const BoxConstraints(
+  //         maxHeight: 200,
+  //         maxWidth: double.infinity,
+  //       ),
+  //       child: ImageContentPicker(
+  //         cambiada: (img) {
+  //           //print("imagen seleccionada");
+  //           datos['imagen'] = img;
+  //           imagenSeleccionada = true;
+  //           //print("cambiada");
+  //           //print("Datos imagen: ${datos['imagen']}");
+  //         },
+  //         imagenActual:
+  //             widget.contenido != null ? widget.contenido!.multimedia : '',
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget categoriaWidget(Categoria categoria) {
+    return Column(
+      children: [
+        SizedBox(
+          width: 100,
+          child: Text(
+            categoria.descripcion,
+            style: const TextStyle(overflow: TextOverflow.ellipsis),
+          ),
+        ),
+        Image.network(
+            "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}"),
+        Switch(
+          value: categoria.seleccionada,
+          onChanged: (a) {
+            // setState(() {
+            //   categoria.seleccionada = !categoria.seleccionada;
+            //   //categoria.cambiaSeleccionada(context, categoria.id);
+            // });
+
+            // setState(() {
+            //   categoria.seleccionada =
+            //       !categoria.seleccionada;
+            // });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget categorias() {
+    return Card(
+        color: Colors.white,
+        child: BlocBuilder<EditorBloc, EditorState>(
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 115,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.categorias.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return categoriaWidget(state.categorias[index]);
+                  },
+                ),
+              ),
+            );
+          },
+        ));
+  }
+
+  Widget titulo() {
+    return TextFormField(
+      controller: _titulo,
+      maxLines: 3,
+      keyboardType: TextInputType.multiline,
+      style: const TextStyle(color: Colors.black),
+      decoration: const InputDecoration(
+        label: Text('Título'),
+        errorStyle: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      validator: (String? value) {
+        if (value == null) return 'El título no puede estar vacío';
+        if (value.length > 100) {
+          return 'El título tiene un límite de 100 caracteres. El tamaño actual es de ${value.length}.';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget texto() {
+    return TextFormField(
+      controller: _texto,
+      maxLines: 5,
+      keyboardType: TextInputType.multiline,
+      style: const TextStyle(color: Colors.black),
+      decoration: const InputDecoration(
+        label: Text('Contenido de la story'),
+        errorStyle: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      validator: (String? value) {
+        if (value == null) return 'Debe tener contenido';
+        if (value.length > 2500) {
+          return 'El texto tiene un límite de 2500 caracteres. El tamaño actual es de ${value.length}.';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget url() {
+    return TextFormField(
+      controller: _url,
+      keyboardType: TextInputType.url,
+      style: const TextStyle(color: Colors.black),
+      decoration: const InputDecoration(
+        label: Text('Url relacionada'),
+        errorStyle: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      validator: (String? value) {
+        if (value != null && value.length > 100) {
+          return 'La url tiene un límite de 100 caracteres. El tamaño actual es de ${value.length}.';
+        }
+        return null;
+      },
+    );
+  }
+}

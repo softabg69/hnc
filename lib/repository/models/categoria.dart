@@ -27,7 +27,6 @@ class Categoria {
 
   @override
   String toString() {
-    // TODO: implement toString
     return '$id - $descripcion: $seleccionada';
   }
 }
