@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/repository/models/contenido.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../components/configuracion.dart';
 import '../../widgets/una_columna.dart';
+import '../bloc/contenido_bloc.dart';
 import '../view/detalle.dart';
 import 'cabecera_contenido.dart';
 
@@ -59,25 +61,44 @@ class UnContenido extends StatelessWidget {
           );
   }
 
-  Widget _gusta(BuildContext context, bool gusta) {
-    return InkWell(
-      onTap: () {},
-      child: Stack(children: [
-        CircleAvatar(
-          backgroundColor: Theme.of(context)
-              .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
-          radius: 30,
-        ),
-        Positioned(
-          left: 5,
-          top: 7,
-          child: Icon(
-            Icons.favorite,
-            size: 50,
-            color: !gusta ? Colors.red : Colors.white,
-          ),
-        ),
-      ]),
+  Widget _gusta(BuildContext context, Contenido contenido) {
+    return GestureDetector(
+      onTap: () {
+        context.read<ContenidoBloc>().add(ContenidoCambiarGusta(
+            idContenido: contenido.idContenido, gusta: !contenido.gusta));
+      },
+      child: BlocBuilder<ContenidoBloc, ContenidoState>(
+        bloc: context.read<ContenidoBloc>(),
+        builder: (context, state) {
+          final int index = state.contenidos.indexWhere(
+            (element) => element.idContenido == contenido.idContenido,
+          );
+          return index != -1 &&
+                  state.contenidos[index].estadoGusta == EstadoGusta.cambiando
+              ? CircleAvatar(
+                  backgroundColor: Theme.of(context)
+                      .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
+                  radius: 30,
+                  child: const CircularProgressIndicator(),
+                )
+              : Stack(children: [
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context)
+                        .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
+                    radius: 30,
+                  ),
+                  Positioned(
+                    left: 5,
+                    top: 7,
+                    child: Icon(
+                      Icons.favorite,
+                      size: 50,
+                      color: !contenido.gusta ? Colors.red : Colors.white,
+                    ),
+                  ),
+                ]);
+        },
+      ),
     );
   }
 
@@ -120,7 +141,7 @@ class UnContenido extends StatelessWidget {
                 Positioned(
                   top: -15,
                   right: 20,
-                  child: _gusta(context, contenido.gusta),
+                  child: _gusta(context, contenido),
                 )
               ]),
               Container(

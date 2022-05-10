@@ -69,4 +69,11 @@ class HncRepository {
     return List<Contenido>.from(jsn.map((model) => Contenido.fromJson(model)))
         .toList();
   }
+
+  Future<void> setGusta(String idContenido, bool gusta) async {
+    final body = {};
+    body['idContenido'] = idContenido;
+    body['gusta'] = gusta;
+    await service.setGusta(json.encode(body));
+  }
 }

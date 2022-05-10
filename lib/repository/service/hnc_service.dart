@@ -137,4 +137,9 @@ class HncService {
         '/data/getContenidos?idscategorias=$idscategorias&dias=$dias&offset=$offset',
         headersToken);
   }
+
+  Future<dynamic> setGusta(String json) async {
+    Log.registra('setGusta');
+    return await _post('/data/setGusta', json, headersToken);
+  }
 }

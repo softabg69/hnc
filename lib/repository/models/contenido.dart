@@ -1,3 +1,7 @@
+import 'package:hnc/contenido/bloc/contenido_bloc.dart';
+
+enum EstadoGusta { normal, cambiando, error }
+
 class Contenido {
   final String idContenido;
   final String titulo;
@@ -13,6 +17,7 @@ class Contenido {
   final bool gusta;
   final int modo;
   final bool propietario;
+  final EstadoGusta estadoGusta;
 
   Contenido(
       {this.idContenido = '',
@@ -28,7 +33,8 @@ class Contenido {
       this.categorias = '',
       this.gusta = false,
       this.modo = 1,
-      this.propietario = false});
+      this.propietario = false,
+      this.estadoGusta = EstadoGusta.normal});
 
   Contenido.fromMap(Map map)
       : idContenido = map['idContenido'] ?? '',
@@ -44,7 +50,8 @@ class Contenido {
         categorias = map['categorias'] ?? '',
         gusta = map['gusta'] ?? false,
         modo = map['modo'] ?? 1,
-        propietario = map['propietario'];
+        propietario = map['propietario'] ?? false,
+        estadoGusta = map['estadoGusta'] ?? EstadoGusta.normal;
 
   factory Contenido.fromJson(Map<String, dynamic> json) =>
       _$ContenidoFromJson(json);
@@ -63,10 +70,11 @@ class Contenido {
       categorias: json['categorias'] ?? '',
       gusta: json['gusta'] ?? false,
       modo: json['modo'] ?? 1,
-      propietario: json['propietario'] ?? false);
+      propietario: json['propietario'] ?? false,
+      estadoGusta: json['estadoGusta'] ?? EstadoGusta.normal);
 
   Contenido copyWith(
-      String? idContenido,
+      {String? idContenido,
       String? titulo,
       String? cuerpo,
       String? multimedia,
@@ -79,7 +87,8 @@ class Contenido {
       String? categorias,
       bool? gusta,
       int? modo,
-      bool? propietario) {
+      bool? propietario,
+      EstadoGusta? estadoGusta}) {
     return Contenido(
         idContenido: idContenido ?? this.idContenido,
         titulo: titulo ?? this.titulo,
@@ -93,6 +102,7 @@ class Contenido {
         categorias: categorias ?? this.categorias,
         gusta: gusta ?? this.gusta,
         modo: modo ?? this.modo,
-        propietario: propietario ?? this.propietario);
+        propietario: propietario ?? this.propietario,
+        estadoGusta: estadoGusta ?? this.estadoGusta);
   }
 }

@@ -32,6 +32,7 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
     on<ContenidoEvent>((event, emit) {});
     on<ContenidoCargarEvent>(_cargar,
         transformer: throttleDroppable(throttleDuration));
+    on<ContenidoCambiarGusta>(_cambiaGusta);
   }
 
   final HncRepository hncRepository;
@@ -79,6 +80,34 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
       }
     } catch (e) {
       emit(state.copyWith(estado: EstadoContenido.error));
+    }
+  }
+
+  FutureOr<void> _cambiaGusta(
+      ContenidoCambiarGusta event, Emitter<ContenidoState> emit) async {
+    Log.registra("cambia gusta: ${event.idContenido} -> ${event.gusta}");
+    final copia = [...state.contenidos];
+    final int seleccionado = copia.indexWhere(
+      (element) => element.idContenido == event.idContenido,
+    );
+    if (seleccionado != -1) {
+      copia[seleccionado] =
+          copia[seleccionado].copyWith(estadoGusta: EstadoGusta.cambiando);
+      emit(state.copyWith(contenidos: copia));
+      try {
+        await hncRepository.setGusta(event.idContenido, event.gusta);
+        final copia = [...state.contenidos];
+        final int seleccionado = copia.indexWhere(
+          (element) => element.idContenido == event.idContenido,
+        );
+        if (seleccionado != -1) {
+          copia[seleccionado] = copia[seleccionado]
+              .copyWith(estadoGusta: EstadoGusta.normal, gusta: event.gusta);
+          emit(state.copyWith(contenidos: copia));
+        }
+      } catch (e) {
+        Log.registra('Error cambia gusta: $e');
+      }
     }
   }
 }
