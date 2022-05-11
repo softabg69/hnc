@@ -76,4 +76,24 @@ class HncRepository {
     body['gusta'] = gusta;
     await service.setGusta(json.encode(body));
   }
+
+  Future<Contenido> guardarContenido(
+      String? idContenido,
+      String? titulo,
+      String? cuerpo,
+      String? url,
+      Uint8List? imagen,
+      int modo,
+      List<int> categorias) async {
+    final body = json.encode({
+      'idContenido': idContenido,
+      'imagen': imagen,
+      'titulo': titulo,
+      'texto': cuerpo,
+      'url': url,
+      'modo': modo,
+      'categorias': categorias
+    });
+    return await service.guardarContenido(body);
+  }
 }

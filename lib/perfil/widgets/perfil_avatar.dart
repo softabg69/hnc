@@ -63,7 +63,7 @@ class PerfilAvatar extends StatelessWidget {
   Future<void> _pickImage(BuildContext context) async {
     final pickedFile = await _picker.pickImage(
       source: ImageSource.camera,
-      maxWidth: 800,
+      maxWidth: 80,
       maxHeight: 80,
       imageQuality: null,
     );

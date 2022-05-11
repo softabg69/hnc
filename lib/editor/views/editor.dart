@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/editor/bloc/editor_bloc.dart';
+import 'package:hnc/editor/widgets/contenido_imagen.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/configuracion.dart';
+import '../../components/dialog.dart';
 import '../../repository/models/categoria.dart';
 import '../../repository/models/contenido.dart';
 
@@ -25,7 +29,9 @@ class _EditorState extends State<Editor> {
   final _url = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   int textoLen = 100;
-  EditorBloc? _editorBloc;
+  String? idImagen;
+  Uint8List? imagen;
+  List<Categoria>? categorias = [];
 
   @override
   void initState() {
@@ -33,6 +39,23 @@ class _EditorState extends State<Editor> {
     _titulo.text = widget.contenido.titulo;
     _texto.text = widget.contenido.cuerpo;
     _url.text = widget.contenido.url;
+    idImagen = widget.contenido.multimedia;
+  }
+
+  @override
+  void didChangeDependencies() {
+    categorias = context.read<SessionBloc>().state.categoriasUsuario;
+    super.didChangeDependencies();
+  }
+
+  List<int> get _categoriasSeleccionadas {
+    final List<int> res = [];
+    for (int index = 0; index < categorias!.length; index++) {
+      if (categorias![index].seleccionada) {
+        res.add(categorias![index].id);
+      }
+    }
+    return res;
   }
 
   @override
@@ -40,15 +63,9 @@ class _EditorState extends State<Editor> {
     return Scaffold(
       body: Form(
         key: _formKey,
-        child: BlocProvider(
-          create: (context) => EditorBloc(
-            hncRepository: context.read<HncRepository>(),
-            session: context.read<SessionBloc>(),
-          ),
-          child: BlocBuilder<EditorBloc, EditorState>(
-            builder: (context, state) => CustomScrollView(
-              slivers: _formulario(context),
-            ),
+        child: BlocBuilder<EditorBloc, EditorState>(
+          builder: (context, state) => CustomScrollView(
+            slivers: _formulario(context),
           ),
         ),
       ),
@@ -57,6 +74,24 @@ class _EditorState extends State<Editor> {
 
   void guardar() async {
     if (_formKey.currentState!.validate()) {
+      if (_categoriasSeleccionadas.isEmpty) {
+        await Dialogs.informacion(context, const Text('Error'),
+            const Text('Debe seleccionar al menos una categoría'));
+        return;
+      }
+      if (widget.contenido.idContenido.isEmpty && imagen == null) {
+        await Dialogs.informacion(context, const Text('Error'),
+            const Text('Debe seleccionar una imagen'));
+        return;
+      }
+      context.read<EditorBloc>().add(EditorGuardarEvent(
+          id: widget.contenido.idContenido,
+          titulo: _titulo.text,
+          cuerpo: _texto.text,
+          url: _url.text,
+          imagen: imagen,
+          categorias: _categoriasSeleccionadas));
+
       // if (widget.contenido != null) {
       //   datos['idContenido'] = widget.contenido!.idContenido;
       // }
@@ -110,11 +145,20 @@ class _EditorState extends State<Editor> {
           child: url(),
         ),
       ),
+      ContenidoImagen(
+          idImagen: idImagen,
+          imagen: imagen,
+          cambiada: (bytes) {
+            setState(() {
+              idImagen = '';
+              imagen = bytes;
+            });
+          }),
       // SliverToBoxAdapter(
       //   child: imagePicker(),
       // ),
       SliverToBoxAdapter(
-        child: categorias(),
+        child: listCategorias(),
       ),
     ];
   }
@@ -134,7 +178,7 @@ class _EditorState extends State<Editor> {
           tooltip: 'Guardar',
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              context.read<EditorBloc>().add(EditorGuardarEvent());
+              guardar();
             }
           },
         ),
@@ -165,21 +209,26 @@ class _EditorState extends State<Editor> {
   //   );
   // }
 
-  Widget categoriaWidget(Categoria categoria) {
+  Widget categoriaWidget(int index) {
     return Column(
       children: [
         SizedBox(
           width: 100,
           child: Text(
-            categoria.descripcion,
+            categorias![index].descripcion,
             style: const TextStyle(overflow: TextOverflow.ellipsis),
           ),
         ),
         Image.network(
-            "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}"),
+            "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categorias![index].avatar}"),
         Switch(
-          value: categoria.seleccionada,
+          value: categorias![index].seleccionada,
           onChanged: (a) {
+            setState(() {
+              categorias![index] = categorias![index]
+                  .copyWith(seleccionada: !categorias![index].seleccionada);
+            });
+
             // setState(() {
             //   categoria.seleccionada = !categoria.seleccionada;
             //   //categoria.cambiaSeleccionada(context, categoria.id);
@@ -195,26 +244,23 @@ class _EditorState extends State<Editor> {
     );
   }
 
-  Widget categorias() {
+  Widget listCategorias() {
     return Card(
-        color: Colors.white,
-        child: BlocBuilder<EditorBloc, EditorState>(
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 115,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.categorias.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return categoriaWidget(state.categorias[index]);
-                  },
-                ),
-              ),
-            );
-          },
-        ));
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SizedBox(
+          height: 115,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categorias!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return categoriaWidget(index);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget titulo() {

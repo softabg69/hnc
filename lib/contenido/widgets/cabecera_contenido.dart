@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
+import 'package:hnc/editor/bloc/editor_bloc.dart';
 import 'package:hnc/editor/views/editor.dart';
+import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/dialog.dart';
+import '../../components/log.dart';
 import '../../repository/models/contenido.dart';
 
 @immutable
@@ -167,12 +172,18 @@ class CabeceraContenido extends StatelessWidget {
           contenido!.propietario
               ? IconButton(
                   onPressed: () async {
+                    Log.registra(contenido!.multimedia);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (ctx) => Editor(
-                          modo: 2,
-                          contenido: contenido!,
+                        builder: (ctx) => BlocProvider(
+                          create: ((context) => EditorBloc(
+                              hncRepository: context.read<HncRepository>(),
+                              session: context.read<SessionBloc>())),
+                          child: Editor(
+                            modo: 1,
+                            contenido: contenido!,
+                          ),
                         ),
                       ),
                     );

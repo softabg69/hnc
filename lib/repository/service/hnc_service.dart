@@ -142,4 +142,9 @@ class HncService {
     Log.registra('setGusta');
     return await _post('/data/setGusta', json, headersToken);
   }
+
+  Future<dynamic> guardarContenido(String json) async {
+    Log.registra('guardarContenido');
+    return await _post('/data/guardarContenido', json, headersToken);
+  }
 }
