@@ -1,6 +1,6 @@
 part of 'contenido_bloc.dart';
 
-enum EstadoContenido { inicial, cargando, cargado, error }
+enum EstadoContenido { inicial, cargando, cargado, error, actualizado }
 
 class ContenidoState extends Equatable {
   const ContenidoState(

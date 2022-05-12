@@ -9,6 +9,7 @@ import 'package:hnc/repository/hnc_repository.dart';
 import '../../components/dialog.dart';
 import '../../components/log.dart';
 import '../../repository/models/contenido.dart';
+import '../bloc/contenido_bloc.dart';
 
 @immutable
 class CabeceraContenido extends StatelessWidget {
@@ -172,17 +173,21 @@ class CabeceraContenido extends StatelessWidget {
           contenido!.propietario
               ? IconButton(
                   onPressed: () async {
-                    Log.registra(contenido!.multimedia);
+                    //Log.registra(contenido!.multimedia);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (ctx) => BlocProvider(
-                          create: ((context) => EditorBloc(
-                              hncRepository: context.read<HncRepository>(),
-                              session: context.read<SessionBloc>())),
-                          child: Editor(
-                            modo: 1,
-                            contenido: contenido!,
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<ContenidoBloc>(),
+                          child: BlocProvider(
+                            create: ((context) => EditorBloc(
+                                hncRepository: context.read<HncRepository>(),
+                                session: context.read<SessionBloc>(),
+                                contenidoBloc: context.read<ContenidoBloc>())),
+                            child: Editor(
+                              modo: 1,
+                              contenido: contenido!,
+                            ),
                           ),
                         ),
                       ),

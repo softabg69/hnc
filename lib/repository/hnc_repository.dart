@@ -94,6 +94,6 @@ class HncRepository {
       'modo': modo,
       'categorias': categorias
     });
-    return await service.guardarContenido(body);
+    return Contenido.fromJson(await service.guardarContenido(body));
   }
 }

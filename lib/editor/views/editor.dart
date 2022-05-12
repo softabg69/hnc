@@ -3,12 +3,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/editor/bloc/editor_bloc.dart';
 import 'package:hnc/editor/widgets/contenido_imagen.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/configuracion.dart';
 import '../../components/dialog.dart';
+import '../../components/log.dart';
 import '../../repository/models/categoria.dart';
 import '../../repository/models/contenido.dart';
 
@@ -32,6 +34,8 @@ class _EditorState extends State<Editor> {
   String? idImagen;
   Uint8List? imagen;
   List<Categoria>? categorias = [];
+  ContenidoBloc? _contenidoBloc;
+  bool navegado = false;
 
   @override
   void initState() {
@@ -45,6 +49,7 @@ class _EditorState extends State<Editor> {
   @override
   void didChangeDependencies() {
     categorias = context.read<SessionBloc>().state.categoriasUsuario;
+    _contenidoBloc = context.read<ContenidoBloc>();
     super.didChangeDependencies();
   }
 
@@ -60,12 +65,21 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
+    Log.registra(_contenidoBloc.toString());
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: BlocBuilder<EditorBloc, EditorState>(
-          builder: (context, state) => CustomScrollView(
-            slivers: _formulario(context),
+      body: BlocListener<ContenidoBloc, ContenidoState>(
+        listener: ((context, state) {
+          if (state.estado == EstadoContenido.actualizado && !navegado) {
+            navegado = true;
+            Navigator.pop(context);
+          }
+        }),
+        child: Form(
+          key: _formKey,
+          child: BlocBuilder<EditorBloc, EditorState>(
+            builder: (context, state) => CustomScrollView(
+              slivers: _formulario(context),
+            ),
           ),
         ),
       ),
@@ -165,6 +179,7 @@ class _EditorState extends State<Editor> {
 
   Widget appBar(BuildContext context) {
     return SliverAppBar(
+      pinned: true,
       title: Text(widget.modo == 1
           ? widget.contenido.idContenido.isEmpty
               ? 'Crear contenido'

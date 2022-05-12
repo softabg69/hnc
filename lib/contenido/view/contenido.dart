@@ -45,9 +45,14 @@ class _ContenidoState extends State<Contenido> {
                   )
                 : SliverList(
                     delegate: SliverChildBuilderDelegate(
-                        (context, index) => index >= state.contenidos.length
+                        (_, index) => index >= state.contenidos.length
                             ? const BlockLoader()
-                            : UnContenido(contenido: state.contenidos[index]),
+                            : BlocProvider.value(
+                                value: context.read<ContenidoBloc>(),
+                                child: UnContenido(
+                                  index: index,
+                                ),
+                              ),
                         childCount: state.alcanzadoFinal
                             ? state.contenidos.length
                             : state.contenidos.length + 1),

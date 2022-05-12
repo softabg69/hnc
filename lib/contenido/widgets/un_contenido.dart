@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/repository/models/contenido.dart';
@@ -10,20 +12,22 @@ import '../view/detalle.dart';
 import 'cabecera_contenido.dart';
 
 class UnContenido extends StatelessWidget {
-  const UnContenido({Key? key, required this.contenido, this.esDetalle = false})
+  const UnContenido({Key? key, required this.index, this.esDetalle = false})
       : super(key: key);
 
-  final Contenido contenido;
+  final int index;
   final bool esDetalle;
 
   _launchURL(String url) async {
-    if (url.isNotEmpty) {
-      if (await canLaunchUrl(Uri(host: url))) {
-        await launchUrl(Uri(host: url));
-      } else {
-        throw 'Could not launch $url';
+    try {
+      if (url.isNotEmpty) {
+        if (await canLaunchUrl(Uri(host: url))) {
+          await launchUrl(Uri(host: url));
+        } else {
+          throw 'Could not launch $url';
+        }
       }
-    }
+    } catch (e) {}
   }
 
   @override
@@ -44,7 +48,8 @@ class UnContenido extends StatelessWidget {
         : tarjeta(context);
   }
 
-  Widget imagen() {
+  Widget imagen(BuildContext context) {
+    final contenido = context.read<ContenidoBloc>().state.contenidos[index];
     return esDetalle
         ? InteractiveViewer(
             maxScale: kIsWeb ? 1 : 5,
@@ -54,10 +59,13 @@ class UnContenido extends StatelessWidget {
               fit: BoxFit.fitWidth,
             ),
           )
-        : Image.network(
-            '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
-            width: double.infinity,
-            fit: BoxFit.fitWidth,
+        : AspectRatio(
+            aspectRatio: 4 / 3,
+            child: Image.network(
+              '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
+              width: double.infinity,
+              fit: BoxFit.scaleDown,
+            ),
           );
   }
 
@@ -70,11 +78,10 @@ class UnContenido extends StatelessWidget {
       child: BlocBuilder<ContenidoBloc, ContenidoState>(
         bloc: context.read<ContenidoBloc>(),
         builder: (context, state) {
-          final int index = state.contenidos.indexWhere(
-            (element) => element.idContenido == contenido.idContenido,
-          );
-          return index != -1 &&
-                  state.contenidos[index].estadoGusta == EstadoGusta.cambiando
+          // final int index = state.contenidos.indexWhere(
+          //   (element) => element.idContenido == contenido.idContenido,
+          // );
+          return state.contenidos[index].estadoGusta == EstadoGusta.cambiando
               ? CircleAvatar(
                   backgroundColor: Theme.of(context)
                       .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
@@ -88,12 +95,12 @@ class UnContenido extends StatelessWidget {
                     radius: 30,
                   ),
                   Positioned(
-                    left: 5,
-                    top: 7,
+                    left: 10,
+                    top: 10,
                     child: Icon(
                       Icons.favorite,
-                      size: 50,
-                      color: !contenido.gusta ? Colors.red : Colors.white,
+                      size: 40,
+                      color: contenido.gusta ? Colors.red : Colors.white,
                     ),
                   ),
                 ]);
@@ -103,6 +110,7 @@ class UnContenido extends StatelessWidget {
   }
 
   Widget tarjeta(BuildContext context) {
+    final contenido = context.read<ContenidoBloc>().state.contenidos[index];
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -111,7 +119,7 @@ class UnContenido extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Detalle(contenido: contenido),
+                builder: (context) => Detalle(index: index),
               ),
             );
           } else {
@@ -121,8 +129,11 @@ class UnContenido extends StatelessWidget {
         child: Card(
           child: Column(
             children: [
-              CabeceraContenido(
-                contenido: contenido,
+              BlocProvider.value(
+                value: context.read<ContenidoBloc>(),
+                child: CabeceraContenido(
+                  contenido: contenido,
+                ),
               ),
               contenido.titulo.isNotEmpty
                   ? Container(
@@ -136,7 +147,7 @@ class UnContenido extends StatelessWidget {
               Stack(clipBehavior: Clip.none, children: [
                 Visibility(
                   visible: contenido.multimedia.isNotEmpty,
-                  child: imagen(),
+                  child: imagen(context),
                 ),
                 Positioned(
                   top: -15,
@@ -155,24 +166,24 @@ class UnContenido extends StatelessWidget {
                   maxLines: esDetalle ? 1000 : 2,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                alignment: Alignment.centerRight,
-                child: GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    //   widget.contenido!.gusta = !widget.contenido!.gusta;
-                    //   //_gusta = !_gusta;
-                    // });
-                    // Llamadas.cambiarGusta(
-                    //     widget.contenido!.idContenido, widget.contenido!.gusta);
-                  },
-                  child: Icon(
-                    Icons.favorite,
-                    color: contenido.gusta ? Colors.red : Colors.grey,
-                  ),
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(16),
+              //   alignment: Alignment.centerRight,
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       // setState(() {
+              //       //   widget.contenido!.gusta = !widget.contenido!.gusta;
+              //       //   //_gusta = !_gusta;
+              //       // });
+              //       // Llamadas.cambiarGusta(
+              //       //     widget.contenido!.idContenido, widget.contenido!.gusta);
+              //     },
+              //     child: Icon(
+              //       Icons.favorite,
+              //       color: contenido.gusta ? Colors.red : Colors.grey,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

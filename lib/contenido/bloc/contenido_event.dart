@@ -24,3 +24,10 @@ class ContenidoCambiarGusta extends ContenidoEvent {
   @override
   List<Object> get props => [idContenido, gusta];
 }
+
+class ContenidoActualizaContenido extends ContenidoEvent {
+  const ContenidoActualizaContenido({required this.contenido});
+  final Contenido contenido;
+  @override
+  List<Object> get props => [contenido];
+}
