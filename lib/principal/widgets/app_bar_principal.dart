@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 
 import '../../ayuda/view/ayuda.dart';
 import '../../bloc/platform/platform_bloc.dart';
 import '../../components/dialog.dart';
+import '../../perfil/view/perfil.dart';
 
 class AppBarPrincipal extends StatelessWidget {
   const AppBarPrincipal({Key? key}) : super(key: key);
@@ -69,6 +71,16 @@ class AppBarPrincipal extends StatelessWidget {
         ),
         //Image.asset('assets/images/icon_login.png'),
         onTap: () async {
+          context.read<PerfilBloc>().add(PerfilCargarEvent());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const Perfil(
+                inicio: false,
+              ),
+            ),
+          );
+
           // var _perfilUsuario =
           //     Provider.of<PerfilUsuarioProvider>(context, listen: false);
           // _perfilUsuario.congelaCategoriasSeleccionadas();

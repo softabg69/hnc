@@ -6,7 +6,9 @@ import '../../principal/view/principal.dart';
 import '../bloc/perfil_bloc.dart';
 
 class Perfil extends StatefulWidget {
-  const Perfil({Key? key}) : super(key: key);
+  const Perfil({Key? key, this.inicio = true}) : super(key: key);
+
+  final bool inicio;
 
   @override
   State<Perfil> createState() => _PerfilState();
@@ -20,7 +22,8 @@ class _PerfilState extends State<Perfil> {
       body: SafeArea(
         child: BlocConsumer<PerfilBloc, PerfilState>(
           listener: (context, state) {
-            if (!navegado &&
+            if (widget.inicio &&
+                !navegado &&
                 (state.estado == EstadoPerfil.yaTienePerfil ||
                     state.estado == EstadoPerfil.guardado)) {
               navegado = true;
@@ -34,12 +37,16 @@ class _PerfilState extends State<Perfil> {
                   ),
                 ),
               );
+            } else if (!widget.inicio &&
+                state.estado == EstadoPerfil.guardado) {
+              Navigator.pop(context);
             }
           },
           builder: (context, state) {
-            return state.estado == EstadoPerfil.cargando ||
-                    state.estado == EstadoPerfil.guardando ||
-                    state.estado == EstadoPerfil.yaTienePerfil
+            return widget.inicio &&
+                    (state.estado == EstadoPerfil.cargando ||
+                        state.estado == EstadoPerfil.guardando ||
+                        state.estado == EstadoPerfil.yaTienePerfil)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
