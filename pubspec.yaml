@@ -37,6 +37,7 @@ dependencies:
   package_info_plus: 
   image_picker:
   url_launcher: ^6.0.12
+  video_player:
   # change_app_package_name: ^1.0.0
 
 

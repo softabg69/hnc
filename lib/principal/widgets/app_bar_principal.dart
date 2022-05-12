@@ -53,7 +53,7 @@ class AppBarPrincipal extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (ctx) => const Ayuda(),
+              builder: (ctx) => Ayuda(),
             ),
           );
           //Navigator.pushNamed(context, Ayuda.routeName);
