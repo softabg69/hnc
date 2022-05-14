@@ -1,7 +1,5 @@
 part of 'session_bloc.dart';
 
-enum AuthMethod { ninguno, local, google }
-
 class SessionState {
   final String email;
   final AuthMethod authMethod;

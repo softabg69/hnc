@@ -28,8 +28,6 @@ class SessionGoogleSignInEvent extends SessionEvent {
 
 class SessionClosing extends SessionEvent {}
 
-class SessionClose extends SessionEvent {}
-
 class SessionActualizarAvatarEvent extends SessionEvent {
   SessionActualizarAvatarEvent(this.avatar);
   final String avatar;

@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../bloc/session/session_bloc.dart';
 import '../../components/configuracion.dart';
+import '../../enumerados.dart';
 
 class PerfilAvatar extends StatelessWidget {
   PerfilAvatar({Key? key}) : super(key: key);

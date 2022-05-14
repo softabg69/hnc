@@ -1,17 +1,5 @@
 part of 'login_bloc.dart';
 
-enum EstadoLogin {
-  inicial,
-  datosUsuarioCandidatos,
-  autenticandoLocal,
-  autenticandoGoogle,
-  localError,
-  googleError,
-  procesado,
-  perfilDefinido,
-  definirPerfil
-}
-
 class LoginState {
   final String email;
   bool get isValidEmail => Validaciones.emailValido(email);

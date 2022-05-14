@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:hnc/login/bloc/login_bloc.dart';
 //import 'package:hnc/principal/bloc/principal_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -25,15 +26,20 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
   ContenidoBloc({required this.hncRepository, required this.session})
       : super(const ContenidoState()) {
-    sessionSubscription = session.stream.listen((state) {
+    sessionSubscription = session.stream.listen((stateSession) {
       Log.registra('cambio estado session en contenido bloc');
-      add(const ContenidoCargarEvent(iniciar: true));
+      if (stateSession.estado == EstadoLogin.solicitudCierre) {
+        add(ContenidoInicializar());
+      } else if (stateSession.estado == EstadoLogin.autenticado) {
+        add(const ContenidoCargarEvent(iniciar: true));
+      }
     });
     on<ContenidoEvent>((event, emit) {});
     on<ContenidoCargarEvent>(_cargar,
         transformer: throttleDroppable(throttleDuration));
     on<ContenidoCambiarGusta>(_cambiaGusta);
     on<ContenidoActualizaContenido>(_actualizaContenido);
+    on<ContenidoInicializar>(_inicializar);
   }
 
   @override
@@ -136,5 +142,14 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
       emit(state.copyWith(
           contenidos: copia, estado: EstadoContenido.actualizado));
     }
+  }
+
+  FutureOr<void> _inicializar(
+      ContenidoInicializar event, Emitter<ContenidoState> emit) async {
+    Log.registra("Inicializar contenido");
+    emit(state.copyWith(
+        estado: EstadoContenido.inicial,
+        contenidos: [],
+        alcanzadoFinal: false));
   }
 }

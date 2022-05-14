@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
@@ -7,6 +8,7 @@ import 'package:hnc/repository/models/categoria.dart';
 
 import '../../bloc/session/session_bloc.dart';
 import '../../components/log.dart';
+import '../../enumerados.dart';
 
 part 'perfil_event.dart';
 part 'perfil_state.dart';
@@ -14,14 +16,28 @@ part 'perfil_state.dart';
 class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
   PerfilBloc({required this.sesionBloc, required this.hncRepository})
       : super(const PerfilState()) {
+    sessionSubscription = sesionBloc.stream.listen((state) {
+      Log.registra('cambio estado session en contenido bloc');
+      if (state.estado == EstadoLogin.solicitudCierre) {
+        add(PerfilCerrar());
+      }
+    });
     Log.registra("constructor perfil bloc");
     on<PerfilCargarEvent>(_cargar);
     on<PerfilImageSelectedEvent>(_imagenSeleccionada);
     on<PerfilCategoriaCambiadaEvent>(_categoriaCambiada);
     on<PerfilProcesadoErrorEvent>(_procesadoError);
     on<PerfilGuardarEvent>(_guardar);
+    on<PerfilCerrar>(_cerrar);
   }
 
+  @override
+  Future<void> close() {
+    sessionSubscription.cancel();
+    return super.close();
+  }
+
+  late final StreamSubscription sessionSubscription;
   final SessionBloc sesionBloc;
   final HncRepository hncRepository;
 
@@ -101,5 +117,16 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
   void _procesadoError(
       PerfilProcesadoErrorEvent event, Emitter<PerfilState> emit) async {
     emit(state.copyWith(estado: EstadoPerfil.intentoSinSeleccion));
+  }
+
+  FutureOr<void> _cerrar(PerfilCerrar event, Emitter<PerfilState> emit) async {
+    Log.registra('cerrar perfil');
+    emit(state.copyWith(
+        email: '',
+        avatar: '',
+        origenAvatar: OrigenImagen.network,
+        categorias: [],
+        estado: EstadoPerfil.inicial,
+        bytesImg: null));
   }
 }

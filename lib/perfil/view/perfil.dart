@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/widgets/perfil_screen.dart';
+import '../../enumerados.dart';
 import '../../principal/view/principal.dart';
 import '../bloc/perfil_bloc.dart';
 

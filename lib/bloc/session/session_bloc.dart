@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hnc/repository/hnc_repository.dart';
 
 import 'package:hnc/repository/models/categoria.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/log.dart';
 import '../../enumerados.dart';
-import '../../login/bloc/login_bloc.dart';
 
 part 'session_event.dart';
 part 'session_state.dart';
 
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
-  SessionBloc() : super(SessionState()) {
+  SessionBloc({required this.hncRepository}) : super(SessionState()) {
     on<SessionInitEvent>(_init);
     on<SessionLocalAuthenticationEvent>(_local);
     on<SessionGoogleSignInEvent>(_googleSignIn);
-    on<SessionClosing>(_closeSession);
+    on<SessionClosing>(_cerrarSession);
     on<SessionActualizarAvatarEvent>(_actualizarAvatar);
     on<SessionEstablecerCategoriasUsuarioEvent>(_establecerCategoriasUsuario);
     on<SessionEstablecerFiltroCategoriasEvent>(_establecerFiltroCategorias);
@@ -28,13 +28,18 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<SessionCambioDias>(_cambioDias);
   }
 
+  final HncRepository hncRepository;
+
   void _init(SessionInitEvent event, Emitter<SessionState> emit) async {
     emit(state.copyWith(email: ''));
   }
 
   void _local(
       SessionLocalAuthenticationEvent event, Emitter<SessionState> emit) async {
-    emit(state.copyWith(email: event.email, authMethod: AuthMethod.local));
+    emit(state.copyWith(
+        email: event.email,
+        authMethod: AuthMethod.local,
+        estado: EstadoLogin.autenticado));
   }
 
   void _googleSignIn(
@@ -42,11 +47,14 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     emit(state.copyWith(
         email: event.email,
         avatar: event.avatar,
-        authMethod: AuthMethod.google));
+        authMethod: AuthMethod.google,
+        estado: EstadoLogin.autenticado));
   }
 
-  void _closeSession(SessionClosing event, Emitter<SessionState> emit) async {
-    if (state.authMethod == AuthMethod.google) {}
+  void _cerrarSession(SessionClosing event, Emitter<SessionState> emit) async {
+    emit(state.copyWith(estado: EstadoLogin.solicitudCierre));
+    hncRepository.cierra();
+    emit(state.copyWith(estado: EstadoLogin.cerrado));
   }
 
   void _actualizarAvatar(

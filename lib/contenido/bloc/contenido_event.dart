@@ -31,3 +31,5 @@ class ContenidoActualizaContenido extends ContenidoEvent {
   @override
   List<Object> get props => [contenido];
 }
+
+class ContenidoInicializar extends ContenidoEvent {}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hnc/bloc/session/cierre_sesion.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/contenido/view/contenido.dart';
 import 'package:hnc/principal/widgets/drawer_principal.dart';
@@ -53,22 +54,24 @@ class _PrincipalState extends State<Principal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const DrawerPrincipal(),
-      backgroundColor: Colors.grey,
-      // onDrawerChanged: (bool isOpen) {
-      //   if (isOpen) {
-      //     context.read<PrincipalBloc>().add(PrincipalDrawerOpen());
-      //   } else {
-      //     context.read<PrincipalBloc>().add(PrincipalDrawerClose());
-      //   }
-      // },
-      body: CustomScrollView(
-        controller: _scrollController,
-        slivers: const [
-          AppBarPrincipal(),
-          Contenido(),
-        ],
+    return CierreSesion(
+      child: Scaffold(
+        drawer: const DrawerPrincipal(),
+        backgroundColor: Colors.grey,
+        // onDrawerChanged: (bool isOpen) {
+        //   if (isOpen) {
+        //     context.read<PrincipalBloc>().add(PrincipalDrawerOpen());
+        //   } else {
+        //     context.read<PrincipalBloc>().add(PrincipalDrawerClose());
+        //   }
+        // },
+        body: CustomScrollView(
+          controller: _scrollController,
+          slivers: const [
+            AppBarPrincipal(),
+            Contenido(),
+          ],
+        ),
       ),
     );
   }

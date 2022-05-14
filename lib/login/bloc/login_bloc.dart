@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -7,6 +9,7 @@ import 'package:hnc/components/validaciones.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import '../../components/log.dart';
 import '../../components/validaciones.dart';
+import '../../enumerados.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -26,6 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginGoogleEvent>(_loginGoogle);
     on<LoginGoogleError>(_loginGoogleError);
     on<LoginEstadoInicial>(_estadoInicial);
+    on<LoginClose>(_cerrar);
   }
 
   final HncRepository hncRepository;
@@ -93,5 +97,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _estadoInicial(
       LoginEstadoInicial event, Emitter<LoginState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.inicial));
+  }
+
+  FutureOr<void> _cerrar(LoginClose event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(estado: EstadoLogin.cerrando));
+    if (session.state.authMethod == AuthMethod.google) {
+      await googleSignIn.signOut();
+    }
+    emit(state.copyWith(estado: EstadoLogin.cerrado));
   }
 }

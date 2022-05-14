@@ -35,7 +35,10 @@ class AppState extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => SessionBloc()..add(SessionInitEvent())),
+            create: (context) =>
+                SessionBloc(hncRepository: context.read<HncRepository>())
+                  ..add(SessionInitEvent()),
+          ),
           BlocProvider(
             create: (context) => PlatformBloc()..add(PlatformLoadEvent()),
           ),

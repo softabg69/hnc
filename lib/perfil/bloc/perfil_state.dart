@@ -1,19 +1,5 @@
 part of 'perfil_bloc.dart';
 
-enum EstadoPerfil {
-  inicial,
-  cargando,
-  cargado,
-  error,
-  guardando,
-  guardado,
-  errorGuardar,
-  errorSeleccion,
-  intentoSinSeleccion,
-  yaTienePerfil
-}
-enum OrigenImagen { network, bytes }
-
 class PerfilState extends Equatable {
   const PerfilState(
       {this.email = '',

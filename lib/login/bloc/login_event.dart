@@ -33,3 +33,5 @@ class LoginGoogleEvent extends LoginEvent {}
 class LoginGoogleStart extends LoginEvent {}
 
 class LoginGoogleError extends LoginEvent {}
+
+class LoginClose extends LoginEvent {}

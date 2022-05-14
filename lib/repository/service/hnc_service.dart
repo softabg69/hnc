@@ -16,7 +16,7 @@ class HncService {
   String _token = '';
 
   void setToken(String token) {
-    Log.registra("setToken: $token");
+    Log.registra("setToken serv: $token");
     _token = token;
   }
 

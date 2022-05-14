@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
+import '../../enumerados.dart';
 import '../../registro/view/registro.dart';
 import '../bloc/login_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
@@ -242,6 +243,9 @@ class _LoginState extends State<Login> {
   Widget _loginForm(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
+        if (state.estado == EstadoLogin.solicitudCierre) {
+          context.read<LoginBloc>().add(LoginClose());
+        }
         return Center(
           child: SingleChildScrollView(
             child: AbsorbPointer(

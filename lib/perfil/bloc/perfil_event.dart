@@ -28,3 +28,5 @@ class PerfilCategoriaCambiadaEvent extends PerfilEvent {
 class PerfilGuardarEvent extends PerfilEvent {}
 
 class PerfilProcesadoErrorEvent extends PerfilEvent {}
+
+class PerfilCerrar extends PerfilEvent {}

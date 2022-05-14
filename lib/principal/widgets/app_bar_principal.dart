@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 
 import '../../ayuda/view/ayuda.dart';
 import '../../bloc/platform/platform_bloc.dart';
 import '../../components/dialog.dart';
+import '../../login/view/login.dart';
 import '../../perfil/view/perfil.dart';
 
 class AppBarPrincipal extends StatelessWidget {
@@ -107,6 +109,14 @@ class AppBarPrincipal extends StatelessWidget {
         ),
         //Image.asset('assets/images/icon_login.png'),
         onTap: () {
+          context.read<SessionBloc>().add(SessionClosing());
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const Login(),
+            ),
+          );
+
           // if (inicioExterno) {
           //   _cerrarSesion();
           // } else {

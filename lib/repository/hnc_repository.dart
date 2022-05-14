@@ -96,4 +96,8 @@ class HncRepository {
     });
     return Contenido.fromJson(await service.guardarContenido(body));
   }
+
+  void cierra() {
+    service.setToken('');
+  }
 }
