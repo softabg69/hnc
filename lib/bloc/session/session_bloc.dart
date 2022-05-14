@@ -53,8 +53,11 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
   void _cerrarSession(SessionClosing event, Emitter<SessionState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.solicitudCierre));
-    hncRepository.cierra();
     emit(state.copyWith(estado: EstadoLogin.cerrado));
+    try {
+      await hncRepository.desconectar();
+    } catch (e) {}
+    hncRepository.cierra();
   }
 
   void _actualizarAvatar(

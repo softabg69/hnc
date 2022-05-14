@@ -147,4 +147,9 @@ class HncService {
     Log.registra('guardarContenido');
     return await _post('/data/guardarContenido', json, headersToken);
   }
+
+  Future<dynamic> desconectar() async {
+    Log.registra('servie desconectar');
+    return await _post('/datos/desconectar', '', headersToken);
+  }
 }

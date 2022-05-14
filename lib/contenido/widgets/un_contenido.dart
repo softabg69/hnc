@@ -64,7 +64,7 @@ class UnContenido extends StatelessWidget {
             child: Image.network(
               '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
               width: double.infinity,
-              fit: BoxFit.scaleDown,
+              fit: BoxFit.cover,
             ),
           );
   }
@@ -112,7 +112,7 @@ class UnContenido extends StatelessWidget {
   Widget tarjeta(BuildContext context) {
     final contenido = context.read<ContenidoBloc>().state.contenidos[index];
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       child: GestureDetector(
         onTap: () {
           if (!esDetalle) {

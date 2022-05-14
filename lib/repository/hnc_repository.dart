@@ -97,6 +97,10 @@ class HncRepository {
     return Contenido.fromJson(await service.guardarContenido(body));
   }
 
+  Future<void> desconectar() async {
+    await service.desconectar();
+  }
+
   void cierra() {
     service.setToken('');
   }
