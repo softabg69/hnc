@@ -4,6 +4,7 @@ import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/contenido/view/contenido.dart';
 import 'package:hnc/principal/widgets/drawer_principal.dart';
 import '../../components/log.dart';
+import '../../stories/views/stories.dart';
 import '../widgets/app_bar_principal.dart';
 
 //typedef DrawerCallback = void Function(bool isOpened);
@@ -69,6 +70,9 @@ class _PrincipalState extends State<Principal> {
           controller: _scrollController,
           slivers: const [
             AppBarPrincipal(),
+            SliverToBoxAdapter(
+              child: Stories(),
+            ),
             Contenido(),
           ],
         ),

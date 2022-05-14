@@ -85,21 +85,21 @@ class UnContenido extends StatelessWidget {
               ? CircleAvatar(
                   backgroundColor: Theme.of(context)
                       .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
-                  radius: 30,
+                  radius: 25,
                   child: const CircularProgressIndicator(),
                 )
               : Stack(children: [
                   CircleAvatar(
                     backgroundColor: Theme.of(context)
                         .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
-                    radius: 30,
+                    radius: 25,
                   ),
                   Positioned(
                     left: 10,
                     top: 10,
                     child: Icon(
                       Icons.favorite,
-                      size: 40,
+                      size: 30,
                       color: contenido.gusta ? Colors.red : Colors.white,
                     ),
                   ),

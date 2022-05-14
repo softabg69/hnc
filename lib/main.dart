@@ -6,9 +6,9 @@ import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
-import 'package:hnc/principal/bloc/principal_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
+import 'package:hnc/stories/bloc/stories_bloc.dart';
 
 import 'login/view/login.dart';
 
@@ -46,6 +46,10 @@ class AppState extends StatelessWidget {
               create: (context) => ContenidoBloc(
                   hncRepository: context.read<HncRepository>(),
                   session: context.read<SessionBloc>())),
+          BlocProvider(
+              create: (context) => StoriesBloc(
+                  session: context.read<SessionBloc>(),
+                  hncRepository: context.read<HncRepository>())),
           // BlocProvider(
           //   create: (context) => PrincipalBloc(
           //       hncRepository: context.read<HncRepository>(),

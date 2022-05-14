@@ -150,6 +150,12 @@ class HncService {
 
   Future<dynamic> desconectar() async {
     Log.registra('servie desconectar');
-    return await _post('/datos/desconectar', '', headersToken);
+    return await _post('/data/desconectar', '', headersToken);
+  }
+
+  Future<dynamic> getStories(int dias, String categorias) async {
+    Log.registra('getStories: $dias $categorias');
+    return await _get(
+        '/data/getStories?dias=$dias&categorias=$categorias', headersToken);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:hnc/repository/models/categoria.dart';
 import 'package:hnc/repository/models/contenido.dart';
+import 'package:hnc/repository/models/usuario_story.dart';
 import 'package:hnc/repository/service/custom_exceptions.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
@@ -103,5 +104,11 @@ class HncRepository {
 
   void cierra() {
     service.setToken('');
+  }
+
+  Future<List<UsuarioStory>> getStories(List<int> categorias, int dias) async {
+    final stories = await service.getStories(-dias, json.encode(categorias));
+    return List<UsuarioStory>.from(
+        stories.map((model) => UsuarioStory.fromJson(model))).toList();
   }
 }

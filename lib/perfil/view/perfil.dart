@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/widgets/perfil_screen.dart';
+import 'package:hnc/stories/bloc/stories_bloc.dart';
 import '../../enumerados.dart';
 import '../../principal/view/principal.dart';
 import '../bloc/perfil_bloc.dart';
@@ -28,6 +30,12 @@ class _PerfilState extends State<Perfil> {
                 (state.estado == EstadoPerfil.yaTienePerfil ||
                     state.estado == EstadoPerfil.guardado)) {
               navegado = true;
+              final categorias =
+                  context.read<SessionBloc>().state.filtroCategorias;
+              context
+                  .read<StoriesBloc>()
+                  .add(StoriesCargar(categorias: categorias));
+
               // context.read<SessionBloc>().add(
               //     SessionEstablecerCategoriasUsuarioEvent(state.categorias));
               Navigator.pushReplacement(
