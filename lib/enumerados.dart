@@ -3,6 +3,7 @@ enum FiltroFechas { ultimos5dias, todos }
 enum OrigenImagen { network, bytes }
 enum AuthMethod { ninguno, local, google }
 enum EstadoStories { inicial, cargando, cargado, error }
+enum EstadoContenido { inicial, cargando, cargado, error, actualizado }
 enum EstadoLogin {
   inicial,
   datosUsuarioCandidatos,

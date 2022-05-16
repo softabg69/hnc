@@ -138,6 +138,14 @@ class HncService {
         headersToken);
   }
 
+  Future<dynamic> getStoriesUsuario(
+      String idUsuario, String idscategorias, int dias, int offset) async {
+    Log.registra('getStoriesUsuario: $idUsuario');
+    return await _get(
+        '/data/getStoriesUsuario?idUsuario=$idUsuario&idscategorias=$idscategorias&dias=$dias&offset=$offset',
+        headersToken);
+  }
+
   Future<dynamic> setGusta(String json) async {
     Log.registra('setGusta');
     return await _post('/data/setGusta', json, headersToken);

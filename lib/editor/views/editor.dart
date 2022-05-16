@@ -6,11 +6,12 @@ import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/editor/bloc/editor_bloc.dart';
 import 'package:hnc/editor/widgets/contenido_imagen.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+//import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/configuracion.dart';
 import '../../components/dialog.dart';
 import '../../components/log.dart';
+import '../../enumerados.dart';
 import '../../repository/models/categoria.dart';
 import '../../repository/models/contenido.dart';
 

@@ -71,6 +71,16 @@ class HncRepository {
         .toList();
   }
 
+  Future<List<Contenido>> getStoriesUsuario(
+      String idUsuario, List<int> idsCategorias, int dias, int? offset) async {
+    offset ??= 0;
+    final String categorias = json.encode(idsCategorias);
+    final jsn =
+        await service.getStoriesUsuario(idUsuario, categorias, dias, offset);
+    return List<Contenido>.from(jsn.map((model) => Contenido.fromJson(model)))
+        .toList();
+  }
+
   Future<void> setGusta(String idContenido, bool gusta) async {
     final body = {};
     body['idContenido'] = idContenido;

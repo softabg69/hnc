@@ -14,7 +14,11 @@ class UsuarioStory {
         avatar = map['avatar'];
 
   factory UsuarioStory.fromJson(Map<String, dynamic> json) => UsuarioStory(
-      idUsuario: json['diUsuario'] ?? '',
+      idUsuario: json['idUsuario'] ?? '',
       usuario: json['usuario'] ?? '',
       avatar: json['avatar'] ?? '');
+  @override
+  String toString() {
+    return 'ID: $idUsuario, USR: $usuario';
+  }
 }

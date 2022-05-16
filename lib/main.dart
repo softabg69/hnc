@@ -9,6 +9,7 @@ import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 import 'package:hnc/stories/bloc/stories_bloc.dart';
+import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
 
 import 'login/view/login.dart';
 
@@ -59,7 +60,12 @@ class AppState extends StatelessWidget {
             create: (context) => PerfilBloc(
                 sesionBloc: context.read<SessionBloc>(),
                 hncRepository: context.read<HncRepository>()),
-          )
+          ),
+          BlocProvider(
+            create: (context) => UserStoriesBloc(
+                hncRepository: context.read<HncRepository>(),
+                session: context.read<SessionBloc>()),
+          ),
         ],
         child: const MyApp(),
       ),
