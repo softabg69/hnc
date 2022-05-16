@@ -5,16 +5,22 @@ import 'package:hnc/components/configuracion.dart';
 import 'package:hnc/editor/bloc/editor_bloc.dart';
 import 'package:hnc/editor/views/editor.dart';
 import 'package:hnc/repository/hnc_repository.dart';
+import 'package:hnc/tipos.dart';
 
 import '../../components/dialog.dart';
-import '../../components/log.dart';
+//import '../../components/log.dart';
 import '../../repository/models/contenido.dart';
 import '../bloc/contenido_bloc.dart';
 
 @immutable
 class CabeceraContenido extends StatelessWidget {
-  const CabeceraContenido({Key? key, this.contenido}) : super(key: key);
-  //this._grupo, this._fecha, this._usuario, this._id, this._idCont);
+  const CabeceraContenido(
+      {Key? key,
+      required this.contenido,
+      required this.eliminar,
+      required this.editar,
+      required this.compartir})
+      : super(key: key);
 
   final TextStyle estiloUsuario =
       const TextStyle(color: Colors.black87, fontSize: 14);
@@ -23,59 +29,10 @@ class CabeceraContenido extends StatelessWidget {
   final TextStyle estiloGrupo =
       const TextStyle(color: Colors.blue, fontSize: 14);
 
-  final Contenido? contenido;
-  // final String _grupo;
-  // final String _fecha;
-  // final String _usuario;
-  // final int _id;
-  // final String _idCont;
-
-  // cardData.categorias,
-  //                           cardData.fecha,
-  //                           cardData.creador,
-  //                           cardData.idCreador,
-  //                           cardData.idContenido),
-
-  // muestraDialogoEliminar(BuildContext context) {
-  //   // set up the buttons
-  //   Widget cancelButton = TextButton(
-  //     child: const Text("Cancelar"),
-  //     onPressed: () {
-  //       Navigator.pop(context);
-  //     },
-  //   );
-  //   Widget continueButton = TextButton(
-  //     child: const Text("Eliminar"),
-  //     onPressed: () {
-  //       // Navigator.push(
-  //       //   context,
-  //       //   MaterialPageRoute(
-  //       //     builder: (context) {
-  //       //       EliminarContenido(idContenido: contenido!.idContenido),
-  //       //     },
-  //       //   ),
-  //       // ).then((value) {
-  //       //   Navigator.pop(context);
-  //       // });
-  //     },
-  //   );
-  //   // set up the AlertDialog
-  //   AlertDialog alert = AlertDialog(
-  //     title: const Text("Eliminar contenido"),
-  //     content: const Text("¿Seguro que quiere eliminar el contenido?"),
-  //     actions: [
-  //       cancelButton,
-  //       continueButton,
-  //     ],
-  //   );
-  //   // show the dialog
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
+  final Contenido contenido;
+  final CallbackContenido eliminar;
+  final CallbackContenido editar;
+  final CallbackContenido compartir;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +44,7 @@ class CabeceraContenido extends StatelessWidget {
           CircleAvatar(
             radius: 14,
             backgroundImage: NetworkImage(
-              '${Environment().config!.baseUrlServicios}/data/avatarusuario?id=${contenido!.avatar}',
+              '${Environment().config!.baseUrlServicios}/data/avatarusuario?id=${contenido.avatar}',
             ),
             // AssetImage('assets/images/helpncare.jpg'),
           ),
@@ -101,7 +58,7 @@ class CabeceraContenido extends StatelessWidget {
                 Wrap(
                   children: [
                     Text(
-                      contenido!.creador + ' ',
+                      contenido.creador + ' ',
                       //_usuario + ' ',
                       style: estiloUsuario,
                       //,
@@ -111,7 +68,7 @@ class CabeceraContenido extends StatelessWidget {
                       style: estiloPublico,
                     ),
                     Text(
-                      contenido!.categorias,
+                      contenido.categorias,
                       //_grupo,
                       style: estiloGrupo,
                     )
@@ -131,7 +88,7 @@ class CabeceraContenido extends StatelessWidget {
                       width: 3,
                     ),
                     Text(
-                      contenido!.cuando,
+                      contenido.cuando,
                       //_fecha,
                       style: const TextStyle(fontSize: 14),
                     ),
@@ -140,19 +97,20 @@ class CabeceraContenido extends StatelessWidget {
               ],
             ),
           ),
-          contenido!.propietario
+          contenido.propietario
               ? IconButton(
                   onPressed: () async {
                     Dialogs.continuarCancelar(
                         context,
                         'Eliminar',
-                        contenido!.modo == 1
+                        contenido.modo == 1
                             ? 'Eliminar contenido'
                             : 'Eliminar story',
-                        contenido!.modo == 1
+                        contenido.modo == 1
                             ? '¿Seguro que quiere eliminar el contenido?'
-                            : '¿Seguro que quiere eliminar la story?',
-                        () {});
+                            : '¿Seguro que quiere eliminar la story?', () {
+                      eliminar(contenido);
+                    });
                     //muestraDialogoEliminar(context);
                     // Navigator.push(
                     //   context,
@@ -170,28 +128,11 @@ class CabeceraContenido extends StatelessWidget {
               : const SizedBox(
                   width: 0,
                 ),
-          contenido!.propietario
+          contenido.propietario
               ? IconButton(
                   onPressed: () async {
+                    editar(contenido);
                     //Log.registra(contenido!.multimedia);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<ContenidoBloc>(),
-                          child: BlocProvider(
-                            create: ((context) => EditorBloc(
-                                hncRepository: context.read<HncRepository>(),
-                                session: context.read<SessionBloc>(),
-                                contenidoBloc: context.read<ContenidoBloc>())),
-                            child: Editor(
-                              modo: 1,
-                              contenido: contenido!,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
                   },
                   icon: const Icon(Icons.edit),
                   color: Theme.of(context).primaryColor,
@@ -201,6 +142,7 @@ class CabeceraContenido extends StatelessWidget {
                 ),
           IconButton(
             onPressed: () async {
+              compartir(contenido);
               // await Share.share(
               //   '$kUrlApp/#/compartido?token=${contenido!.idContenido}',
               //   subject:

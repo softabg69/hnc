@@ -90,7 +90,12 @@ class ContenidoStory extends StatelessWidget {
         child: Card(
           child: Column(
             children: [
-              CabeceraContenido(contenido: contenido),
+              CabeceraContenido(
+                contenido: contenido,
+                eliminar: eliminar,
+                editar: editar,
+                compartir: compartir,
+              ),
               contenido.titulo.isNotEmpty
                   ? Container(
                       padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),

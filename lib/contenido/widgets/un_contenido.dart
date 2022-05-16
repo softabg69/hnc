@@ -5,7 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/repository/models/contenido.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import '../../bloc/session/session_bloc.dart';
 import '../../components/configuracion.dart';
+import '../../editor/bloc/editor_bloc.dart';
+import '../../editor/views/editor.dart';
+import '../../enumerados.dart';
+import '../../repository/hnc_repository.dart';
 import '../../widgets/una_columna.dart';
 import '../bloc/contenido_bloc.dart';
 import '../view/detalle.dart';
@@ -133,6 +138,28 @@ class UnContenido extends StatelessWidget {
                 value: context.read<ContenidoBloc>(),
                 child: CabeceraContenido(
                   contenido: contenido,
+                  eliminar: (c) {},
+                  editar: (c) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<ContenidoBloc>(),
+                          child: BlocProvider(
+                            create: ((context) => EditorBloc(
+                                hncRepository: context.read<HncRepository>(),
+                                session: context.read<SessionBloc>(),
+                                contenidoBloc: context.read<ContenidoBloc>())),
+                            child: Editor(
+                              modo: 1,
+                              contenido: contenido,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  compartir: (c) {},
                 ),
               ),
               contenido.titulo.isNotEmpty

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/repository/models/usuario_story.dart';
+import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
+import 'package:hnc/user_stories/views/visor_stories_usuario.dart';
 
 import '../../components/configuracion.dart';
 
@@ -16,13 +19,16 @@ class Story extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () async {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (ctx) => const StoriesUsuario(),
-              //   ),
-              //   //StoriesUsuario.routeName,
-              // );
+              context
+                  .read<UserStoriesBloc>()
+                  .add(UserStoriesCargar(idUsuario: story.idUsuario));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => const VisorStoriesUsuario(),
+                ),
+                //StoriesUsuario.routeName,
+              );
             },
             child: Stack(
               children: [

@@ -26,6 +26,7 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
       Log.registra('UserStoriesEvent: $event');
     });
     on<UserStoriesCargar>(_cargar);
+    on<UserStoriesCambiarGusta>(_cambiaGusta);
   }
   @override
   Future<void> close() {
@@ -86,5 +87,33 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
     Log.registra("Inicializar contenido");
     emit(state.copyWith(
         estado: EstadoContenido.inicial, stories: [], alcanzadoFinal: false));
+  }
+
+  FutureOr<void> _cambiaGusta(
+      UserStoriesCambiarGusta event, Emitter<UserStoriesState> emit) async {
+    Log.registra("cambia gusta: ${event.idContenido} -> ${event.gusta}");
+    final copia = [...state.stories];
+    final int seleccionado = copia.indexWhere(
+      (element) => element.idContenido == event.idContenido,
+    );
+    if (seleccionado != -1) {
+      copia[seleccionado] =
+          copia[seleccionado].copyWith(estadoGusta: EstadoGusta.cambiando);
+      emit(state.copyWith(stories: copia));
+      try {
+        await hncRepository.setGusta(event.idContenido, event.gusta);
+        final copia = [...state.stories];
+        final int seleccionado = copia.indexWhere(
+          (element) => element.idContenido == event.idContenido,
+        );
+        if (seleccionado != -1) {
+          copia[seleccionado] = copia[seleccionado]
+              .copyWith(estadoGusta: EstadoGusta.normal, gusta: event.gusta);
+          emit(state.copyWith(stories: copia));
+        }
+      } catch (e) {
+        Log.registra('Error cambia gusta: $e');
+      }
+    }
   }
 }

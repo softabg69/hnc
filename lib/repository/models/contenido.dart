@@ -1,6 +1,6 @@
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 
-enum EstadoGusta { normal, cambiando, error }
+import '../../enumerados.dart';
 
 class Contenido {
   final String idContenido;
