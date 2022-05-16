@@ -4,6 +4,7 @@ import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/contenido/widgets/block_loader.dart';
 import 'package:hnc/widgets/una_columna.dart';
 
+import '../../enumerados.dart';
 import '../widgets/un_contenido.dart';
 
 class Contenido extends StatefulWidget {

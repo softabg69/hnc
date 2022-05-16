@@ -131,9 +131,6 @@ class UnaStory extends StatelessWidget {
                 value: context.read<UserStoriesBloc>(),
                 child: CabeceraContenido(
                   contenido: contenido,
-                  editar: (c) {},
-                  eliminar: (c) {},
-                  compartir: (c) {},
                 ),
               ),
               contenido.titulo.isNotEmpty
