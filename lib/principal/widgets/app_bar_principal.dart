@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
+import 'package:hnc/stories/views/stories.dart';
 
 import '../../ayuda/view/ayuda.dart';
 import '../../bloc/platform/platform_bloc.dart';
@@ -38,11 +39,22 @@ class AppBarPrincipal extends StatelessWidget {
           );
         },
       ),
-      expandedHeight: 70,
+      floating: true,
+      expandedHeight: 175,
       pinned: true,
       backgroundColor: Colors.white,
       foregroundColor: Colors.blue,
       actions: acciones(context),
+      flexibleSpace: FlexibleSpaceBar(
+        background: Column(
+          children: const [
+            SizedBox(
+              height: 70,
+            ),
+            Stories(),
+          ],
+        ),
+      ),
     );
   }
 

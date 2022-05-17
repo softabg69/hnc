@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/repository/models/usuario_story.dart';
+import 'package:hnc/tipos.dart';
 import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
 import 'package:hnc/user_stories/views/visor_stories_usuario.dart';
 
 import '../../components/configuracion.dart';
 
 class Story extends StatelessWidget {
-  const Story({Key? key, required this.story}) : super(key: key);
+  const Story({Key? key, required this.story, required this.callback})
+      : super(key: key);
 
   final UsuarioStory story;
+  final CallbackUsuarioStory callback;
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +22,7 @@ class Story extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () async {
-              context
-                  .read<UserStoriesBloc>()
-                  .add(UserStoriesCargar(idUsuario: story.idUsuario));
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (ctx) => const VisorStoriesUsuario(),
-                ),
-                //StoriesUsuario.routeName,
-              );
+              callback(story);
             },
             child: Stack(
               children: [
@@ -47,20 +41,20 @@ class Story extends StatelessWidget {
                     backgroundColor: Colors.grey.shade200,
                     radius: 30,
                   ),
-                  // CircleAvatar(
-                  //   child: CachedNetworkImage(
-                  //     imageUrl: kUrlServicios +
-                  //         'datos/getavatar?idUsuario=${stori.idUsuario}',
-                  //     placeholder: (context, url) =>
-                  //         const CircularProgressIndicator(),
-                  //     errorWidget: (context, url, error) =>
-                  //         const CircleAvatar(
-                  //       backgroundColor: Colors.red,
-                  //       radius: 33,
-                  //     ),
-                  //   ),
-                  // ),
                 ),
+                story.idUsuario.isEmpty
+                    ? Positioned(
+                        right: -10,
+                        bottom: -10,
+                        child: Icon(
+                          Icons.add,
+                          size: 50,
+                          color: Theme.of(context).primaryColor,
+                          shadows: const [Shadow()],
+                        ))
+                    : const SizedBox(
+                        height: 0,
+                      )
               ],
             ),
           ),
@@ -68,7 +62,7 @@ class Story extends StatelessWidget {
             height: 8,
           ),
           SizedBox(
-            width: 80,
+            width: 90,
             child: Center(
               child: FittedBox(
                 child: Text(

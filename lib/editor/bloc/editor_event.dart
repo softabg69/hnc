@@ -14,6 +14,7 @@ class EditorGuardarEvent extends EditorEvent {
       this.cuerpo,
       this.url,
       this.imagen,
+      required this.modo,
       required this.categorias})
       : super();
   final String? id;
@@ -21,5 +22,6 @@ class EditorGuardarEvent extends EditorEvent {
   final String? cuerpo;
   final String? url;
   final Uint8List? imagen;
+  final int modo;
   final List<int> categorias;
 }

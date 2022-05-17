@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/enumerados.dart';
-import 'package:hnc/user_stories/views/stories_usuario.dart';
+//import 'package:hnc/user_stories/views/stories_usuario.dart';
 import 'package:hnc/widgets/contenido_story.dart';
 
 import '../../components/log.dart';
 import '../bloc/user_stories_bloc.dart';
 
 class VisorStoriesUsuario extends StatefulWidget {
-  const VisorStoriesUsuario({Key? key}) : super(key: key);
+  const VisorStoriesUsuario({Key? key, required this.usuario})
+      : super(key: key);
+
+  final String usuario;
 
   @override
   State<VisorStoriesUsuario> createState() => _VisorStoriesUsuarioState();
@@ -67,8 +70,9 @@ class _VisorStoriesUsuarioState extends State<VisorStoriesUsuario> {
             //   ),
             // ),
             //StoriesUsuario(),
-            const SliverAppBar(
-              title: Text('Stories de '),
+            SliverAppBar(
+              title: Text('Stories de ${widget.usuario}'),
+              pinned: true,
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(

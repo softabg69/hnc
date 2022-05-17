@@ -105,6 +105,7 @@ class _EditorState extends State<Editor> {
           cuerpo: _texto.text,
           url: _url.text,
           imagen: imagen,
+          modo: widget.contenido.modo,
           categorias: _categoriasSeleccionadas));
 
       // if (widget.contenido != null) {

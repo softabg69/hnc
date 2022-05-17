@@ -65,10 +65,14 @@ class ContenidoImagen extends StatelessWidget {
                   ),
                 ),
               )
-            : Container(
-                decoration: const BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.green,
+            : Center(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.green,
+                  ),
+                  width: 100,
+                  height: 75,
                 ),
               );
   }

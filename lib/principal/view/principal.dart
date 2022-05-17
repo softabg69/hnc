@@ -74,9 +74,9 @@ class _PrincipalState extends State<Principal> {
           controller: _scrollController,
           slivers: const [
             AppBarPrincipal(),
-            SliverToBoxAdapter(
-              child: Stories(),
-            ),
+            // SliverToBoxAdapter(
+            //   child: Stories(),
+            // ),
             Contenido(),
           ],
         ),

@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 
 import 'package:hnc/repository/models/categoria.dart';
+import 'package:hnc/repository/models/usuario_story.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/log.dart';
