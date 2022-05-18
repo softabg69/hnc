@@ -35,7 +35,10 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
       final conte = await hncRepository.guardarContenido(event.id, event.titulo,
           event.cuerpo, event.url, event.imagen, event.modo, event.categorias);
       Log.registra("después de guardar: $conte");
-      contenidoBloc.add(ContenidoActualizaContenido(contenido: conte));
+      if (event.modo == 1) {
+        contenidoBloc.add(ContenidoActualizaContenido(contenido: conte));
+      } else if (event.modo == 2) {}
+
       Log.registra("después actualizar");
       if (event.id != null && event.id!.isNotEmpty) {
         // existente

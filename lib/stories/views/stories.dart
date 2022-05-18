@@ -35,12 +35,9 @@ class Stories extends StatelessWidget {
                   itemBuilder: ((context, index) {
                     if (index == 0) {
                       final sesion = context.read<SessionBloc>().state;
-                      Log.registra(
-                          'Usuario: ${sesion.email.substring(0, sesion.email.indexOf('@'))}');
                       final UsuarioStory usuStory = UsuarioStory(
                           idUsuario: '',
-                          usuario: sesion.email
-                              .substring(0, sesion.email.indexOf('@')),
+                          usuario: 'Crear story',
                           avatar: sesion.avatar);
                       return Story(
                         story: usuStory,

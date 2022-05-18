@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/perfil/bloc/perfil_bloc.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../components/configuracion.dart';
 import '../../components/log.dart';
@@ -67,12 +67,18 @@ class ContenidoImagen extends StatelessWidget {
               )
             : Center(
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color: Colors.green,
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 2),
                   ),
-                  width: 100,
+                  width: 300,
                   height: 75,
+                  child: const Expanded(
+                    child: Center(
+                      child: Text('Pulse aquí para seleccionar la imagen'),
+                    ),
+                  ),
                 ),
               );
   }

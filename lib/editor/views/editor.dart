@@ -230,10 +230,14 @@ class _EditorState extends State<Editor> {
     return Column(
       children: [
         SizedBox(
-          width: 100,
-          child: Text(
-            categorias![index].descripcion,
-            style: const TextStyle(overflow: TextOverflow.ellipsis),
+          width: 90,
+          child: Center(
+            child: FittedBox(
+              child: Text(
+                categorias![index].descripcion,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
         ),
         Image.network(
