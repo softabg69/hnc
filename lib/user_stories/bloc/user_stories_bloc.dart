@@ -27,6 +27,8 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
     });
     on<UserStoriesCargar>(_cargar);
     on<UserStoriesCambiarGusta>(_cambiaGusta);
+    on<UserStoriesActualizar>(_actualizar);
+    on<UserStoriesEliminar>(_eliminar);
   }
   @override
   Future<void> close() {
@@ -114,6 +116,47 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
       } catch (e) {
         Log.registra('Error cambia gusta: $e');
       }
+    }
+  }
+
+  FutureOr<void> _actualizar(
+      UserStoriesActualizar event, Emitter<UserStoriesState> emit) async {
+    Log.registra("_actualizarContenido userStories");
+    final copia = [...state.stories];
+    final int seleccionado = copia.indexWhere(
+      (element) => element.idContenido == event.story.idContenido,
+    );
+    if (seleccionado != -1) {
+      //Log.registra('Actualiza: ${event.categorias}');
+      copia[seleccionado] = copia[seleccionado].copyWith(
+          idContenido: event.story.idContenido,
+          titulo: event.story.titulo,
+          cuerpo: event.story.cuerpo,
+          url: event.story.url,
+          multimedia: event.story.multimedia,
+          categorias: event.story.categorias,
+          gusta: event.story.gusta,
+          idsCategorias: event.story.idscategorias);
+      emit(state.copyWith(stories: copia, estado: EstadoContenido.actualizado));
+    }
+  }
+
+  FutureOr<void> _eliminar(
+      UserStoriesEliminar event, Emitter<UserStoriesState> emit) async {
+    Log.registra("_eliminar userstories bloc");
+    emit(state.copyWith(estado: EstadoContenido.eliminando));
+    try {
+      await hncRepository.eliminarContenido(event.story.idContenido);
+      final copia = [...state.stories];
+      final int seleccionado = copia.indexWhere(
+        (element) => element.idContenido == event.story.idContenido,
+      );
+      if (seleccionado != -1) {
+        copia.removeAt(seleccionado);
+        emit(state.copyWith(stories: copia, estado: EstadoContenido.eliminado));
+      }
+    } catch (e) {
+      emit(state.copyWith(estado: EstadoContenido.errorEliminar));
     }
   }
 }

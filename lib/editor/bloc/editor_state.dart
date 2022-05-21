@@ -1,7 +1,5 @@
 part of 'editor_bloc.dart';
 
-enum EstadoEditor { editando, guardando, guardado, error }
-
 class EditorState extends Equatable {
   const EditorState(
       {this.estado = EstadoEditor.editando, this.categorias = const []});
@@ -9,7 +7,7 @@ class EditorState extends Equatable {
   final EstadoEditor estado;
   final List<Categoria> categorias;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [estado, categorias];
 
   EditorState copyWith({EstadoEditor? estado, List<Categoria>? categorias}) {
     return EditorState(

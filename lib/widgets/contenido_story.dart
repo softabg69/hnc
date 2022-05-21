@@ -1,10 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import 'package:hnc/contenido/widgets/cabecera_contenido.dart';
+import 'package:hnc/enumerados.dart';
 import 'package:hnc/tipos.dart';
+import 'package:hnc/utils/visualizar_url.dart';
 import 'package:hnc/widgets/una_columna.dart';
 
 import '../components/configuracion.dart';
+import '../contenido/view/detalle.dart';
 import '../repository/models/contenido.dart';
 
 class ContenidoStory extends StatelessWidget {
@@ -12,22 +17,24 @@ class ContenidoStory extends StatelessWidget {
       {Key? key,
       required this.contenido,
       this.esDetalle = false,
-      required this.onClick,
+      //required this.onClick,
       required this.eliminar,
       required this.editar,
       required this.compartir,
       required this.cambiarGusta,
-      required this.gustaCambiando})
+      required this.gustaCambiando,
+      required this.bloc})
       : super(key: key);
 
   final Contenido contenido;
   final bool esDetalle;
-  final CallbackContenido onClick;
-  final CallbackContenido eliminar;
-  final CallbackContenido editar;
-  final CallbackContenido compartir;
-  final CallbackContenido cambiarGusta;
+  //final CallbackContenidoAsync onClick;
+  final CallbackContenidoAsync eliminar;
+  final CallbackContenidoAsync editar;
+  final CallbackContenidoAsync compartir;
+  final CallbackContenidoAsync cambiarGusta;
   final bool gustaCambiando;
+  final Bloc bloc;
 
   Widget imagen(BuildContext context) {
     return esDetalle
@@ -51,8 +58,8 @@ class ContenidoStory extends StatelessWidget {
 
   Widget _gusta(BuildContext context, Contenido contenido) {
     return GestureDetector(
-      onTap: () {
-        cambiarGusta(contenido);
+      onTap: () async {
+        await cambiarGusta(contenido);
       },
       child: gustaCambiando
           ? CircleAvatar(
@@ -84,8 +91,29 @@ class ContenidoStory extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       child: GestureDetector(
-        onTap: () {
-          onClick(contenido);
+        onTap: () async {
+          if (!esDetalle) {
+            context
+                .read<MemoriaContenidoBloc>()
+                .add(MemoriaContenidoAsignar(contenido: contenido));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => Detalle(
+                      editar: editar,
+                      eliminar: eliminar,
+                      compartir: compartir,
+                      cambiarGusta: cambiarGusta,
+                      gustaCambiando:
+                          contenido.estadoGusta == EstadoGusta.cambiando,
+                      bloc: bloc,
+                    )),
+              ),
+            );
+          } else {
+            lanzaURL(contenido.url);
+          }
+          //await onClick(contenido);
         },
         child: Card(
           child: Column(

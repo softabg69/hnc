@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
+//import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
-import 'package:hnc/editor/bloc/editor_bloc.dart';
-import 'package:hnc/editor/views/editor.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+//import 'package:hnc/editor/bloc/editor_bloc.dart';
+//import 'package:hnc/editor/views/editor.dart';
+//import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/tipos.dart';
 
 import '../../components/dialog.dart';
 //import '../../components/log.dart';
+import '../../components/log.dart';
 import '../../repository/models/contenido.dart';
-import '../bloc/contenido_bloc.dart';
+//import '../bloc/contenido_bloc.dart';
 
 @immutable
 class CabeceraContenido extends StatelessWidget {
@@ -30,9 +31,9 @@ class CabeceraContenido extends StatelessWidget {
       const TextStyle(color: Colors.blue, fontSize: 14);
 
   final Contenido contenido;
-  final CallbackContenido eliminar;
-  final CallbackContenido editar;
-  final CallbackContenido compartir;
+  final CallbackContenidoAsync eliminar;
+  final CallbackContenidoAsync editar;
+  final CallbackContenidoAsync compartir;
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +109,10 @@ class CabeceraContenido extends StatelessWidget {
                             : 'Eliminar story',
                         contenido.modo == 1
                             ? '¿Seguro que quiere eliminar el contenido?'
-                            : '¿Seguro que quiere eliminar la story?', () {
-                      eliminar(contenido);
+                            : '¿Seguro que quiere eliminar la story?',
+                        () async {
+                      Log.registra('eliminar en cabecera: $contenido');
+                      await eliminar(contenido);
                     });
                     //muestraDialogoEliminar(context);
                     // Navigator.push(
@@ -131,7 +134,7 @@ class CabeceraContenido extends StatelessWidget {
           contenido.propietario
               ? IconButton(
                   onPressed: () async {
-                    editar(contenido);
+                    await editar(contenido);
                     //Log.registra(contenido!.multimedia);
                   },
                   icon: const Icon(Icons.edit),
@@ -142,7 +145,7 @@ class CabeceraContenido extends StatelessWidget {
                 ),
           IconButton(
             onPressed: () async {
-              compartir(contenido);
+              await compartir(contenido);
               // await Share.share(
               //   '$kUrlApp/#/compartido?token=${contenido!.idContenido}',
               //   subject:

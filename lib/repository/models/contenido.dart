@@ -73,6 +73,11 @@ class Contenido {
       propietario: json['propietario'] ?? false,
       estadoGusta: json['estadoGusta'] ?? EstadoGusta.normal);
 
+  @override
+  String toString() {
+    return 'idContenido-> $titulo -> $gusta';
+  }
+
   Contenido copyWith(
       {String? idContenido,
       String? titulo,

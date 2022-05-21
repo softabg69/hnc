@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/app_bloc_observer.dart';
+import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
@@ -18,6 +19,7 @@ void main() {
     'ENVIRONMENT',
     defaultValue: Environment.DEV,
   );
+  WidgetsFlutterBinding.ensureInitialized();
   BlocOverrides.runZoned(
     () {
       Environment().initConfig(environment);
@@ -51,6 +53,7 @@ class AppState extends StatelessWidget {
               create: (context) => StoriesBloc(
                   session: context.read<SessionBloc>(),
                   hncRepository: context.read<HncRepository>())),
+          BlocProvider(create: (context) => MemoriaContenidoBloc()),
           // BlocProvider(
           //   create: (context) => PrincipalBloc(
           //       hncRepository: context.read<HncRepository>(),
@@ -58,8 +61,9 @@ class AppState extends StatelessWidget {
           // ),
           BlocProvider(
             create: (context) => PerfilBloc(
-                sesionBloc: context.read<SessionBloc>(),
-                hncRepository: context.read<HncRepository>()),
+              sesionBloc: context.read<SessionBloc>(),
+              hncRepository: context.read<HncRepository>(),
+            ),
           ),
           BlocProvider(
             create: (context) => UserStoriesBloc(

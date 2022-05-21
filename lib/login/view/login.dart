@@ -173,8 +173,11 @@ class _LoginState extends State<Login> {
                       child: Container(
                         padding: const EdgeInsets.all(3),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey)),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor)),
                         child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ClipRRect(
@@ -189,6 +192,9 @@ class _LoginState extends State<Login> {
                                 width: 10,
                               ),
                               const Text('Identifícate con Google'),
+                              const SizedBox(
+                                width: 10,
+                              ),
                             ]),
                       ),
                     ),

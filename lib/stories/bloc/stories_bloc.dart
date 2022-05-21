@@ -7,7 +7,7 @@ import 'package:hnc/enumerados.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/log.dart';
-import '../../repository/models/contenido.dart';
+//import '../../repository/models/contenido.dart';
 import '../../repository/models/usuario_story.dart';
 
 part 'stories_event.dart';

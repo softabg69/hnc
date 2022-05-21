@@ -40,7 +40,7 @@ class AppBarPrincipal extends StatelessWidget {
         },
       ),
       floating: true,
-      expandedHeight: 175,
+      expandedHeight: 170,
       pinned: true,
       backgroundColor: Colors.white,
       foregroundColor: Colors.blue,
@@ -49,7 +49,7 @@ class AppBarPrincipal extends StatelessWidget {
         background: Column(
           children: const [
             SizedBox(
-              height: 70,
+              height: 90,
             ),
             Stories(),
           ],

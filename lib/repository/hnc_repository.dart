@@ -108,6 +108,12 @@ class HncRepository {
     return Contenido.fromJson(await service.guardarContenido(body));
   }
 
+  Future<void> eliminarContenido(String idContenido) async {
+    final body = {};
+    body['idContenido'] = idContenido;
+    await service.eliminarContenido(json.encode(body));
+  }
+
   Future<void> desconectar() async {
     await service.desconectar();
   }

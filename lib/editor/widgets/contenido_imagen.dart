@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 //import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../components/configuracion.dart';
+import '../../components/dialog.dart';
 import '../../components/log.dart';
+import '../../utils/camera.dart';
 
 typedef CallBackBytes = void Function(Uint8List);
 
@@ -83,9 +85,24 @@ class ContenidoImagen extends StatelessWidget {
               );
   }
 
-  Future<void> _pickImage(BuildContext context) async {
+  // Future<void> _pickImage(BuildContext context) async {
+  //   final pickedFile = await _picker.pickImage(
+  //     source: ImageSource.camera,
+  //     maxWidth: 800,
+  //     maxHeight: 800,
+  //     imageQuality: null,
+  //   );
+  //   if (pickedFile != null) {
+  //     final Uint8List img = await pickedFile.readAsBytes();
+  //     cambiada(img);
+  //     //context.read<PerfilBloc>().add(PerfilImageSelectedEvent(image: img));
+  //   }
+  // }
+
+  Future<void> _seleccionaImagen(
+      BuildContext context, ImageSource origen) async {
     final pickedFile = await _picker.pickImage(
-      source: ImageSource.camera,
+      source: origen,
       maxWidth: 800,
       maxHeight: 800,
       imageQuality: null,
@@ -93,7 +110,17 @@ class ContenidoImagen extends StatelessWidget {
     if (pickedFile != null) {
       final Uint8List img = await pickedFile.readAsBytes();
       cambiada(img);
-      //context.read<PerfilBloc>().add(PerfilImageSelectedEvent(image: img));
+    }
+  }
+
+  Future<void> _pickImage(BuildContext context) async {
+    if (await Camera.hayCamaras()) {
+      try {
+        final origen = await Dialogs.selectorCamaraGaleria(context);
+        await _seleccionaImagen(context, origen);
+      } catch (e) {}
+    } else {
+      await _seleccionaImagen(context, ImageSource.gallery);
     }
   }
 }

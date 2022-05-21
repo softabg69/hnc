@@ -40,6 +40,7 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
     on<ContenidoCambiarGusta>(_cambiaGusta);
     on<ContenidoActualizaContenido>(_actualizaContenido);
     on<ContenidoInicializar>(_inicializar);
+    on<ContenidoEliminar>(_eliminar);
   }
 
   @override
@@ -77,14 +78,14 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
         if (!event.iniciar) {
           emit(
             state.copyWith(
-                alcanzadoFinal: false,
+                alcanzadoFinal: resp.length < 10,
                 contenidos: List.of(state.contenidos)..addAll(resp),
                 estado: EstadoContenido.cargado),
           );
         } else {
           emit(
             state.copyWith(
-                alcanzadoFinal: false,
+                alcanzadoFinal: resp.length < 10,
                 contenidos: resp,
                 estado: EstadoContenido.cargado),
           );
@@ -116,7 +117,8 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
         if (seleccionado != -1) {
           copia[seleccionado] = copia[seleccionado]
               .copyWith(estadoGusta: EstadoGusta.normal, gusta: event.gusta);
-          emit(state.copyWith(contenidos: copia));
+          emit(state.copyWith(
+              contenidos: copia, estado: EstadoContenido.actualizado));
         }
       } catch (e) {
         Log.registra('Error cambia gusta: $e');
@@ -132,13 +134,16 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
       (element) => element.idContenido == event.contenido.idContenido,
     );
     if (seleccionado != -1) {
+      Log.registra('Actualiza: ${event.contenido.categorias}');
       copia[seleccionado] = copia[seleccionado].copyWith(
           idContenido: event.contenido.idContenido,
           titulo: event.contenido.titulo,
           cuerpo: event.contenido.cuerpo,
           url: event.contenido.url,
           multimedia: event.contenido.multimedia,
-          categorias: event.contenido.categorias);
+          categorias: event.contenido.categorias,
+          gusta: event.contenido.gusta,
+          idsCategorias: event.contenido.idscategorias);
       emit(state.copyWith(
           contenidos: copia, estado: EstadoContenido.actualizado));
     }
@@ -151,5 +156,25 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
         estado: EstadoContenido.inicial,
         contenidos: [],
         alcanzadoFinal: false));
+  }
+
+  FutureOr<void> _eliminar(
+      ContenidoEliminar event, Emitter<ContenidoState> emit) async {
+    Log.registra("_eliminar Contenido bloc");
+    emit(state.copyWith(estado: EstadoContenido.eliminando));
+    try {
+      await hncRepository.eliminarContenido(event.contenido.idContenido);
+      final copia = [...state.contenidos];
+      final int seleccionado = copia.indexWhere(
+        (element) => element.idContenido == event.contenido.idContenido,
+      );
+      if (seleccionado != -1) {
+        copia.removeAt(seleccionado);
+        emit(state.copyWith(
+            contenidos: copia, estado: EstadoContenido.actualizado));
+      }
+    } catch (e) {
+      emit(state.copyWith(estado: EstadoContenido.errorEliminar));
+    }
   }
 }

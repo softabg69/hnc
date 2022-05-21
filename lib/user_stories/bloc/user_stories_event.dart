@@ -25,3 +25,13 @@ class UserStoriesCambiarGusta extends UserStoriesEvent {
   @override
   List<Object> get props => [idContenido, gusta];
 }
+
+class UserStoriesActualizar extends UserStoriesEvent {
+  const UserStoriesActualizar({required this.story});
+  final Contenido story;
+}
+
+class UserStoriesEliminar extends UserStoriesEvent {
+  const UserStoriesEliminar({required this.story});
+  final Contenido story;
+}

@@ -3,24 +3,30 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/contenido/bloc/contenido_bloc.dart';
+//import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/editor/bloc/editor_bloc.dart';
 import 'package:hnc/editor/widgets/contenido_imagen.dart';
+import 'package:hnc/tipos.dart';
 //import 'package:hnc/repository/hnc_repository.dart';
 
 import '../../components/configuracion.dart';
 import '../../components/dialog.dart';
-import '../../components/log.dart';
+//mport '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../repository/models/categoria.dart';
 import '../../repository/models/contenido.dart';
 
 class Editor extends StatefulWidget {
-  const Editor({Key? key, required this.contenido, required this.modo})
+  const Editor(
+      {Key? key,
+      required this.contenido,
+      required this.modo,
+      required this.guardar})
       : super(key: key);
 
   final Contenido contenido;
   final int modo;
+  final CallbackContenidoAsync guardar;
 
   @override
   State<Editor> createState() => _EditorState();
@@ -35,7 +41,7 @@ class _EditorState extends State<Editor> {
   String? idImagen;
   Uint8List? imagen;
   List<Categoria>? categorias = [];
-  ContenidoBloc? _contenidoBloc;
+  //ContenidoBloc? _contenidoBloc;
   bool navegado = false;
 
   @override
@@ -49,8 +55,13 @@ class _EditorState extends State<Editor> {
 
   @override
   void didChangeDependencies() {
-    categorias = context.read<SessionBloc>().state.categoriasUsuario;
-    _contenidoBloc = context.read<ContenidoBloc>();
+    categorias = [];
+    for (final cat in context.read<SessionBloc>().state.categoriasUsuario) {
+      final nueva = cat.copyWith(
+          seleccionada: widget.contenido.idscategorias.contains(cat.id));
+      categorias!.add(nueva);
+    }
+    //_contenidoBloc = context.read<ContenidoBloc>();
     super.didChangeDependencies();
   }
 
@@ -66,11 +77,11 @@ class _EditorState extends State<Editor> {
 
   @override
   Widget build(BuildContext context) {
-    Log.registra(_contenidoBloc.toString());
+    //Log.registra(_contenidoBloc.toString());
     return Scaffold(
-      body: BlocListener<ContenidoBloc, ContenidoState>(
+      body: BlocListener<EditorBloc, EditorState>(
         listener: ((context, state) {
-          if (state.estado == EstadoContenido.actualizado && !navegado) {
+          if (state.estado == EstadoEditor.guardado && !navegado) {
             navegado = true;
             Navigator.pop(context);
           }
@@ -78,16 +89,20 @@ class _EditorState extends State<Editor> {
         child: Form(
           key: _formKey,
           child: BlocBuilder<EditorBloc, EditorState>(
-            builder: (context, state) => CustomScrollView(
-              slivers: _formulario(context),
-            ),
+            builder: (context, state) => state.estado == EstadoEditor.guardando
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomScrollView(
+                    slivers: _formulario(context),
+                  ),
           ),
         ),
       ),
     );
   }
 
-  void guardar() async {
+  void guarda() async {
     if (_formKey.currentState!.validate()) {
       if (_categoriasSeleccionadas.isEmpty) {
         await Dialogs.informacion(context, const Text('Error'),
@@ -107,6 +122,12 @@ class _EditorState extends State<Editor> {
           imagen: imagen,
           modo: widget.contenido.modo,
           categorias: _categoriasSeleccionadas));
+
+      await widget.guardar(widget.contenido.copyWith(
+          titulo: _titulo.text,
+          cuerpo: _texto.text,
+          url: _url.text,
+          idsCategorias: _categoriasSeleccionadas));
 
       // if (widget.contenido != null) {
       //   datos['idContenido'] = widget.contenido!.idContenido;
@@ -195,7 +216,7 @@ class _EditorState extends State<Editor> {
           tooltip: 'Guardar',
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              guardar();
+              guarda();
             }
           },
         ),
@@ -240,8 +261,18 @@ class _EditorState extends State<Editor> {
             ),
           ),
         ),
-        Image.network(
-            "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categorias![index].avatar}"),
+        Container(
+          width: 50.0,
+          height: 50.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: NetworkImage(
+                  "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categorias![index].avatar}"),
+            ),
+          ),
+        ),
         Switch(
           value: categorias![index].seleccionada,
           onChanged: (a) {
@@ -271,7 +302,7 @@ class _EditorState extends State<Editor> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
-          height: 115,
+          height: 120,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categorias!.length,

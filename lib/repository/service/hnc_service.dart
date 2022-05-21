@@ -55,6 +55,20 @@ class HncService {
     return responseJson;
   }
 
+  Future<dynamic> _delete(
+      String url, String body, Map<String, String>? headers) async {
+    dynamic responseJson;
+    try {
+      final response =
+          await _httpClient.delete(_getUrl(url), body: body, headers: headers);
+      Log.registra("_delete: $response");
+      responseJson = _response(response);
+    } on SocketException {
+      throw FetchDataException('No hay conexión a internet');
+    }
+    return responseJson;
+  }
+
   dynamic _response(http.Response response) {
     Log.registra("response status: ${response.statusCode}");
     switch (response.statusCode) {
@@ -165,5 +179,10 @@ class HncService {
     Log.registra('getStories: $dias $categorias');
     return await _get(
         '/data/getStories?dias=$dias&categorias=$categorias', headersToken);
+  }
+
+  Future<dynamic> eliminarContenido(String token) async {
+    Log.registra('eliminarContenido');
+    return await _delete('/data/eliminarContenido', token, headersToken);
   }
 }

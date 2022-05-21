@@ -8,9 +8,11 @@ abstract class StoriesEvent extends Equatable {
 }
 
 class StoriesCargar extends StoriesEvent {
-  const StoriesCargar({required this.categorias}) : super();
+  const StoriesCargar({required this.categorias, this.inicializar = false})
+      : super();
 
   final List<int> categorias;
+  final bool inicializar;
 }
 
 class StoriesInicializar extends StoriesEvent {}

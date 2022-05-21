@@ -11,7 +11,7 @@ class ContenidoState extends Equatable {
   final bool alcanzadoFinal;
 
   @override
-  List<Object> get props => [estado, contenidos];
+  List<Object> get props => [estado, contenidos, alcanzadoFinal];
 
   ContenidoState copyWith(
       {EstadoContenido? estado,

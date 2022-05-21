@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hnc/components/log.dart';
+import 'package:http/retry.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Dialogs {
   static Future<void> informacion(
@@ -52,16 +55,6 @@ class Dialogs {
       onPressed: () {
         Navigator.pop(context);
         if (callback != null) callback();
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) {
-        //       EliminarContenido(idContenido: contenido!.idContenido),
-        //     },
-        //   ),
-        // ).then((value) {
-        //   Navigator.pop(context);
-        // });
       },
     );
     // set up the AlertDialog
@@ -80,5 +73,53 @@ class Dialogs {
         return alert;
       },
     );
+  }
+
+  static Future<ImageSource> selectorCamaraGaleria(BuildContext context) async {
+    ImageSource res = ImageSource.camera;
+    AlertDialog alert = AlertDialog(
+      title: const Text('Seleccione origen'),
+      content: const SizedBox(height: 0),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, ImageSource.camera);
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Icon(Icons.camera),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Cámara'),
+            ],
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context, ImageSource.gallery);
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              Icon(Icons.image),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Galería'),
+            ],
+          ),
+        )
+      ],
+    );
+    // show the dialog
+    await showDialog<ImageSource>(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    ).then((value) => res = value!);
+    return res;
   }
 }
