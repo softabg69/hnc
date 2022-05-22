@@ -4,6 +4,7 @@ import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/perfil/widgets/perfil_screen.dart';
 import 'package:hnc/stories/bloc/stories_bloc.dart';
+import '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../principal/view/principal.dart';
 import '../bloc/perfil_bloc.dart';
@@ -35,7 +36,7 @@ class _PerfilState extends State<Perfil> {
               context
                   .read<StoriesBloc>()
                   .add(StoriesCargar(categorias: categorias));
-
+              Log.registra('perfil carga stories: $categorias');
               // context.read<SessionBloc>().add(
               //     SessionEstablecerCategoriasUsuarioEvent(state.categorias));
               Navigator.pushReplacement(
