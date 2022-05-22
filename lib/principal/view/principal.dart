@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/cierre_sesion.dart';
+import 'package:hnc/bloc/session/session_bloc.dart';
 //import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
 import 'package:hnc/contenido/view/contenido.dart';
 import 'package:hnc/principal/widgets/drawer_principal.dart';
+import 'package:hnc/repository/hnc_repository.dart';
+import '../../repository/models/contenido.dart' as model_contenido;
 //import 'package:hnc/repository/hnc_repository.dart';
 //import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
 import '../../components/log.dart';
-import '../../stories/views/stories.dart';
+import '../../editor/bloc/editor_bloc.dart';
+import '../../editor/views/editor.dart';
+//import '../../stories/views/stories.dart';
 import '../widgets/app_bar_principal.dart';
 
 //typedef DrawerCallback = void Function(bool isOpened);
@@ -42,7 +49,7 @@ class _PrincipalState extends State<Principal> {
   void _onScroll() {
     if (_isBottom) {
       Log.registra('alcanzado final contenidos');
-      widget.contenidoBloc.add(ContenidoCargarEvent());
+      widget.contenidoBloc.add(const ContenidoCargarEvent());
     }
   }
 
@@ -63,22 +70,43 @@ class _PrincipalState extends State<Principal> {
       child: Scaffold(
         drawer: const DrawerPrincipal(),
         backgroundColor: Colors.grey,
-        // onDrawerChanged: (bool isOpen) {
-        //   if (isOpen) {
-        //     context.read<PrincipalBloc>().add(PrincipalDrawerOpen());
-        //   } else {
-        //     context.read<PrincipalBloc>().add(PrincipalDrawerClose());
-        //   }
-        // },
         body: CustomScrollView(
           controller: _scrollController,
           slivers: const [
             AppBarPrincipal(),
-            // SliverToBoxAdapter(
-            //   child: Stories(),
-            // ),
             Contenido(),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: ((context) => BlocProvider.value(
+                        value: context.read<ContenidoBloc>(),
+                        child: BlocProvider(
+                          create: ((context) => EditorBloc(
+                              hncRepository: context.read<HncRepository>(),
+                              session: context.read<SessionBloc>(),
+                              memoriaContenido:
+                                  context.read<MemoriaContenidoBloc>())),
+                          child: Editor(
+                            modo: 1,
+                            contenido: model_contenido.Contenido(modo: 1),
+                            guardar: (c) async {
+                              context.read<ContenidoBloc>().add(
+                                  const ContenidoCargarEvent(iniciar: true));
+                              Log.registra('Después de crear nueva story');
+                            },
+                          ),
+                        ),
+                      ))),
+            );
+          },
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Colors.white,
+          child: const Icon(Icons.add),
+          tooltip: 'Añadir nuevo contenido',
         ),
       ),
     );
