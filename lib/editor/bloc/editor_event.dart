@@ -15,7 +15,8 @@ class EditorGuardarEvent extends EditorEvent {
       this.url,
       this.imagen,
       required this.modo,
-      required this.categorias})
+      required this.categorias,
+      required this.guardar})
       : super();
   final String? id;
   final String? titulo;
@@ -24,4 +25,5 @@ class EditorGuardarEvent extends EditorEvent {
   final Uint8List? imagen;
   final int modo;
   final List<int> categorias;
+  final CallbackContenidoAsync guardar;
 }

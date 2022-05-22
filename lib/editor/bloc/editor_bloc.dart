@@ -43,6 +43,7 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
       Log.registra("después de guardar: $conte");
       memoriaContenido.add(MemoriaContenidoAsignar(contenido: conte));
 
+      event.guardar(conte);
       // if (event.modo == 1) {
       //   contenidoBloc.add(ContenidoActualizaContenido(contenido: conte));
       // } else if (event.modo == 2) {}

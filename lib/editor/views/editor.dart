@@ -121,13 +121,14 @@ class _EditorState extends State<Editor> {
           url: _url.text,
           imagen: imagen,
           modo: widget.contenido.modo,
-          categorias: _categoriasSeleccionadas));
+          categorias: _categoriasSeleccionadas,
+          guardar: widget.guardar));
 
-      await widget.guardar(widget.contenido.copyWith(
-          titulo: _titulo.text,
-          cuerpo: _texto.text,
-          url: _url.text,
-          idsCategorias: _categoriasSeleccionadas));
+      // await widget.guardar(widget.contenido.copyWith(
+      //     titulo: _titulo.text,
+      //     cuerpo: _texto.text,
+      //     url: _url.text,
+      //     idsCategorias: _categoriasSeleccionadas));
 
       // if (widget.contenido != null) {
       //   datos['idContenido'] = widget.contenido!.idContenido;
