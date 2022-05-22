@@ -15,13 +15,14 @@ class HncRepository {
 
   final HncService service;
 
-  Future<void> authenticate(String email, String pwd) async {
+  Future<String> authenticate(String email, String pwd) async {
     final token = JwtToken.generarToken(email, pwd, 'local', 'autenticar');
     final resp = await service.autenticar(json.encode({'token': token}));
     if (resp == null || resp['token'].toString().isEmpty) {
       throw UnauthorizedException();
     }
     service.setToken(resp["token"]);
+    return resp["avatar"];
   }
 
   Future<String> iniciarGoogle(String email, String urlAvatar) async {
@@ -126,5 +127,10 @@ class HncRepository {
     final stories = await service.getStories(-dias, json.encode(categorias));
     return List<UsuarioStory>.from(
         stories.map((model) => UsuarioStory.fromJson(model))).toList();
+  }
+
+  Future<Contenido> getContenidoCompartido(String idContenido) async {
+    final jsn = await service.getContenidoCompartido(idContenido);
+    return Contenido.fromJson(jsn);
   }
 }

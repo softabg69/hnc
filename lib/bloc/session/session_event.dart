@@ -9,9 +9,10 @@ abstract class SessionEvent extends Equatable {
 class SessionInitEvent extends SessionEvent {}
 
 class SessionLocalAuthenticationEvent extends SessionEvent {
-  SessionLocalAuthenticationEvent(this.email);
+  SessionLocalAuthenticationEvent(this.email, this.avatar);
 
   final String email;
+  final String avatar;
 
   @override
   List<Object?> get props => [email];

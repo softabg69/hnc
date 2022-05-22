@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/app_bloc_observer.dart';
@@ -12,13 +13,18 @@ import 'package:hnc/repository/service/hnc_service.dart';
 import 'package:hnc/stories/bloc/stories_bloc.dart';
 import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
 
+import 'compartido/views/compartido.dart';
 import 'login/view/login.dart';
 
+String urlInicio = "";
 void main() {
   const String environment = String.fromEnvironment(
     'ENVIRONMENT',
     defaultValue: Environment.DEV,
   );
+  if (kIsWeb) {
+    urlInicio = Uri.base.toString(); //get complete url
+  }
   WidgetsFlutterBinding.ensureInitialized();
   BlocOverrides.runZoned(
     () {
@@ -105,7 +111,11 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
-      home: const Login(),
+      home: urlInicio.contains("#/compartido?token=")
+          ? Compartido(
+              url: urlInicio,
+            )
+          : const Login(),
       //routes: {},
     );
   }

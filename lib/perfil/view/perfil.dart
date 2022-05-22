@@ -48,6 +48,11 @@ class _PerfilState extends State<Perfil> {
               );
             } else if (!widget.inicio &&
                 state.estado == EstadoPerfil.guardado) {
+              final categorias =
+                  context.read<SessionBloc>().state.filtroCategorias;
+              context
+                  .read<StoriesBloc>()
+                  .add(StoriesCargar(categorias: categorias));
               Navigator.pop(context);
             }
           },

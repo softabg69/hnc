@@ -185,4 +185,10 @@ class HncService {
     Log.registra('eliminarContenido');
     return await _delete('/data/eliminarContenido', token, headersToken);
   }
+
+  Future<dynamic> getContenidoCompartido(String idContenido) async {
+    Log.registra('getContenidoCompartido');
+    return await _get(
+        '/data/getContenidoCompartido?idContenido=$idContenido', headers);
+  }
 }

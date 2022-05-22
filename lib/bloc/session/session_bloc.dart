@@ -39,6 +39,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       SessionLocalAuthenticationEvent event, Emitter<SessionState> emit) async {
     emit(state.copyWith(
         email: event.email,
+        avatar: event.avatar,
         authMethod: AuthMethod.local,
         estado: EstadoLogin.autenticado));
   }

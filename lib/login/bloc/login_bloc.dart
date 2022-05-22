@@ -48,8 +48,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginButtonPressEvent event, Emitter<LoginState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.autenticandoLocal));
     try {
-      await hncRepository.authenticate(state.email, state.pwd);
-      session.add(SessionLocalAuthenticationEvent(state.email));
+      final avatar = await hncRepository.authenticate(state.email, state.pwd);
+      session.add(SessionLocalAuthenticationEvent(state.email, avatar));
     } catch (e) {
       emit(state.copyWith(
           estado: EstadoLogin.localError,
