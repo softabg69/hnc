@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
@@ -45,14 +47,21 @@ class AppBarPrincipal extends StatelessWidget {
       backgroundColor: Colors.white,
       foregroundColor: Colors.blue,
       actions: acciones(context),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Column(
-          children: const [
-            SizedBox(
-              height: 90,
-            ),
-            Stories(),
-          ],
+      flexibleSpace: SafeArea(
+        child: FlexibleSpaceBar(
+          background: Column(
+            children: const [
+              SizedBox(
+                height: 60,
+                // Platform.isAndroid
+                //     ? 60
+                //     : kIsWeb
+                //         ? 90
+                //         : 110,
+              ),
+              const Stories(),
+            ],
+          ),
         ),
       ),
     );

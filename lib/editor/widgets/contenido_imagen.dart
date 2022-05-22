@@ -76,10 +76,8 @@ class ContenidoImagen extends StatelessWidget {
                   ),
                   width: 300,
                   height: 75,
-                  child: const Expanded(
-                    child: Center(
-                      child: Text('Pulse aquí para seleccionar la imagen'),
-                    ),
+                  child: const Center(
+                    child: Text('Pulse aquí para seleccionar la imagen'),
                   ),
                 ),
               );

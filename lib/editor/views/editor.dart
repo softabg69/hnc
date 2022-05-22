@@ -191,9 +191,6 @@ class _EditorState extends State<Editor> {
               imagen = bytes;
             });
           }),
-      // SliverToBoxAdapter(
-      //   child: imagePicker(),
-      // ),
       SliverToBoxAdapter(
         child: listCategorias(),
       ),
