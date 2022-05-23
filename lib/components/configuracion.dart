@@ -18,7 +18,7 @@ class ProdConfig implements BaseConfig {
   @override
   String get baseUrlServicios => 'https://oesvrhnc.azurewebsites.net';
   @override
-  String get baseUrlWeb => 'https://hnc.coeptalis.es/';
+  String get baseUrlWeb => 'https://app.helpncare.es/';
   @override
   bool get esDesarrollo => false;
 }
