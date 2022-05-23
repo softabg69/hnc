@@ -191,4 +191,9 @@ class HncService {
     return await _get(
         '/data/getContenidoCompartido?idContenido=$idContenido', headers);
   }
+
+  Future<dynamic> getVersion() async {
+    Log.registra('getVersion');
+    return await _get('/data/version', headers);
+  }
 }

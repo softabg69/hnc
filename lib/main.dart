@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +8,9 @@ import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart
 import 'package:hnc/bloc/platform/platform_bloc.dart';
 import 'package:hnc/bloc/session/session_bloc.dart';
 import 'package:hnc/components/configuracion.dart';
+//import 'package:hnc/components/dialog.dart';
 import 'package:hnc/contenido/bloc/contenido_bloc.dart';
+import 'package:hnc/enumerados.dart';
 import 'package:hnc/perfil/bloc/perfil_bloc.dart';
 import 'package:hnc/repository/hnc_repository.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
@@ -14,13 +18,14 @@ import 'package:hnc/stories/bloc/stories_bloc.dart';
 import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
 
 import 'compartido/views/compartido.dart';
+//import 'components/log.dart';
 import 'login/view/login.dart';
 
 String urlInicio = "";
 void main() {
   const String environment = String.fromEnvironment(
     'ENVIRONMENT',
-    defaultValue: Environment.PROD,
+    defaultValue: Environment.DEV,
   );
   if (kIsWeb) {
     urlInicio = Uri.base.toString(); //get complete url
@@ -49,7 +54,9 @@ class AppState extends StatelessWidget {
                   ..add(SessionInitEvent()),
           ),
           BlocProvider(
-            create: (context) => PlatformBloc()..add(PlatformLoadEvent()),
+            create: (context) =>
+                PlatformBloc(hncRepository: context.read<HncRepository>())
+                  ..add(PlatformLoadEvent()),
           ),
           BlocProvider(
               create: (context) => ContenidoBloc(
@@ -99,6 +106,29 @@ Map<int, Color> colorCodes = {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  Widget _mantenimiento(String mensaje) {
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+            child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+              child: Image.asset('assets/images/helpncare_logo.png'),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Text(
+                mensaje,
+                style: const TextStyle(fontSize: 18),
+              ),
+            )
+          ],
+        )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -111,12 +141,38 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Roboto',
         backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
-      home: urlInicio.contains("#/compartido?token=")
-          ? Compartido(
-              url: urlInicio,
-            )
-          : const Login(),
-      //routes: {},
+      home: BlocBuilder<PlatformBloc, PlatformState>(builder: (context, state) {
+        if (kIsWeb) {
+          return urlInicio.contains("#/compartido?token=")
+              ? Compartido(
+                  url: urlInicio,
+                )
+              : const Login();
+        } else if (state is AplicacionBloqueada) {
+          return _mantenimiento(state.msg);
+        } else if (state.estado == EstadoPlatform.cargando) {
+          return Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Image.asset('assets/images/helpncare_logo.png'),
+              ),
+            ),
+          );
+        } else {
+          if (state.resultadoVersion == ResultadoComparaVersion.imcompatible) {
+            return _mantenimiento(
+                'La versión que tiene instalada es demasiado antigua. Debe actualizar a una nueva versión para seguir utilizando Helpncare.');
+          } else if (state.resultadoVersion ==
+              ResultadoComparaVersion.nuevaVersionDisponible) {
+            return const Login(
+              nuevaVersionDisponible: true,
+            );
+          } else {
+            return const Login();
+          }
+        }
+      }),
     );
   }
 }

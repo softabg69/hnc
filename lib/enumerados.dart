@@ -10,6 +10,10 @@ enum EstadoStories { inicial, cargando, cargado, error }
 
 enum EstadoEditor { editando, guardando, guardado, error }
 
+enum EstadoPlatform { pendiente, cargando, disponible }
+
+enum ResultadoComparaVersion { iguales, nuevaVersionDisponible, imcompatible }
+
 enum EstadoContenido {
   inicial,
   cargando,

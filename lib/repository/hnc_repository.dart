@@ -7,6 +7,7 @@ import 'package:hnc/repository/service/custom_exceptions.dart';
 import 'package:hnc/repository/service/hnc_service.dart';
 
 import '../components/jwt_token.dart';
+import 'models/version.dart';
 
 class HncRepository {
   const HncRepository({
@@ -132,5 +133,10 @@ class HncRepository {
   Future<Contenido> getContenidoCompartido(String idContenido) async {
     final jsn = await service.getContenidoCompartido(idContenido);
     return Contenido.fromJson(jsn);
+  }
+
+  Future<Version> getVersion() async {
+    final jsn = await service.getVersion();
+    return Version.fromJson(jsn);
   }
 }

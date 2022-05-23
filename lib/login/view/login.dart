@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +18,10 @@ import '../../perfil/view/perfil.dart';
 import '../../politica_privacidad/view/politica.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({Key? key, this.nuevaVersionDisponible = false})
+      : super(key: key);
 
+  final bool nuevaVersionDisponible;
   @override
   State<Login> createState() => _LoginState();
 }
@@ -25,6 +29,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   bool navegado = false;
+  bool mostradoSnackBar = false;
 
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -221,24 +226,44 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Widget _textInfo(PlatformState state) {
+    return RichText(
+      text: TextSpan(
+        style: const TextStyle(
+          fontSize: 14.0,
+          color: Colors.black,
+        ),
+        children: <TextSpan>[
+          const TextSpan(text: 'AppName: '),
+          TextSpan(
+              text: state.appName,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const TextSpan(text: '  PackageName: '),
+          TextSpan(
+              text: state.packageName,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const TextSpan(text: '  BuildNumbre: '),
+          TextSpan(
+              text: state.buildNumber,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const TextSpan(text: '  Signature: '),
+          TextSpan(
+              text: state.buildSignature,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+
   Widget _logo() {
     return BlocBuilder<PlatformBloc, PlatformState>(
       builder: (context, platform) {
         return GestureDetector(
           onTap: () {
-            Dialogs.informacion(
-                context,
-                const Text('Info'),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text('appName: ${platform.appName}'),
-                    Text('packageName: ${platform.packageName}'),
-                    Text('version: ${platform.version}'),
-                    Text('buildNumber: ${platform.buildNumber}'),
-                    Text('buildSignature: ${platform.buildSignature}')
-                  ],
-                ));
+            Dialogs.snackBar(
+                context: context,
+                content: _textInfo(platform),
+                color: Theme.of(context).primaryColor);
           },
           child: Image.asset('assets/images/helpncare_logo.png'),
         );
@@ -314,8 +339,22 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Timer scheduleTimeout([int milliseconds = 1000]) =>
+      Timer(Duration(milliseconds: milliseconds), handleTimeout);
+
+  void handleTimeout() {
+    Dialogs.snackBar(
+        context: context,
+        color: Colors.green,
+        content: const Text('Hay una nueva versión de Helpncare.'));
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.nuevaVersionDisponible && !mostradoSnackBar) {
+      mostradoSnackBar = true;
+      scheduleTimeout(1 * 1000); // 5 seconds.
+    }
     return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
         if (state.isAuthenticated && !navegado) {
