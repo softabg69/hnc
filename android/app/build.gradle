@@ -52,9 +52,9 @@ android {
     signingConfigs {
         debug {
             storeFile file('/Users/abg/key.jks')
-            storePassword '110503AAbg'
-            keyAlias 'androiddebugkey'
-            keyPassword '110503AAbg'
+            storePassword 'Coeptalis2022'
+            keyAlias 'upload'
+            keyPassword 'Coeptalis2022'
         }
     }
 
