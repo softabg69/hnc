@@ -54,48 +54,54 @@ class Stories extends StatelessWidget {
                                   idUsuario: '',
                                   usuario: 'Crear story',
                                   avatar: sesion.avatar);
-                              return Story(
-                                story: usuStory,
-                                callback: (u) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                        value: context.read<StoriesBloc>(),
-                                        child: BlocProvider.value(
-                                          value: context.read<EditorBloc>(),
-                                          child: Editor(
-                                            modo: 2,
-                                            contenido: Contenido(modo: 2),
-                                            guardar: (c) async {
-                                              Log.registra(
-                                                  'Después de crear nueva story');
-                                            },
+                              return MouseRegion(
+                                cursor: SystemMouseCursors.click,
+                                child: Story(
+                                  story: usuStory,
+                                  callback: (u) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: context.read<StoriesBloc>(),
+                                          child: BlocProvider.value(
+                                            value: context.read<EditorBloc>(),
+                                            child: Editor(
+                                              modo: 2,
+                                              contenido: Contenido(modo: 2),
+                                              guardar: (c) async {
+                                                Log.registra(
+                                                    'Después de crear nueva story');
+                                              },
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                  Log.registra('Nueva story');
-                                },
+                                    );
+                                    Log.registra('Nueva story');
+                                  },
+                                ),
                               );
                             }
-                            return Story(
-                              story: storiesState.usuariosStories[index - 1],
-                              callback: (us) {
-                                context.read<UserStoriesBloc>().add(
-                                    UserStoriesCargar(
-                                        idUsuario: us.idUsuario,
-                                        iniciar: true));
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (ctx) => VisorStoriesUsuario(
-                                        usuario: us.usuario),
-                                  ),
-                                  //StoriesUsuario.routeName,
-                                );
-                              },
+                            return MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: Story(
+                                story: storiesState.usuariosStories[index - 1],
+                                callback: (us) {
+                                  context.read<UserStoriesBloc>().add(
+                                      UserStoriesCargar(
+                                          idUsuario: us.idUsuario,
+                                          iniciar: true));
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (ctx) => VisorStoriesUsuario(
+                                          usuario: us.usuario),
+                                    ),
+                                    //StoriesUsuario.routeName,
+                                  );
+                                },
+                              ),
                             );
                           }),
                           itemCount: storiesState.usuariosStories.length + 1,

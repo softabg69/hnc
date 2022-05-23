@@ -17,7 +17,7 @@ class Story extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 2, 0, 0),
+      padding: const EdgeInsets.fromLTRB(2, 2, 2, 0),
       child: Column(
         children: [
           GestureDetector(

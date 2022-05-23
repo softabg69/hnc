@@ -25,6 +25,7 @@ class StoriesBloc extends Bloc<StoriesEvent, StoriesState> {
     // on<StoriesEvent>((event, emit) {
     // });
     on<StoriesCargar>(_cargarStories);
+    on<StoriesInicializar>(_inicializar);
   }
 
   @override
@@ -49,5 +50,10 @@ class StoriesBloc extends Bloc<StoriesEvent, StoriesState> {
       Log.registra('Error carga stories: $e');
       emit(StoriesError(exception: e as Exception));
     }
+  }
+
+  FutureOr<void> _inicializar(
+      StoriesInicializar event, Emitter<StoriesState> emit) async {
+    emit(StoriesInitial());
   }
 }

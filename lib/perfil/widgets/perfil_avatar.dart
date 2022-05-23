@@ -40,34 +40,37 @@ class PerfilAvatar extends StatelessWidget {
 
   Widget _imageAvatar() {
     return BlocBuilder<PerfilBloc, PerfilState>(
-      builder: ((context, state) => Stack(
-            children: [
-              Container(
-                width: 120.0,
-                height: 80.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      fit: state.origenAvatar == OrigenImagen.network
-                          ? BoxFit.contain
-                          : BoxFit.scaleDown,
-                      image: state.origenAvatar == OrigenImagen.network
-                          ? NetworkImage(
-                              "${Environment().config!.baseUrlServicios}/data/avatarusuario?id=${state.avatar}",
-                            )
-                          : Image.memory(state.bytesImg!).image),
+      builder: ((context, state) => MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: Stack(
+              children: [
+                Container(
+                  width: 120.0,
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: state.origenAvatar == OrigenImagen.network
+                            ? BoxFit.contain
+                            : BoxFit.scaleDown,
+                        image: state.origenAvatar == OrigenImagen.network
+                            ? NetworkImage(
+                                "${Environment().config!.baseUrlServicios}/data/avatarusuario?id=${state.avatar}",
+                              )
+                            : Image.memory(state.bytesImg!).image),
+                  ),
                 ),
-              ),
-              Positioned(
-                child: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 40,
+                Positioned(
+                  child: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 40,
+                  ),
+                  right: -5,
+                  bottom: -5,
                 ),
-                right: -5,
-                bottom: -5,
-              ),
-            ],
+              ],
+            ),
           )),
     );
   }

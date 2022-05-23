@@ -40,53 +40,59 @@ class ContenidoStory extends StatelessWidget {
   final Bloc bloc;
 
   Widget imagen(BuildContext context) {
-    return esDetalle
-        ? InteractiveViewer(
-            maxScale: kIsWeb ? 1 : 5,
-            child: Image.network(
-              '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
-              width: double.infinity,
-              fit: BoxFit.fitWidth,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: esDetalle
+          ? InteractiveViewer(
+              maxScale: kIsWeb ? 1 : 5,
+              child: Image.network(
+                '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
+                width: double.infinity,
+                fit: BoxFit.fitWidth,
+              ),
+            )
+          : AspectRatio(
+              aspectRatio: 4 / 3,
+              child: Image.network(
+                '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
-          )
-        : AspectRatio(
-            aspectRatio: 4 / 3,
-            child: Image.network(
-              '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          );
+    );
   }
 
   Widget _gusta(BuildContext context, Contenido contenido) {
-    return GestureDetector(
-      onTap: () async {
-        await cambiarGusta(contenido);
-      },
-      child: gustaCambiando
-          ? CircleAvatar(
-              backgroundColor: Theme.of(context)
-                  .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
-              radius: 25,
-              child: const CircularProgressIndicator(),
-            )
-          : Stack(children: [
-              CircleAvatar(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () async {
+          await cambiarGusta(contenido);
+        },
+        child: gustaCambiando
+            ? CircleAvatar(
                 backgroundColor: Theme.of(context)
                     .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
                 radius: 25,
-              ),
-              Positioned(
-                left: 10,
-                top: 10,
-                child: Icon(
-                  Icons.favorite,
-                  size: 30,
-                  color: contenido.gusta ? Colors.red : Colors.white,
+                child: const CircularProgressIndicator(),
+              )
+            : Stack(children: [
+                CircleAvatar(
+                  backgroundColor: Theme.of(context)
+                      .backgroundColor, // Color.fromARGB(0, 240, 0, 140),
+                  radius: 25,
                 ),
-              ),
-            ]),
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: Icon(
+                    Icons.favorite,
+                    size: 30,
+                    color: contenido.gusta ? Colors.red : Colors.white,
+                  ),
+                ),
+              ]),
+      ),
     );
   }
 

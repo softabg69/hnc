@@ -39,48 +39,51 @@ class ContenidoImagen extends StatelessWidget {
   Widget _imageContenido(BuildContext context) {
     Log.registra(
         '${Environment().config!.baseUrlServicios}/data/imagen?id=$idImagen');
-    return idImagen != null && idImagen!.isNotEmpty
-        ? Container(
-            width: 400,
-            height: 400,
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: NetworkImage(
-                  '${Environment().config!.baseUrlServicios}/data/imagen?id=$idImagen',
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: idImagen != null && idImagen!.isNotEmpty
+          ? Container(
+              width: 400,
+              height: 400,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: NetworkImage(
+                    '${Environment().config!.baseUrlServicios}/data/imagen?id=$idImagen',
+                  ),
                 ),
               ),
-            ),
-          )
-        : imagen != null
-            ? Center(
-                child: Container(
-                  width: 400,
-                  height: 400,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: Image.memory(imagen!).image,
+            )
+          : imagen != null
+              ? Center(
+                  child: Container(
+                    width: 400,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: Image.memory(imagen!).image,
+                      ),
+                    ),
+                  ),
+                )
+              : Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 2),
+                    ),
+                    width: 300,
+                    height: 75,
+                    child: const Center(
+                      child: Text('Pulse aquí para seleccionar la imagen'),
                     ),
                   ),
                 ),
-              )
-            : Center(
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 2),
-                  ),
-                  width: 300,
-                  height: 75,
-                  child: const Center(
-                    child: Text('Pulse aquí para seleccionar la imagen'),
-                  ),
-                ),
-              );
+    );
   }
 
   // Future<void> _pickImage(BuildContext context) async {
