@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-//import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-import 'package:hnc/editor/bloc/editor_bloc.dart';
-import 'package:hnc/editor/widgets/contenido_imagen.dart';
-import 'package:hnc/tipos.dart';
-//import 'package:hnc/repository/hnc_repository.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+//import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/editor/bloc/editor_bloc.dart';
+import 'package:helpncare/editor/widgets/contenido_imagen.dart';
+import 'package:helpncare/tipos.dart';
+//import 'package:helpncare/repository/hnc_repository.dart';
 
 import '../../components/configuracion.dart';
 import '../../components/dialog.dart';

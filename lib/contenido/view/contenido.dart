@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-import 'package:hnc/contenido/widgets/block_loader.dart';
-import 'package:hnc/editor/bloc/editor_bloc.dart';
-import 'package:hnc/editor/views/editor.dart';
-import 'package:hnc/repository/hnc_repository.dart';
-import 'package:hnc/widgets/contenido_story.dart';
-import 'package:hnc/widgets/una_columna.dart';
+import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/contenido/widgets/block_loader.dart';
+import 'package:helpncare/editor/bloc/editor_bloc.dart';
+import 'package:helpncare/editor/views/editor.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
+import 'package:helpncare/widgets/contenido_story.dart';
+import 'package:helpncare/widgets/una_columna.dart';
 import '../../components/log.dart';
 //import '../../repository/models/contenido.dart' as model;
 

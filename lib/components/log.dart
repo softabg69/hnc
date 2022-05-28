@@ -1,4 +1,4 @@
-import 'package:hnc/components/configuracion.dart';
+import 'package:helpncare/components/configuracion.dart';
 
 class Log {
   static void registra(String msg) {

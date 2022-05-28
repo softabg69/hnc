@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hnc/components/log.dart';
+import 'package:helpncare/components/log.dart';
 import 'package:http/retry.dart';
 import 'package:image_picker/image_picker.dart';
 

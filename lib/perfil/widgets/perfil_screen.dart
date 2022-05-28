@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/perfil/widgets/perfil_avatar.dart';
-import 'package:hnc/perfil/widgets/perfil_categorias.dart';
-import 'package:hnc/perfil/widgets/perfil_usuario.dart';
+import 'package:helpncare/perfil/widgets/perfil_avatar.dart';
+import 'package:helpncare/perfil/widgets/perfil_categorias.dart';
+import 'package:helpncare/perfil/widgets/perfil_usuario.dart';
 import '../../components/dialog.dart';
 import '../../enumerados.dart';
 import '../bloc/perfil_bloc.dart';

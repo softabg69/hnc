@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:hnc/repository/models/contenido.dart';
-// import 'package:hnc/tipos.dart';
+// import 'package:helpncare/repository/models/contenido.dart';
+// import 'package:helpncare/tipos.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter/foundation.dart' show kIsWeb;
 // //import '../../bloc/session/session_bloc.dart';

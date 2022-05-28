@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/enumerados.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+import 'package:helpncare/enumerados.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 part 'platform_event.dart';

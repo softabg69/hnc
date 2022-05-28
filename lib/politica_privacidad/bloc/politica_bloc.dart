@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/bloc/request_status.dart';
+import 'package:helpncare/bloc/request_status.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/log.dart';

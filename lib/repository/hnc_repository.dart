@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:hnc/repository/models/categoria.dart';
-import 'package:hnc/repository/models/contenido.dart';
-import 'package:hnc/repository/models/usuario_story.dart';
-import 'package:hnc/repository/service/custom_exceptions.dart';
-import 'package:hnc/repository/service/hnc_service.dart';
+import 'package:helpncare/repository/models/categoria.dart';
+import 'package:helpncare/repository/models/contenido.dart';
+import 'package:helpncare/repository/models/usuario_story.dart';
+import 'package:helpncare/repository/service/custom_exceptions.dart';
+import 'package:helpncare/repository/service/hnc_service.dart';
 
 import '../components/jwt_token.dart';
 import 'models/version.dart';

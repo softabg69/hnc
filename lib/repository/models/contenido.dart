@@ -1,4 +1,4 @@
-import 'package:hnc/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
 
 import '../../enumerados.dart';
 

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/repository/models/contenido.dart';
-import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
+import 'package:helpncare/repository/models/contenido.dart';
+import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
 
 import '../../components/log.dart';
 import '../../contenido/widgets/block_loader.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-//import 'package:hnc/login/bloc/login_bloc.dart';
-//import 'package:hnc/principal/bloc/principal_bloc.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+//import 'package:helpncare/login/bloc/login_bloc.dart';
+//import 'package:helpncare/principal/bloc/principal_bloc.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:stream_transform/stream_transform.dart';
 

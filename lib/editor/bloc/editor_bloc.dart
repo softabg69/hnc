@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
-//import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-import 'package:hnc/tipos.dart';
+import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
+//import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/tipos.dart';
 //import 'package:http/retry.dart';
 
 import '../../components/log.dart';

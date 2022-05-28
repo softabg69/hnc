@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/principal/bloc/principal_bloc.dart';
-import 'package:hnc/principal/widgets/categoria_horizontal.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/principal/bloc/principal_bloc.dart';
+import 'package:helpncare/principal/widgets/categoria_horizontal.dart';
 
 import '../../components/log.dart';
 import '../../enumerados.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/repository/models/usuario_story.dart';
-import 'package:hnc/tipos.dart';
-//import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
-//import 'package:hnc/user_stories/views/visor_stories_usuario.dart';
+import 'package:helpncare/repository/models/usuario_story.dart';
+import 'package:helpncare/tipos.dart';
+//import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
+//import 'package:helpncare/user_stories/views/visor_stories_usuario.dart';
 
 import '../../components/configuracion.dart';
 

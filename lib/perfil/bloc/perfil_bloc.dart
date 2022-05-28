@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/repository/hnc_repository.dart';
-import 'package:hnc/repository/models/categoria.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
+import 'package:helpncare/repository/models/categoria.dart';
 
 import '../../bloc/session/session_bloc.dart';
 import '../../components/log.dart';

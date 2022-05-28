@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/components/configuracion.dart';
-import 'package:hnc/repository/models/categoria.dart';
-import 'package:hnc/widgets/una_columna.dart';
+import 'package:helpncare/components/configuracion.dart';
+import 'package:helpncare/repository/models/categoria.dart';
+import 'package:helpncare/widgets/una_columna.dart';
 
 import '../../components/log.dart';
 import '../bloc/perfil_bloc.dart';

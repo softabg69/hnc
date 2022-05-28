@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-import 'package:hnc/repository/models/contenido.dart';
-import 'package:hnc/tipos.dart';
-import 'package:hnc/widgets/contenido_story.dart';
+//import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+import 'package:helpncare/repository/models/contenido.dart';
+import 'package:helpncare/tipos.dart';
+import 'package:helpncare/widgets/contenido_story.dart';
 
 import '../../components/log.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../enumerados.dart';
-//import 'package:hnc/contenido/widgets/un_contenido.dart';
+//import 'package:helpncare/contenido/widgets/un_contenido.dart';
 
 class Detalle extends StatelessWidget {
   const Detalle(

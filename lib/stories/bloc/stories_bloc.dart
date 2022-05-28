@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/enumerados.dart';
-import 'package:hnc/repository/hnc_repository.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/enumerados.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
 
 import '../../components/log.dart';
 //import '../../repository/models/contenido.dart';

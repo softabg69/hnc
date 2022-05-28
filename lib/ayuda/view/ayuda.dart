@@ -1,6 +1,6 @@
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hnc/widgets/una_columna.dart';
+import 'package:helpncare/widgets/una_columna.dart';
 import 'package:video_player/video_player.dart';
 
 //import '../constantes.dart';

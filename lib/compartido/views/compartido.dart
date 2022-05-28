@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/components/configuracion.dart';
-import 'package:hnc/repository/hnc_repository.dart';
-import 'package:hnc/utils/visualizar_url.dart';
-import 'package:hnc/widgets/contenido_story_compartido.dart';
+import 'package:helpncare/components/configuracion.dart';
+import 'package:helpncare/repository/hnc_repository.dart';
+import 'package:helpncare/utils/visualizar_url.dart';
+import 'package:helpncare/widgets/contenido_story_compartido.dart';
 
 import '../../repository/models/contenido.dart';
 

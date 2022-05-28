@@ -2,9 +2,9 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/perfil/bloc/perfil_bloc.dart';
-import 'package:hnc/stories/views/stories.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/perfil/bloc/perfil_bloc.dart';
+import 'package:helpncare/stories/views/stories.dart';
 
 import '../../ayuda/view/ayuda.dart';
 import '../../bloc/platform/platform_bloc.dart';

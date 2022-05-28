@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hnc/widgets/una_columna.dart';
+import 'package:helpncare/widgets/una_columna.dart';
 
 import '../compartido/widgets/cabecera_contenido_compartido.dart';
 import '../components/configuracion.dart';

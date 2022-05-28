@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
 
 import '../components/log.dart';
 

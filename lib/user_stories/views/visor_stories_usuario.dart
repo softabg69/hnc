@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/enumerados.dart';
-import 'package:hnc/stories/bloc/stories_bloc.dart';
-//import 'package:hnc/user_stories/views/stories_usuario.dart';
-import 'package:hnc/widgets/contenido_story.dart';
+import 'package:helpncare/enumerados.dart';
+import 'package:helpncare/stories/bloc/stories_bloc.dart';
+//import 'package:helpncare/user_stories/views/stories_usuario.dart';
+import 'package:helpncare/widgets/contenido_story.dart';
 
 import '../../bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import '../../bloc/session/session_bloc.dart';

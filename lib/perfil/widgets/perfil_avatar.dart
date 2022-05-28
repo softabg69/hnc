@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/perfil/bloc/perfil_bloc.dart';
-import 'package:hnc/utils/camera.dart';
+import 'package:helpncare/perfil/bloc/perfil_bloc.dart';
+import 'package:helpncare/utils/camera.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../bloc/session/session_bloc.dart';

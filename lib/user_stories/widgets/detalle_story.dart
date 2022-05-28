@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:hnc/contenido/bloc/contenido_bloc.dart';
-//import 'package:hnc/contenido/widgets/un_contenido.dart';
-import 'package:hnc/user_stories/bloc/user_stories_bloc.dart';
-//import 'package:hnc/user_stories/widgets/una_story.dart';
-import 'package:hnc/widgets/contenido_story.dart';
+//import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
+//import 'package:helpncare/contenido/widgets/un_contenido.dart';
+import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
+//import 'package:helpncare/user_stories/widgets/una_story.dart';
+import 'package:helpncare/widgets/contenido_story.dart';
 
 import '../../enumerados.dart';
 

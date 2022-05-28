@@ -1,5 +1,5 @@
-import 'package:hnc/editor/models/editado.dart';
-import 'package:hnc/repository/models/usuario_story.dart';
+import 'package:helpncare/editor/models/editado.dart';
+import 'package:helpncare/repository/models/usuario_story.dart';
 
 import 'repository/models/contenido.dart';
 

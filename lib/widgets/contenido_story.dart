@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hnc/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
-import 'package:hnc/bloc/session/session_bloc.dart';
-import 'package:hnc/contenido/widgets/cabecera_contenido.dart';
-import 'package:hnc/enumerados.dart';
-import 'package:hnc/tipos.dart';
-import 'package:hnc/utils/visualizar_url.dart';
-import 'package:hnc/widgets/session.dart';
-import 'package:hnc/widgets/una_columna.dart';
+import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
+import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/contenido/widgets/cabecera_contenido.dart';
+import 'package:helpncare/enumerados.dart';
+import 'package:helpncare/tipos.dart';
+import 'package:helpncare/utils/visualizar_url.dart';
+import 'package:helpncare/widgets/session.dart';
+import 'package:helpncare/widgets/una_columna.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../components/configuracion.dart';
