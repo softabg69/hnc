@@ -132,7 +132,8 @@ class ContenidoStory extends StatelessWidget {
                 eliminar: eliminar,
                 editar: editar,
                 compartir: (c) async {
-                  final String email = context.read<SessionBloc>().state.email;
+                  final String emailC = context.read<SessionBloc>().state.email;
+                  final String email = emailC.substring(0, emailC.indexOf('@'));
                   await Share.share(
                     '${Environment().config!.baseUrlWeb}/#/compartido?token=${contenido.idContenido}',
                     subject:

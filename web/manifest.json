@@ -1,11 +1,11 @@
 {
-    "name": "hnc",
-    "short_name": "hnc",
+    "name": "helpncare",
+    "short_name": "helpncare",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "La red social para ayudar y pedir ayuda. El punto de encuentro de la solidaridad y la ayuda mutua.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
