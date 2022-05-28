@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="es.helpncare.app">
    <application
-        android:label="hnc"
+        android:label="helpncare"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
