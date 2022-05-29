@@ -33,7 +33,9 @@ class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
       } else {
         final vApp = version.version.split('.');
         final vBD = info.version.split('.');
-        if (vApp[0] == vBD[0] && vApp[1] == vBD[1]) {
+        final nvApp = int.parse(vApp[2]);
+        final nvBD = int.parse(vBD[2]);
+        if (vApp[0] == vBD[0] && vApp[1] == vBD[1] && nvBD > nvApp) {
           emit(PlatformState(
               estado: EstadoPlatform.disponible,
               appName: info.appName,
@@ -43,7 +45,7 @@ class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
               buildSignature: info.buildSignature,
               resultadoVersion:
                   ResultadoComparaVersion.nuevaVersionDisponible));
-        } else {
+        } else if (vApp[0] != vBD[0] || vApp[1] != vBD[1]) {
           emit(PlatformState(
               estado: EstadoPlatform.disponible,
               appName: info.appName,
@@ -52,6 +54,15 @@ class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
               buildNumber: info.buildNumber,
               buildSignature: info.buildSignature,
               resultadoVersion: ResultadoComparaVersion.imcompatible));
+        } else {
+          emit(PlatformState(
+              estado: EstadoPlatform.disponible,
+              appName: info.appName,
+              packageName: info.packageName,
+              version: info.version,
+              buildNumber: info.buildNumber,
+              buildSignature: info.buildSignature,
+              resultadoVersion: ResultadoComparaVersion.iguales));
         }
       }
     }
