@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "hnc" "\0"
+            VALUE "CompanyName", "es.helpncare" "\0"
+            VALUE "FileDescription", "helpncare" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "hnc" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "hnc.exe" "\0"
-            VALUE "ProductName", "hnc" "\0"
+            VALUE "OriginalFilename", "helpncare.exe" "\0"
+            VALUE "ProductName", "helpncare" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,6 +1,6 @@
 # hnc
 
-A new Flutter project.
+La red social para ayudar y pedir ayuda. El punto de encuentro de la solidaridad y la ayuda mutua.
 
 ## Getting Started
 

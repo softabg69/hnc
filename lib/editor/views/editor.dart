@@ -246,49 +246,59 @@ class _EditorState extends State<Editor> {
   // }
 
   Widget categoriaWidget(int index) {
-    return Column(
+    return Row(
       children: [
-        SizedBox(
-          width: 90,
-          child: Center(
-            child: FittedBox(
-              child: Text(
-                categorias![index].descripcion,
-                overflow: TextOverflow.ellipsis,
+        Column(
+          children: [
+            SizedBox(
+              width: 90,
+              child: Center(
+                child: FittedBox(
+                  child: Text(
+                    categorias![index].descripcion,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        Container(
-          width: 50.0,
-          height: 50.0,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.contain,
-              image: NetworkImage(
-                  "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categorias![index].avatar}"),
+            const SizedBox(
+              height: 10,
             ),
-          ),
+            Container(
+              width: 50.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: NetworkImage(
+                      "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categorias![index].avatar}"),
+                ),
+              ),
+            ),
+            Switch(
+              value: categorias![index].seleccionada,
+              onChanged: (a) {
+                setState(() {
+                  categorias![index] = categorias![index]
+                      .copyWith(seleccionada: !categorias![index].seleccionada);
+                });
+
+                // setState(() {
+                //   categoria.seleccionada = !categoria.seleccionada;
+                //   //categoria.cambiaSeleccionada(context, categoria.id);
+                // });
+
+                // setState(() {
+                //   categoria.seleccionada =
+                //       !categoria.seleccionada;
+                // });
+              },
+            ),
+          ],
         ),
-        Switch(
-          value: categorias![index].seleccionada,
-          onChanged: (a) {
-            setState(() {
-              categorias![index] = categorias![index]
-                  .copyWith(seleccionada: !categorias![index].seleccionada);
-            });
-
-            // setState(() {
-            //   categoria.seleccionada = !categoria.seleccionada;
-            //   //categoria.cambiaSeleccionada(context, categoria.id);
-            // });
-
-            // setState(() {
-            //   categoria.seleccionada =
-            //       !categoria.seleccionada;
-            // });
-          },
+        const SizedBox(
+          width: 10,
         ),
       ],
     );
