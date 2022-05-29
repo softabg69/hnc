@@ -20,6 +20,12 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+<string>Puedes utilizar la galería para publicar la imagen</string>
+	<key>NSCameraUsageDescription</key>
+<string>Puedes utilizar la cámara para publicar la imagen</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Puede utilizar la grabación de video/audio para publicar un contenido</string>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>

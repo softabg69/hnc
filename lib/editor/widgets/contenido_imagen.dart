@@ -102,15 +102,27 @@ class ContenidoImagen extends StatelessWidget {
 
   Future<void> _seleccionaImagen(
       BuildContext context, ImageSource origen) async {
-    final pickedFile = await _picker.pickImage(
-      source: origen,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: null,
-    );
-    if (pickedFile != null) {
-      final Uint8List img = await pickedFile.readAsBytes();
-      cambiada(img);
+    Log.registra('selección de imagen');
+    try {
+      final pickedFile = await _picker.pickImage(
+        source: origen,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 90,
+      );
+
+      Log.registra('después de selección de imagen');
+      if (pickedFile != null) {
+        Log.registra("name: ${pickedFile.name}");
+      } else {
+        Log.registra("name: null");
+      }
+      if (pickedFile != null) {
+        final Uint8List img = await pickedFile.readAsBytes();
+        cambiada(img);
+      }
+    } catch (e) {
+      Log.registra("Error selección imagen: $e");
     }
   }
 
