@@ -42,6 +42,11 @@ class StoriesBloc extends Bloc<StoriesEvent, StoriesState> {
       StoriesCargar event, Emitter<StoriesState> emit) async {
     emit(StoriesCargando());
     Log.registra('_cargarStories');
+    if (event.categorias.isEmpty) {
+      emit(StoriesInitial());
+      Log.registra('_cargarStories sin categorias');
+      return;
+    }
     try {
       final stories = await hncRepository.getStories(event.categorias,
           session.state.dias == FiltroFechas.ultimos5dias ? 5 : 300);

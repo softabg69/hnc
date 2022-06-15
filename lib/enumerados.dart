@@ -40,7 +40,8 @@ enum EstadoLogin {
   definirPerfil,
   solicitudCierre,
   cerrado,
-  cerrando
+  cerrando,
+  cargadasCredenciales
 }
 
 enum EstadoPerfil {

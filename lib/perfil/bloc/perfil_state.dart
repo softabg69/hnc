@@ -3,6 +3,7 @@ part of 'perfil_bloc.dart';
 class PerfilState extends Equatable {
   const PerfilState(
       {this.email = '',
+      this.nickname = '',
       this.avatar = '',
       this.origenAvatar = OrigenImagen.network,
       this.categorias = const [],
@@ -11,6 +12,7 @@ class PerfilState extends Equatable {
       this.index = 0});
 
   final String email;
+  final String nickname;
   final String avatar;
   final OrigenImagen origenAvatar;
   final List<Categoria> categorias;
@@ -40,6 +42,7 @@ class PerfilState extends Equatable {
 
   PerfilState copyWith(
       {String? email,
+      String? nickname,
       String? avatar,
       OrigenImagen? origenAvatar,
       List<Categoria>? categorias,
@@ -47,6 +50,7 @@ class PerfilState extends Equatable {
       Uint8List? bytesImg}) {
     return PerfilState(
         email: email ?? this.email,
+        nickname: nickname ?? this.nickname,
         avatar: avatar ?? this.avatar,
         origenAvatar: origenAvatar ?? this.origenAvatar,
         categorias: categorias ?? this.categorias,
@@ -57,6 +61,6 @@ class PerfilState extends Equatable {
 
   @override
   String toString() {
-    return 'PerfilState: $index -> $categorias';
+    return 'PerfilState: email: $email nickname: $nickname $index -> $categorias';
   }
 }

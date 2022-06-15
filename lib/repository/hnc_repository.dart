@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:helpncare/repository/models/categoria.dart';
 import 'package:helpncare/repository/models/contenido.dart';
+import 'package:helpncare/repository/models/perfil.dart';
 import 'package:helpncare/repository/models/usuario_story.dart';
 import 'package:helpncare/repository/service/custom_exceptions.dart';
 import 'package:helpncare/repository/service/hnc_service.dart';
 
 import '../components/jwt_token.dart';
+import '../components/log.dart';
 import 'models/version.dart';
 
 class HncRepository {
@@ -50,16 +52,23 @@ class HncRepository {
     await service.registro(json.encode({'token': token}));
   }
 
-  Future<List<Categoria>> getPerfil() async {
+  Future<Perfil> getPerfil() async {
     final json = await service.getPerfil();
-    return List<Categoria>.from(json.map((model) => Categoria.fromJson(model)));
+    Log.registra('Respuesta getPerfil: $json');
+
+    return Perfil(
+        nickname: json['nickname'],
+        categorias: List<Categoria>.from(
+            json['categorias'].map((model) => Categoria.fromJson(model))));
   }
 
   Future<String> actualizarPerfil(
-      List<int> categorias, Uint8List? avatar) async {
+      List<int> categorias, Uint8List? avatar, String nickname) async {
     final body = <String, dynamic>{};
     body['categorias'] = categorias;
+    body['nickname'] = nickname;
     if (avatar != null && avatar.isNotEmpty) body['avatar'] = avatar;
+    Log.registra('body actualizar: $body');
     final res = await service.actualizarPerfil(json.encode(body));
     return res['avatar'];
   }

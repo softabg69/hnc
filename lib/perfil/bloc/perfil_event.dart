@@ -25,8 +25,16 @@ class PerfilCategoriaCambiadaEvent extends PerfilEvent {
   List<Object> get props => [categoria];
 }
 
-class PerfilGuardarEvent extends PerfilEvent {}
+class PerfilGuardarEvent extends PerfilEvent {
+  const PerfilGuardarEvent({this.nickname}) : super();
+  final String? nickname;
+}
 
 class PerfilProcesadoErrorEvent extends PerfilEvent {}
 
 class PerfilCerrar extends PerfilEvent {}
+
+class PerfilSetNickname extends PerfilEvent {
+  const PerfilSetNickname({this.nickname}) : super();
+  final String? nickname;
+}

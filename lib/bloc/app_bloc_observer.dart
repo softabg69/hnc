@@ -21,13 +21,13 @@ class AppBlocObserver extends BlocObserver {
   void onChange(BlocBase bloc, Change change) {
     super.onChange(bloc, change);
     // TODO: implement onChange
-    Log.registra('*** onChange $bloc: $change');
+    //Log.registra('*** onChange $bloc: $change');
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
     // TODO: implement onChange
-    Log.registra('*** onTransition $bloc: $transition');
+    //Log.registra('*** onTransition $bloc: $transition');
   }
 }

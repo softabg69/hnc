@@ -6,6 +6,8 @@ abstract class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+class CargaCredenciales extends LoginEvent {}
+
 class EmailChangedEvent extends LoginEvent {
   final String email;
 
@@ -35,3 +37,10 @@ class LoginGoogleStart extends LoginEvent {}
 class LoginGoogleError extends LoginEvent {}
 
 class LoginClose extends LoginEvent {}
+
+class LoginRecordarEvent extends LoginEvent {
+  LoginRecordarEvent({required this.recordar}) : super();
+  final bool recordar;
+}
+
+class LoginProcesadoError extends LoginEvent {}

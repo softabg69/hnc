@@ -23,7 +23,7 @@ String urlInicio = "";
 void main() {
   const String environment = String.fromEnvironment(
     'ENVIRONMENT',
-    defaultValue: Environment.PRD,
+    defaultValue: Environment.DEV,
   );
   if (kIsWeb) {
     urlInicio = Uri.base.toString(); //get complete url

@@ -7,3 +7,4 @@ typedef CallbackContenido = void Function(Contenido);
 typedef CallbackContenidoAsync = Future<void> Function(Contenido);
 typedef CallbackUsuarioStory = void Function(UsuarioStory);
 typedef CallbackEditado = void Function(Editado);
+typedef CallbackString = void Function(String);

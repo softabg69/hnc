@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 
 import 'package:helpncare/repository/models/categoria.dart';
-import 'package:helpncare/repository/models/usuario_story.dart';
+//import 'package:helpncare/repository/models/usuario_story.dart';
 import 'package:meta/meta.dart';
 
 import '../../components/log.dart';
@@ -27,6 +27,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         (event, emit) => emit(state.copyWith(estado: EstadoLogin.procesado)));
     on<SessionCambioFiltroCategoria>(_cambioFiltroCategoria);
     on<SessionCambioDias>(_cambioDias);
+    on<SessionEstablecerNickname>(_setNickname);
   }
 
   final HncRepository hncRepository;
@@ -96,5 +97,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   FutureOr<void> _cambioDias(
       SessionCambioDias event, Emitter<SessionState> emit) async {
     emit(state.copyWith(dias: event.dias));
+  }
+
+  FutureOr<void> _setNickname(
+      SessionEstablecerNickname event, Emitter<SessionState> emit) async {
+    emit(state.copyWith(
+        nickname: event.nickname == null || event.nickname!.isEmpty
+            ? state.email.substring(0, state.email.indexOf('@'))
+            : event.nickname));
   }
 }

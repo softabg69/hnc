@@ -29,6 +29,7 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
     on<PerfilProcesadoErrorEvent>(_procesadoError);
     on<PerfilGuardarEvent>(_guardar);
     on<PerfilCerrar>(_cerrar);
+    on<PerfilSetNickname>(_setNickname);
   }
 
   @override
@@ -45,20 +46,24 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
     if (state.estado == EstadoPerfil.cargando) return;
     emit(state.copyWith(estado: EstadoPerfil.cargando));
     try {
-      final categorias = await hncRepository.getPerfil();
+      final perfil = await hncRepository.getPerfil();
+      Log.registra('carga perfil nickname: ${perfil.nickname}');
+      sesionBloc.add(SessionEstablecerNickname(perfil.nickname));
       sesionBloc.add(SessionEstablecerCategoriasUsuarioEvent(
-          [...categorias.where((cat) => cat.seleccionada)]));
-      if (categorias.any((cat) => cat.seleccionada)) {
+          [...perfil.categorias.where((cat) => cat.seleccionada)]));
+      if (perfil.categorias.any((cat) => cat.seleccionada)) {
         emit(state.copyWith(
             email: sesionBloc.state.email,
+            nickname: perfil.nickname,
             avatar: sesionBloc.state.avatar,
-            categorias: categorias,
+            categorias: perfil.categorias,
             estado: EstadoPerfil.yaTienePerfil));
       } else {
         emit(state.copyWith(
             email: sesionBloc.state.email,
+            nickname: perfil.nickname,
             avatar: sesionBloc.state.avatar,
-            categorias: categorias,
+            categorias: perfil.categorias,
             estado: EstadoPerfil.cargado));
       }
     } catch (e) {
@@ -94,14 +99,19 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
 
   void _guardar(PerfilGuardarEvent event, Emitter<PerfilState> emit) async {
     final seleccionadas = state.selecciondas();
+    Log.registra('perfilState: $state');
+    final String nickname =
+        event.nickname != null ? event.nickname! : state.nickname;
     if (seleccionadas.isEmpty) {
-      emit(state.copyWith(estado: EstadoPerfil.errorSeleccion));
+      emit(state.copyWith(
+          nickname: nickname, estado: EstadoPerfil.errorSeleccion));
       return;
     }
-    emit(state.copyWith(estado: EstadoPerfil.guardando));
+    emit(state.copyWith(nickname: nickname, estado: EstadoPerfil.guardando));
     try {
-      final resp =
-          await hncRepository.actualizarPerfil(seleccionadas, state.bytesImg);
+      Log.registra('_guardarPerfil nickname: $nickname');
+      final resp = await hncRepository.actualizarPerfil(
+          seleccionadas, state.bytesImg, nickname);
       if (resp.isNotEmpty) {
         sesionBloc.add(SessionActualizarAvatarEvent(resp));
       }
@@ -128,5 +138,11 @@ class PerfilBloc extends Bloc<PerfilEvent, PerfilState> {
         categorias: [],
         estado: EstadoPerfil.inicial,
         bytesImg: null));
+  }
+
+  FutureOr<void> _setNickname(
+      PerfilSetNickname event, Emitter<PerfilState> emit) {
+    Log.registra('_setNickname: $state');
+    emit(state.copyWith(nickname: event.nickname));
   }
 }

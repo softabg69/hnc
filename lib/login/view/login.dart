@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpncare/perfil/bloc/perfil_bloc.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../registro/view/registro.dart';
 import '../bloc/login_bloc.dart';
@@ -28,13 +30,19 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _pwdController = TextEditingController();
   bool navegado = false;
   bool mostradoSnackBar = false;
+  bool procesadasCredenciales = false;
+  bool recordar = false;
 
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
+        Log.registra('emailField: ${state.email}');
         return TextFormField(
+          controller: _emailController,
           decoration: const InputDecoration(
             labelText: 'Email',
             icon: Icon(Icons.person),
@@ -52,6 +60,7 @@ class _LoginState extends State<Login> {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
+          controller: _pwdController,
           obscureText: true,
           decoration: const InputDecoration(
             labelText: 'Contraseña',
@@ -65,6 +74,27 @@ class _LoginState extends State<Login> {
         );
       },
     );
+  }
+
+  Widget _recordar() {
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Checkbox(
+              value: recordar,
+              onChanged: (b) {
+                context
+                    .read<LoginBloc>()
+                    .add(LoginRecordarEvent(recordar: b ?? false));
+                setState(() {
+                  recordar = b ?? false;
+                });
+              }),
+          const Text('recordar credenciales')
+        ],
+      );
+    });
   }
 
   Widget _loginButton() {
@@ -271,6 +301,23 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Widget _loginApple() {
+    return SignInWithAppleButton(
+      onPressed: () async {
+        final credential = await SignInWithApple.getAppleIDCredential(
+          scopes: [
+            AppleIDAuthorizationScopes.email,
+            AppleIDAuthorizationScopes.fullName,
+          ],
+        );
+        print(credential);
+
+        // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+        // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+      },
+    );
+  }
+
   Widget _loginForm(BuildContext context) {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
@@ -286,12 +333,17 @@ class _LoginState extends State<Login> {
                 listener: (context, state) {
                   if (state.estado == EstadoLogin.googleError ||
                       state.estado == EstadoLogin.localError) {
+                    Log.registra(
+                        'login error: ${state.mensajeError} ${(state.mensajeError == 'Petición no válida')}');
                     Dialogs.snackBar(
                         context: context,
                         content: Text(state.mensajeError.isEmpty
                             ? 'Se ha producido un error'
-                            : state.mensajeError),
+                            : state.mensajeError == 'Petición no válida'
+                                ? 'Credenciales incorrectas'
+                                : state.mensajeError),
                         color: Colors.red);
+                    context.read<LoginBloc>().add(LoginProcesadoError());
                   }
                 },
                 child: Form(
@@ -316,15 +368,38 @@ class _LoginState extends State<Login> {
                         _emailField(),
                         _passwordField(),
                         const SizedBox(height: 20),
+                        _recordar(),
+                        const SizedBox(height: 20),
                         _loginButton(),
                         const SizedBox(height: 20),
                         google(),
                         const SizedBox(height: 15),
+                        // _loginApple(),
+                        // const SizedBox(height: 15),
                         _recuperarPassword(context),
                         (kIsWeb
                             ? const SizedBox(height: 10)
                             : const SizedBox(height: 0)),
                         _registrate(context),
+                        kIsWeb
+                            ? const SizedBox(height: 20)
+                            : const SizedBox(height: 0),
+                        kIsWeb
+                            ? RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  text:
+                                      'Usamos cookies para asegurar que te damos la mejor experiencia en nuestra web. Si continúas usando este sitio, asumiremos que estás de acuerdo con ello.',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
+                              )
+                            : const SizedBox(
+                                height: 0,
+                              ),
                         const SizedBox(height: 20),
                         _politica(context),
                       ],
@@ -356,26 +431,40 @@ class _LoginState extends State<Login> {
       scheduleTimeout(1 * 1000); // 5 seconds.
     }
     return BlocListener<SessionBloc, SessionState>(
-      listener: (context, state) {
-        if (state.isAuthenticated && !navegado) {
-          navegado = true;
-          context.read<PerfilBloc>().add(PerfilCargarEvent());
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const Perfil(),
+        listener: (context, state) {
+          if (state.isAuthenticated && !navegado) {
+            navegado = true;
+            context.read<PerfilBloc>().add(PerfilCargarEvent());
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const Perfil(),
+              ),
+            );
+          }
+        },
+        child: Scaffold(
+          body: BlocProvider(
+            create: (context) => LoginBloc(
+                hncRepository: context.read<HncRepository>(),
+                session: context.read<SessionBloc>())
+              ..add(CargaCredenciales()),
+            child: BlocListener<LoginBloc, LoginState>(
+              listener: (context, state) {
+                if (state.estado == EstadoLogin.cargadasCredenciales &&
+                    !procesadasCredenciales) {
+                  procesadasCredenciales = true;
+                  _emailController.text = state.email;
+                  _pwdController.text = state.pwd;
+                  setState(() {
+                    Log.registra('setState recordar: ${state.recordar}');
+                    recordar = state.recordar;
+                  });
+                }
+              },
+              child: _loginForm(context),
             ),
-          );
-        }
-      },
-      child: Scaffold(
-        body: BlocProvider(
-          create: (context) => LoginBloc(
-              hncRepository: context.read<HncRepository>(),
-              session: context.read<SessionBloc>()),
-          child: _loginForm(context),
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

@@ -2,6 +2,7 @@ part of 'session_bloc.dart';
 
 class SessionState {
   final String email;
+  final String nickname;
   final AuthMethod authMethod;
   final String avatar;
   final List<Categoria> categoriasUsuario;
@@ -13,6 +14,7 @@ class SessionState {
 
   SessionState(
       {this.email = '',
+      this.nickname = '',
       this.authMethod = AuthMethod.ninguno,
       this.avatar = '',
       this.categoriasUsuario = const [],
@@ -22,6 +24,7 @@ class SessionState {
 
   SessionState copyWith(
       {String? email,
+      String? nickname,
       AuthMethod? authMethod,
       String? avatar,
       List<Categoria>? categoriasUsuario,
@@ -30,6 +33,7 @@ class SessionState {
       EstadoLogin? estado}) {
     return SessionState(
         email: email ?? this.email,
+        nickname: nickname ?? this.nickname,
         authMethod: authMethod ?? this.authMethod,
         avatar: avatar ?? this.avatar,
         categoriasUsuario: categoriasUsuario ?? this.categoriasUsuario,

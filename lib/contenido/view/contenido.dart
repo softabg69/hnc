@@ -9,10 +9,11 @@ import 'package:helpncare/editor/views/editor.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:helpncare/widgets/contenido_story.dart';
 import 'package:helpncare/widgets/una_columna.dart';
-import '../../components/log.dart';
+//import '../../components/log.dart';
 //import '../../repository/models/contenido.dart' as model;
 
 import '../../enumerados.dart';
+import '../../stories/bloc/stories_bloc.dart';
 
 class Contenido extends StatefulWidget {
   const Contenido({Key? key}) : super(key: key);
@@ -22,6 +23,13 @@ class Contenido extends StatefulWidget {
 }
 
 class _ContenidoState extends State<Contenido> {
+  @override
+  void didChangeDependencies() {
+    final categorias = context.read<SessionBloc>().state.filtroCategorias;
+    context.read<StoriesBloc>().add(StoriesCargar(categorias: categorias));
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     //Log.registra('Redibujando Contenido');

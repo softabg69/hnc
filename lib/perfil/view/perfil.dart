@@ -20,6 +20,7 @@ class Perfil extends StatefulWidget {
 
 class _PerfilState extends State<Perfil> {
   bool navegado = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +66,10 @@ class _PerfilState extends State<Perfil> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : const PerfilScreen();
+                : PerfilScreen(
+                    nickname: state.nickname,
+                    mayor: !widget.inicio,
+                  );
           },
         ),
       ),

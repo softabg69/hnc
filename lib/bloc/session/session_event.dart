@@ -64,3 +64,8 @@ class SessionCambioDias extends SessionEvent {
   SessionCambioDias(this.dias) : super();
   final FiltroFechas dias;
 }
+
+class SessionEstablecerNickname extends SessionEvent {
+  SessionEstablecerNickname(this.nickname) : super();
+  final String? nickname;
+}

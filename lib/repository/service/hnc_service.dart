@@ -74,7 +74,7 @@ class HncService {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.body);
-        Log.registra("json: $responseJson");
+        //Log.registra("json: $responseJson");
         return responseJson;
       case 400:
         throw BadRequestException(response.body);
