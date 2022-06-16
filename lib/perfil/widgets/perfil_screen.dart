@@ -57,7 +57,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                       context,
                       const Text('Debes ser mayor de 18 años'),
                       const Text(
-                          'Si eres mayor de 18 años, marca la casilla para poder continuar. Si no eres mayor de 18 años no podrás utilizar la aplicación y debes cerrarla inmediatamente.'),
+                          'Si eres mayor de 18 años, marca la casilla para poder continuar. Si no eres mayor de 18 años no puedes utilizar la aplicación.'),
                     );
                   } else {
                     context

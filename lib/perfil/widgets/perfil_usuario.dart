@@ -30,16 +30,16 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
             keyboardType: TextInputType.text,
             style: const TextStyle(color: Colors.black),
             decoration: const InputDecoration(
-              label: Text('Apodo'),
+              label: Text('Alias'),
               errorStyle: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
             validator: (String? value) {
-              if (value == null) return 'Debe definr un apodo';
+              if (value == null) return 'Debe definr un alias';
               if (value.length > 50) {
-                return 'El apodo debe ser inferior a 50 caracteres. Ahora tiene ${value.length}.';
+                return 'El alias debe ser inferior a 50 caracteres. Ahora tiene ${value.length}.';
               }
               return null;
             },
