@@ -12,8 +12,8 @@ class PerfilCategorias extends StatelessWidget {
 
   Widget _categoria(BuildContext context, Categoria categoria) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: SwitchListTile(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: SwitchListTile(
           key: Key('C${categoria.id}'),
           title: Text(categoria.descripcion),
           value: categoria.seleccionada,
@@ -22,18 +22,29 @@ class PerfilCategorias extends StatelessWidget {
                 .read<PerfilBloc>()
                 .add(PerfilCategoriaCambiadaEvent(categoria: categoria));
           },
-          secondary: Image.network(
-              "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}")
-          //Image.memory(categoria.bytes()),
+          secondary: Container(
+            width: 50.0,
+            height: 50.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: Image.network(
+                        "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}")
+                    .image,
+              ),
+            ),
+
+            //Image.memory(categoria.bytes()),
           ),
-    );
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PerfilBloc, PerfilState>(
       builder: (context, state) {
-        Log.registra(state.toString());
+        //Log.registra(state.toString());
         return SliverList(
           delegate: SliverChildBuilderDelegate(
               (context, index) => UnaColumna(

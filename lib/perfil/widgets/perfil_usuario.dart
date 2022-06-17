@@ -22,30 +22,33 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
       builder: ((context, state) {
         Log.registra('BBB: ${state.nickname}');
         _nickname.text = state.nickname;
-        return SizedBox(
-          width: 400,
-          child: TextFormField(
-            controller: _nickname,
-            maxLines: 1,
-            keyboardType: TextInputType.text,
-            style: const TextStyle(color: Colors.black),
-            decoration: const InputDecoration(
-              label: Text('Alias'),
-              errorStyle: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            width: 400,
+            child: TextFormField(
+              controller: _nickname,
+              maxLines: 1,
+              keyboardType: TextInputType.text,
+              style: const TextStyle(color: Colors.black),
+              decoration: const InputDecoration(
+                label: Text('Alias'),
+                errorStyle: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              validator: (String? value) {
+                if (value == null) return 'Debe definr un alias';
+                if (value.length > 50) {
+                  return 'El alias debe ser inferior a 50 caracteres. Ahora tiene ${value.length}.';
+                }
+                return null;
+              },
+              onChanged: (String? value) {
+                widget.callbackNickname.call(_nickname.text);
+              },
             ),
-            validator: (String? value) {
-              if (value == null) return 'Debe definr un alias';
-              if (value.length > 50) {
-                return 'El alias debe ser inferior a 50 caracteres. Ahora tiene ${value.length}.';
-              }
-              return null;
-            },
-            onChanged: (String? value) {
-              widget.callbackNickname.call(_nickname.text);
-            },
           ),
         );
       }),
