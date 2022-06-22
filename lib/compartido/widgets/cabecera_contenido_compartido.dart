@@ -5,11 +5,11 @@ import 'package:helpncare/components/configuracion.dart';
 //import 'package:helpncare/editor/bloc/editor_bloc.dart';
 //import 'package:helpncare/editor/views/editor.dart';
 //import 'package:helpncare/repository/hnc_repository.dart';
-import 'package:helpncare/tipos.dart';
+//import 'package:helpncare/tipos.dart';
 
-import '../../components/dialog.dart';
+//import '../../components/dialog.dart';
 //import '../../components/log.dart';
-import '../../components/log.dart';
+//import '../../components/log.dart';
 import '../../repository/models/contenido.dart';
 //import '../bloc/contenido_bloc.dart';
 

@@ -10,6 +10,7 @@ import 'package:helpncare/repository/models/contenido.dart';
 import 'package:helpncare/tipos.dart';
 import 'package:helpncare/widgets/contenido_story.dart';
 
+import '../../components/dialog.dart';
 import '../../components/log.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../enumerados.dart';
@@ -80,6 +81,14 @@ class Detalle extends StatelessWidget {
               gustaCambiando:
                   contenido.contenido.estadoGusta == EstadoGusta.cambiando,
               bloc: bloc,
+              denunciar: (c) async {
+                context
+                    .read<ContenidoBloc>()
+                    .add(ContenidoDenunciar(contenido: c.idContenido));
+                Dialogs.snackBar(
+                    context: context,
+                    content: const Text('Se ha notificado la denuncia'));
+              },
             ),
           ),
         );

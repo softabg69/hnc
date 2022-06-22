@@ -41,6 +41,7 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
     on<ContenidoActualizaContenido>(_actualizaContenido);
     on<ContenidoInicializar>(_inicializar);
     on<ContenidoEliminar>(_eliminar);
+    on<ContenidoDenunciar>(_denunciar);
   }
 
   @override
@@ -167,6 +168,26 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
       final copia = [...state.contenidos];
       final int seleccionado = copia.indexWhere(
         (element) => element.idContenido == event.contenido.idContenido,
+      );
+      if (seleccionado != -1) {
+        copia.removeAt(seleccionado);
+        emit(state.copyWith(
+            contenidos: copia, estado: EstadoContenido.actualizado));
+      }
+    } catch (e) {
+      emit(state.copyWith(estado: EstadoContenido.errorEliminar));
+    }
+  }
+
+  FutureOr<void> _denunciar(
+      ContenidoDenunciar event, Emitter<ContenidoState> emit) async {
+    Log.registra("denunciar Contenido bloc");
+
+    try {
+      await hncRepository.denunciaContenido(event.contenido);
+      final copia = [...state.contenidos];
+      final int seleccionado = copia.indexWhere(
+        (element) => element.idContenido == event.contenido,
       );
       if (seleccionado != -1) {
         copia.removeAt(seleccionado);

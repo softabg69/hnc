@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helpncare/contenido/bloc/contenido_bloc.dart';
 import 'package:helpncare/enumerados.dart';
 import 'package:helpncare/stories/bloc/stories_bloc.dart';
 //import 'package:helpncare/user_stories/views/stories_usuario.dart';
@@ -7,6 +8,7 @@ import 'package:helpncare/widgets/contenido_story.dart';
 
 import '../../bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import '../../bloc/session/session_bloc.dart';
+import '../../components/dialog.dart';
 import '../../components/log.dart';
 import '../../contenido/widgets/block_loader.dart';
 import '../../editor/bloc/editor_bloc.dart';
@@ -161,6 +163,15 @@ class _VisorStoriesUsuarioState extends State<VisorStoriesUsuario> {
                                   gustaCambiando:
                                       state.stories[index].estadoGusta ==
                                           EstadoGusta.cambiando,
+                                  denunciar: (c) async {
+                                    context.read<UserStoriesBloc>().add(
+                                        UserStoriesDenunciar(
+                                            story: c.idContenido));
+                                    Dialogs.snackBar(
+                                        context: context,
+                                        content: const Text(
+                                            'Se ha notificado la denuncia'));
+                                  },
                                   bloc: context.read<UserStoriesBloc>(),
                                 ),
                             childCount: state.stories.length),

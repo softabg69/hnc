@@ -148,4 +148,10 @@ class HncRepository {
     final jsn = await service.getVersion();
     return Version.fromJson(jsn);
   }
+
+  Future denunciaContenido(String idContenido) async {
+    final body = {};
+    body['idContenido'] = idContenido;
+    await service.denunciarContenido(json.encode(body));
+  }
 }

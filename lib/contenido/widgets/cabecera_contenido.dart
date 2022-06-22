@@ -20,7 +20,8 @@ class CabeceraContenido extends StatelessWidget {
       required this.contenido,
       required this.eliminar,
       required this.editar,
-      required this.compartir})
+      required this.compartir,
+      required this.denunciar})
       : super(key: key);
 
   final TextStyle estiloUsuario =
@@ -34,6 +35,7 @@ class CabeceraContenido extends StatelessWidget {
   final CallbackContenidoAsync eliminar;
   final CallbackContenidoAsync editar;
   final CallbackContenidoAsync compartir;
+  final CallbackContenidoAsync denunciar;
 
   @override
   Widget build(BuildContext context) {
@@ -143,12 +145,31 @@ class CabeceraContenido extends StatelessWidget {
               : const SizedBox(
                   width: 0,
                 ),
-          IconButton(
-            onPressed: () async {
-              await compartir(contenido);
-            },
-            icon: const Icon(Icons.share),
-            color: Theme.of(context).primaryColor,
+          Tooltip(
+            message: 'Denunciar contenido',
+            child: IconButton(
+              onPressed: () async {
+                Dialogs.continuarCancelar(
+                    context,
+                    'Denunciar',
+                    'Denunciar contenido',
+                    '¿Desea denunciar este contenido? ', () {
+                  denunciar(contenido);
+                });
+              },
+              icon: const Icon(Icons.security),
+              color: Colors.red,
+            ),
+          ),
+          Tooltip(
+            message: 'Compartir',
+            child: IconButton(
+              onPressed: () async {
+                await compartir(contenido);
+              },
+              icon: const Icon(Icons.share),
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ],
       ),

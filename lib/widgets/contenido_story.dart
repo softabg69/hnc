@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import 'package:helpncare/bloc/session/session_bloc.dart';
+import 'package:helpncare/components/dialog.dart';
 import 'package:helpncare/contenido/widgets/cabecera_contenido.dart';
 import 'package:helpncare/enumerados.dart';
 import 'package:helpncare/tipos.dart';
@@ -24,6 +25,7 @@ class ContenidoStory extends StatelessWidget {
       required this.eliminar,
       required this.editar,
       required this.compartir,
+      required this.denunciar,
       required this.cambiarGusta,
       required this.gustaCambiando,
       required this.bloc})
@@ -34,6 +36,7 @@ class ContenidoStory extends StatelessWidget {
   //final CallbackContenidoAsync onClick;
   final CallbackContenidoAsync eliminar;
   final CallbackContenidoAsync editar;
+  final CallbackContenidoAsync denunciar;
   final CallbackContenidoAsync compartir;
   final CallbackContenidoAsync cambiarGusta;
   final bool gustaCambiando;
@@ -139,6 +142,9 @@ class ContenidoStory extends StatelessWidget {
                     subject:
                         '$email ha compartido contigo un contenido de helpncare',
                   );
+                },
+                denunciar: (c) async {
+                  denunciar(c);
                 },
               ),
               contenido.titulo.isNotEmpty

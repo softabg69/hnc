@@ -12,6 +12,7 @@ import 'package:helpncare/widgets/una_columna.dart';
 //import '../../components/log.dart';
 //import '../../repository/models/contenido.dart' as model;
 
+import '../../components/dialog.dart';
 import '../../enumerados.dart';
 import '../../stories/bloc/stories_bloc.dart';
 
@@ -112,6 +113,15 @@ class _ContenidoState extends State<Contenido> {
                                       state.contenidos[index].estadoGusta ==
                                           EstadoGusta.cambiando,
                                   bloc: context.read<ContenidoBloc>(),
+                                  denunciar: (c) async {
+                                    context.read<ContenidoBloc>().add(
+                                        ContenidoDenunciar(
+                                            contenido: c.idContenido));
+                                    Dialogs.snackBar(
+                                        context: context,
+                                        content: const Text(
+                                            'Se ha notificado la denuncia'));
+                                  },
                                 ),
                               ),
                         childCount: state.alcanzadoFinal

@@ -40,3 +40,10 @@ class ContenidoEliminar extends ContenidoEvent {
 }
 
 class ContenidoInicializar extends ContenidoEvent {}
+
+class ContenidoDenunciar extends ContenidoEvent {
+  const ContenidoDenunciar({required this.contenido});
+  final String contenido;
+  @override
+  List<Object> get props => [contenido];
+}

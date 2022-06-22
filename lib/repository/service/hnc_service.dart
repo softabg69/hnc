@@ -196,4 +196,9 @@ class HncService {
     Log.registra('getVersion');
     return await _get('/data/version', headers);
   }
+
+  Future denunciarContenido(String body) async {
+    Log.registra('denuncia contenido');
+    await _post('/data/DenunciarContenido', body, headersToken);
+  }
 }

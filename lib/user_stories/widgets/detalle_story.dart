@@ -6,6 +6,8 @@ import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
 //import 'package:helpncare/user_stories/widgets/una_story.dart';
 import 'package:helpncare/widgets/contenido_story.dart';
 
+import '../../components/dialog.dart';
+import '../../contenido/bloc/contenido_bloc.dart';
 import '../../enumerados.dart';
 
 class DetalleStory extends StatelessWidget {
@@ -39,6 +41,14 @@ class DetalleStory extends StatelessWidget {
               gustaCambiando:
                   state.stories[index].estadoGusta == EstadoGusta.cambiando,
               bloc: context.read<UserStoriesBloc>(),
+              denunciar: (c) async {
+                context
+                    .read<ContenidoBloc>()
+                    .add(ContenidoDenunciar(contenido: c.idContenido));
+                Dialogs.snackBar(
+                    context: context,
+                    content: const Text('Se ha notificado la denuncia'));
+              },
             ),
           ),
         ),

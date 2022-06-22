@@ -29,6 +29,7 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
     on<UserStoriesCambiarGusta>(_cambiaGusta);
     on<UserStoriesActualizar>(_actualizar);
     on<UserStoriesEliminar>(_eliminar);
+    on<UserStoriesDenunciar>(_denunciar);
   }
   @override
   Future<void> close() {
@@ -150,6 +151,25 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
       final copia = [...state.stories];
       final int seleccionado = copia.indexWhere(
         (element) => element.idContenido == event.story.idContenido,
+      );
+      if (seleccionado != -1) {
+        copia.removeAt(seleccionado);
+        emit(state.copyWith(stories: copia, estado: EstadoContenido.eliminado));
+      }
+    } catch (e) {
+      emit(state.copyWith(estado: EstadoContenido.errorEliminar));
+    }
+  }
+
+  FutureOr<void> _denunciar(
+      UserStoriesDenunciar event, Emitter<UserStoriesState> emit) async {
+    Log.registra("_denunciar userstories bloc");
+    emit(state.copyWith(estado: EstadoContenido.eliminando));
+    try {
+      await hncRepository.denunciaContenido(event.story);
+      final copia = [...state.stories];
+      final int seleccionado = copia.indexWhere(
+        (element) => element.idContenido == event.story,
       );
       if (seleccionado != -1) {
         copia.removeAt(seleccionado);
