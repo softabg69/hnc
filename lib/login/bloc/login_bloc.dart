@@ -9,6 +9,7 @@ import 'package:helpncare/bloc/session/session_bloc.dart';
 import 'package:helpncare/components/validaciones.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:helpncare/repository/service/custom_exceptions.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../../components/log.dart';
 import '../../components/validaciones.dart';
 import '../../enumerados.dart';
@@ -35,6 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginClose>(_cerrar);
     on<LoginRecordarEvent>(_recordar);
     on<LoginProcesadoError>(_procesadoError);
+    on<LoginAppleEvent>(_loginApple);
   }
 
   final HncRepository hncRepository;
@@ -153,5 +155,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   FutureOr<void> _procesadoError(
       LoginProcesadoError event, Emitter<LoginState> emit) {
     emit(state.copyWith(estado: EstadoLogin.procesado));
+  }
+
+  FutureOr<void> _loginApple(
+      LoginAppleEvent event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(estado: EstadoLogin.autenticandoApple));
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+      ],
+    );
+    Log.registra('credencial Apple: $credential');
+    session.add(SessionAppleSignInEvent(email: credential.email!));
   }
 }

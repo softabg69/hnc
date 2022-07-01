@@ -32,7 +32,8 @@ class LoginButtonPressEvent extends LoginEvent {}
 
 class LoginGoogleEvent extends LoginEvent {}
 
-class LoginGoogleStart extends LoginEvent {}
+//class LoginGoogleStart extends LoginEvent {}
+class LoginAppleEvent extends LoginEvent {}
 
 class LoginGoogleError extends LoginEvent {}
 

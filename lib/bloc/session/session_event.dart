@@ -27,6 +27,13 @@ class SessionGoogleSignInEvent extends SessionEvent {
   List<Object?> get props => [email];
 }
 
+class SessionAppleSignInEvent extends SessionEvent {
+  SessionAppleSignInEvent({required this.email});
+  final String email;
+  @override
+  List<Object?> get props => [email];
+}
+
 class SessionClosing extends SessionEvent {}
 
 class SessionActualizarAvatarEvent extends SessionEvent {

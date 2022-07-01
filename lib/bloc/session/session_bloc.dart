@@ -28,6 +28,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     on<SessionCambioFiltroCategoria>(_cambioFiltroCategoria);
     on<SessionCambioDias>(_cambioDias);
     on<SessionEstablecerNickname>(_setNickname);
+    on<SessionAppleSignInEvent>(_appleSignIn);
   }
 
   final HncRepository hncRepository;
@@ -105,5 +106,13 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         nickname: event.nickname == null || event.nickname!.isEmpty
             ? state.email.substring(0, state.email.indexOf('@'))
             : event.nickname));
+  }
+
+  FutureOr<void> _appleSignIn(
+      SessionAppleSignInEvent event, Emitter<SessionState> emit) async {
+    emit(state.copyWith(
+        email: event.email,
+        authMethod: AuthMethod.apple,
+        estado: EstadoLogin.autenticado));
   }
 }
