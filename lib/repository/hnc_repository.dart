@@ -154,4 +154,8 @@ class HncRepository {
     body['idContenido'] = idContenido;
     await service.denunciarContenido(json.encode(body));
   }
+
+  Future validaCredencialApple(String autorizationCode) async {
+    await service.validarApple(autorizationCode);
+  }
 }

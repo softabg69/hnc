@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:helpncare/components/jwt_token.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import '../../components/configuracion.dart';
@@ -200,5 +201,25 @@ class HncService {
   Future denunciarContenido(String body) async {
     Log.registra('denuncia contenido');
     await _post('/data/DenunciarContenido', body, headersToken);
+  }
+
+  Future validarApple(String code) async {
+    Log.registra('validar Apple: $code');
+    final url = Uri.parse('https://appleid.apple.com/auth/token');
+    final header = <String, String>{
+      'content-type': 'application/x-www-form-urlencoded',
+    };
+    final body = <String, String>{
+      'client_id': 'es.helpncare.app',
+      'client_secret': JwtToken.keyApple,
+      'code': code,
+      'grant_type': 'authorization_code',
+    };
+    try {
+      final response = await _httpClient.post(url, body: body, headers: header);
+      Log.registra("_post: $response");
+    } on SocketException {
+      throw FetchDataException('No hay conexión a internet');
+    }
   }
 }

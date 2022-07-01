@@ -18,6 +18,7 @@ import 'package:helpncare/recuperar_password/view/recuperar_pwd.dart';
 
 import '../../perfil/view/perfil.dart';
 import '../../politica_privacidad/view/politica.dart';
+//import 'package:html_shim.dart' if (dart.library.html) 'dart:html' show window;
 
 class Login extends StatefulWidget {
   const Login({Key? key, this.nuevaVersionDisponible = false})

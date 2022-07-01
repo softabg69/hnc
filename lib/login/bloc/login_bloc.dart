@@ -166,6 +166,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       ],
     );
     Log.registra('credencial Apple: $credential');
+    try {
+      await hncRepository.validaCredencialApple(credential.authorizationCode);
+    } catch (e) {
+      Log.registra('error: $e');
+    }
     session.add(SessionAppleSignInEvent(email: credential.email!));
   }
 }
