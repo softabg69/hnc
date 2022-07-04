@@ -136,15 +136,16 @@ class ContenidoBloc extends Bloc<ContenidoEvent, ContenidoState> {
     );
     if (seleccionado != -1) {
       Log.registra('Actualiza: ${event.contenido.categorias}');
-      copia[seleccionado] = copia[seleccionado].copyWith(
-          idContenido: event.contenido.idContenido,
-          titulo: event.contenido.titulo,
-          cuerpo: event.contenido.cuerpo,
-          url: event.contenido.url,
-          multimedia: event.contenido.multimedia,
-          categorias: event.contenido.categorias,
-          gusta: event.contenido.gusta,
-          idsCategorias: event.contenido.idscategorias);
+      copia.removeAt(seleccionado);
+      // copia[seleccionado] = copia[seleccionado].copyWith(
+      //     idContenido: event.contenido.idContenido,
+      //     titulo: event.contenido.titulo,
+      //     cuerpo: event.contenido.cuerpo,
+      //     url: event.contenido.url,
+      //     multimedia: event.contenido.multimedia,
+      //     categorias: event.contenido.categorias,
+      //     gusta: event.contenido.gusta,
+      //     idsCategorias: event.contenido.idscategorias);
       emit(state.copyWith(
           contenidos: copia, estado: EstadoContenido.actualizado));
     }

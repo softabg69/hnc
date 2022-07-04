@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import '../../bloc/session/session_bloc.dart';
 import '../../components/log.dart';
@@ -128,16 +129,18 @@ class UserStoriesBloc extends Bloc<UserStoriesEvent, UserStoriesState> {
       (element) => element.idContenido == event.story.idContenido,
     );
     if (seleccionado != -1) {
+      // al modificar se quita hasta revisión
+      copia.removeAt(seleccionado);
       //Log.registra('Actualiza: ${event.categorias}');
-      copia[seleccionado] = copia[seleccionado].copyWith(
-          idContenido: event.story.idContenido,
-          titulo: event.story.titulo,
-          cuerpo: event.story.cuerpo,
-          url: event.story.url,
-          multimedia: event.story.multimedia,
-          categorias: event.story.categorias,
-          gusta: event.story.gusta,
-          idsCategorias: event.story.idscategorias);
+      // copia[seleccionado] = copia[seleccionado].copyWith(
+      //     idContenido: event.story.idContenido,
+      //     titulo: event.story.titulo,
+      //     cuerpo: event.story.cuerpo,
+      //     url: event.story.url,
+      //     multimedia: event.story.multimedia,
+      //     categorias: event.story.categorias,
+      //     gusta: event.story.gusta,
+      //     idsCategorias: event.story.idscategorias);
       emit(state.copyWith(stories: copia, estado: EstadoContenido.actualizado));
     }
   }

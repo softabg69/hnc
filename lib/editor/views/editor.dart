@@ -84,6 +84,10 @@ class _EditorState extends State<Editor> {
           if (state.estado == EstadoEditor.guardado && !navegado) {
             navegado = true;
             Navigator.pop(context);
+            Dialogs.snackBar(
+                context: context,
+                content: const Text(
+                    'El contenido se visualizará en cuanto pase la revisión.'));
           }
         }),
         child: Form(

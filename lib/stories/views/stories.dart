@@ -8,6 +8,7 @@ import 'package:helpncare/repository/models/usuario_story.dart';
 import 'package:helpncare/stories/bloc/stories_bloc.dart';
 import 'package:helpncare/stories/widgets/story.dart';
 
+import '../../components/dialog.dart';
 import '../../components/log.dart';
 import '../../editor/bloc/editor_bloc.dart';
 import '../../editor/views/editor.dart';
@@ -35,6 +36,10 @@ class Stories extends StatelessWidget {
                 context.read<StoriesBloc>().add(StoriesCargar(
                     categorias:
                         context.read<SessionBloc>().state.filtroCategorias));
+                Dialogs.snackBar(
+                    context: context,
+                    content: const Text(
+                        'La story se visualizará en cuanto pase la revisión.'));
               }
             },
             builder: ((context, state) => SizedBox(
