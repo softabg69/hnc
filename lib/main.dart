@@ -140,12 +140,10 @@ class MyApp extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
       home: BlocBuilder<PlatformBloc, PlatformState>(builder: (context, state) {
-        if (kIsWeb) {
-          return urlInicio.contains("#/compartido?token=")
-              ? Compartido(
-                  url: urlInicio,
-                )
-              : const Login();
+        if (kIsWeb && urlInicio.contains("#/compartido?token=")) {
+          return Compartido(
+            url: urlInicio,
+          );
         } else if (state is AplicacionBloqueada) {
           return _mantenimiento(state.msg);
         } else if (state.estado == EstadoPlatform.cargando) {
