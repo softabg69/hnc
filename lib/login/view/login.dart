@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show Platform;
+//import 'dart:io' show Platform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,6 +37,13 @@ class _LoginState extends State<Login> {
   bool mostradoSnackBar = false;
   bool procesadasCredenciales = false;
   bool recordar = false;
+  bool isIOS = false;
+
+  @override
+  void didChangeDependencies() {
+    isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    super.didChangeDependencies();
+  }
 
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -213,9 +220,8 @@ class _LoginState extends State<Login> {
                             border: Border.all(
                                 color: Theme.of(context).primaryColor)),
                         child: Row(
-                            mainAxisSize: !Platform.isIOS
-                                ? MainAxisSize.min
-                                : MainAxisSize.max,
+                            mainAxisSize:
+                                !isIOS ? MainAxisSize.min : MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ClipRRect(
@@ -305,18 +311,23 @@ class _LoginState extends State<Login> {
   }
 
   Widget _loginApple() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return state.estado == EstadoLogin.autenticandoApple
-          ? const CircularProgressIndicator()
-          : SignInWithAppleButton(
-              onPressed: () async {
-                context.read<LoginBloc>().add(LoginAppleEvent());
+    Log.registra('kisweb: $kIsWeb');
+    return kIsWeb
+        ? const SizedBox(
+            height: 0,
+          )
+        : BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+            return state.estado == EstadoLogin.autenticandoApple
+                ? const CircularProgressIndicator()
+                : SignInWithAppleButton(
+                    onPressed: () async {
+                      context.read<LoginBloc>().add(LoginAppleEvent());
 
-                // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-              },
-            );
-    });
+                      // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                      // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                    },
+                  );
+          });
   }
 
   Widget _loginForm(BuildContext context) {
@@ -375,16 +386,24 @@ class _LoginState extends State<Login> {
                         const SizedBox(height: 20),
                         google(),
                         const SizedBox(height: 15),
-                        Platform.isIOS
-                            ? _loginApple()
-                            : const SizedBox(
+                        kIsWeb
+                            ? const SizedBox(
                                 height: 0,
-                              ),
-                        Platform.isIOS
-                            ? const SizedBox(height: 15)
-                            : const SizedBox(
+                              )
+                            : isIOS
+                                ? _loginApple()
+                                : const SizedBox(
+                                    height: 0,
+                                  ),
+                        kIsWeb
+                            ? const SizedBox(
                                 height: 0,
-                              ),
+                              )
+                            : isIOS
+                                ? const SizedBox(height: 15)
+                                : const SizedBox(
+                                    height: 0,
+                                  ),
                         _recuperarPassword(context),
                         (kIsWeb
                             ? const SizedBox(height: 10)
