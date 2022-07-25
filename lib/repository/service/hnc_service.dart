@@ -121,8 +121,13 @@ class HncService {
   }
 
   Future<dynamic> iniciarGoogle(String token) async {
-    Log.registra("autenticar: $token");
+    Log.registra("autenticar google: $token");
     return await _post('/data/iniciarGoogle', token, headers);
+  }
+
+  Future<dynamic> iniciarApple(String token) async {
+    Log.registra("autenticar apple: $token");
+    return await _post('/data/iniciarApple', token, headers);
   }
 
   Future<dynamic> recuperarPwd(String token) async {
@@ -211,13 +216,16 @@ class HncService {
     };
     final body = <String, String>{
       'client_id': 'es.helpncare.app',
-      'client_secret': JwtToken.keyApple,
+      'client_secret': JwtToken.clientSecretApple(),
       'code': code,
       'grant_type': 'authorization_code',
     };
     try {
       final response = await _httpClient.post(url, body: body, headers: header);
       Log.registra("_post: $response");
+      Log.registra("status: ${response.statusCode}");
+      Log.registra("body: ${response.body}");
+      //Log.registra(json.encode(response));
     } on SocketException {
       throw FetchDataException('No hay conexión a internet');
     }

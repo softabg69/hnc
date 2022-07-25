@@ -9,7 +9,8 @@ import 'package:helpncare/bloc/session/session_bloc.dart';
 import 'package:helpncare/components/validaciones.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:helpncare/repository/service/custom_exceptions.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+//import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../components/log.dart';
 import '../../components/validaciones.dart';
 import '../../enumerados.dart';
@@ -37,6 +38,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginRecordarEvent>(_recordar);
     on<LoginProcesadoError>(_procesadoError);
     on<LoginAppleEvent>(_loginApple);
+    on<LoginCheckAppleEvent>(_checkLoggedInState);
+    on<LoginApple>(_logInApple);
   }
 
   final HncRepository hncRepository;
@@ -108,6 +111,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     // });
   }
 
+  FutureOr<void> _loginApple(
+      LoginAppleEvent event, Emitter<LoginState> emit) async {
+    emit(state.copyWith(estado: EstadoLogin.autenticandoApple));
+    try {
+      final resp = await hncRepository.iniciarApple(event.email);
+      session.add(SessionAppleSignInEvent(email: event.email));
+    } catch (e) {
+      Log.registra('error _login apple');
+      emit(state.copyWith(estado: EstadoLogin.appleError));
+    }
+  }
+
   void _loginGoogleError(
       LoginGoogleError event, Emitter<LoginState> emit) async {
     emit(state.copyWith(estado: EstadoLogin.googleError));
@@ -157,20 +172,79 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(estado: EstadoLogin.procesado));
   }
 
-  FutureOr<void> _loginApple(
-      LoginAppleEvent event, Emitter<LoginState> emit) async {
-    emit(state.copyWith(estado: EstadoLogin.autenticandoApple));
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-      ],
-    );
-    Log.registra('credencial Apple: $credential');
-    try {
-      await hncRepository.validaCredencialApple(credential.authorizationCode);
-    } catch (e) {
-      Log.registra('error: $e');
+  FutureOr<void> _checkLoggedInState(
+      LoginCheckAppleEvent event, Emitter<LoginState> emit) async {
+    final userId = await const FlutterSecureStorage().read(key: "userId");
+    Log.registra('userId: $userId');
+    if (userId == null) {
+      Log.registra("No stored user ID");
+      return;
     }
-    session.add(SessionAppleSignInEvent(email: credential.email!));
+
+    final credentialState = await TheAppleSignIn.getCredentialState(userId);
+    Log.registra('status: ${credentialState.status}');
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        Log.registra("getCredentialState returned authorized");
+        final email = await const FlutterSecureStorage().read(key: "email");
+        Log.registra('Email***: $email');
+        // //context.read<SessionBloc>().add(SessionAppleSignInEvent(email: email!));
+
+        _loginApple(LoginAppleEvent(email: email!), emit);
+        // context
+        //     .read<LoginBloc>()
+        //     .add(LoginAppleEvent(email: 'softabg@gmail.com'));
+        break;
+
+      case CredentialStatus.error:
+        Log.registra(
+            "getCredentialState returned an error: ${credentialState.error?.localizedDescription}");
+        break;
+
+      case CredentialStatus.revoked:
+        Log.registra("getCredentialState returned revoked");
+        break;
+
+      case CredentialStatus.notFound:
+        Log.registra("getCredentialState returned not found");
+        break;
+
+      case CredentialStatus.transferred:
+        Log.registra("getCredentialState returned not transferred");
+        break;
+    }
+  }
+
+  FutureOr<void> _logInApple(LoginApple event, Emitter<LoginState> emit) async {
+    final AuthorizationResult result = await TheAppleSignIn.performRequests([
+      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+    Log.registra('result.status: ${result.status}');
+    Log.registra('result credential: ${result.credential}');
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+
+        // Store user ID
+        await const FlutterSecureStorage()
+            .write(key: "userId", value: result.credential?.user);
+        await const FlutterSecureStorage()
+            .write(key: "email", value: result.credential?.email);
+        await _checkLoggedInState(LoginCheckAppleEvent(), emit);
+        //checkLoggedInState();
+        // Navigate to secret page (shhh!)
+        //Log.registra('Navegar a página secreta: ${result.credential?.email}');
+
+        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+        //     builder: (_) => AfterLoginPage(credential: result.credential)));
+        break;
+
+      case AuthorizationStatus.error:
+        Log.registra("Sign in failed: ${result.error?.localizedDescription}");
+        break;
+
+      case AuthorizationStatus.cancelled:
+        Log.registra('User cancelled');
+        break;
+    }
   }
 }

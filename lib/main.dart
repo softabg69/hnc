@@ -17,13 +17,14 @@ import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
 
 import 'compartido/views/compartido.dart';
 //import 'components/log.dart';
+import 'login/bloc/login_bloc.dart';
 import 'login/view/login.dart';
 
 String urlInicio = "";
 void main() {
   const String environment = String.fromEnvironment(
     'ENVIRONMENT',
-    defaultValue: Environment.PRD,
+    defaultValue: Environment.DEV,
   );
   if (kIsWeb) {
     urlInicio = Uri.base.toString(); //get complete url
@@ -159,13 +160,17 @@ class MyApp extends StatelessWidget {
           if (state.resultadoVersion == ResultadoComparaVersion.imcompatible) {
             return _mantenimiento(
                 'La versión que tiene instalada es demasiado antigua. Debe actualizar a una nueva versión para seguir utilizando Helpncare.');
-          } else if (state.resultadoVersion ==
-              ResultadoComparaVersion.nuevaVersionDisponible) {
-            return const Login(
-              nuevaVersionDisponible: true,
-            );
           } else {
-            return const Login();
+            return BlocProvider(
+              create: (context) => LoginBloc(
+                  hncRepository: context.read<HncRepository>(),
+                  session: context.read<SessionBloc>())
+                ..add(CargaCredenciales()),
+              child: Login(
+                nuevaVersionDisponible: state.resultadoVersion ==
+                    ResultadoComparaVersion.nuevaVersionDisponible,
+              ),
+            );
           }
         }
       }),

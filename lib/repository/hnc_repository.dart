@@ -37,6 +37,14 @@ class HncRepository {
     return resp["avatar"];
   }
 
+  Future<String> iniciarApple(String email) async {
+    final token = JwtToken.generarToken(email, 'pass', 'apple', 'iniciar');
+    final resp = await service.iniciarApple(json.encode({'token': token}));
+    if (resp == null) throw UnauthorizedException();
+    service.setToken(resp["token"]);
+    return 'OK';
+  }
+
   Future<String> politica() async {
     final resp = await service.politica();
     return resp["politica"];

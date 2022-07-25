@@ -33,7 +33,10 @@ class LoginButtonPressEvent extends LoginEvent {}
 class LoginGoogleEvent extends LoginEvent {}
 
 //class LoginGoogleStart extends LoginEvent {}
-class LoginAppleEvent extends LoginEvent {}
+class LoginAppleEvent extends LoginEvent {
+  LoginAppleEvent({required this.email}) : super();
+  final String email;
+}
 
 class LoginGoogleError extends LoginEvent {}
 
@@ -45,3 +48,7 @@ class LoginRecordarEvent extends LoginEvent {
 }
 
 class LoginProcesadoError extends LoginEvent {}
+
+class LoginCheckAppleEvent extends LoginEvent {}
+
+class LoginApple extends LoginEvent {}

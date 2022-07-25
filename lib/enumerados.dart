@@ -36,6 +36,7 @@ enum EstadoLogin {
   autenticado,
   localError,
   googleError,
+  appleError,
   procesado,
   perfilDefinido,
   definirPerfil,

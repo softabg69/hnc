@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helpncare/perfil/bloc/perfil_bloc.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+//import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+//import 'package:the_apple_sign_in/scope.dart';
 import '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../registro/view/registro.dart';
@@ -15,7 +17,7 @@ import 'package:helpncare/components/dialog.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:helpncare/recuperar_password/view/recuperar_pwd.dart';
-
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../perfil/view/perfil.dart';
 import '../../politica_privacidad/view/politica.dart';
 //import 'package:html_shim.dart' if (dart.library.html) 'dart:html' show window;
@@ -38,12 +40,101 @@ class _LoginState extends State<Login> {
   bool procesadasCredenciales = false;
   bool recordar = false;
   bool isIOS = false;
+  final Future<bool> _isAvailableFuture = TheAppleSignIn.isAvailable();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //checkLoggedInState();
+
+    TheAppleSignIn.onCredentialRevoked?.listen((_) {
+      Log.registra("Credentials revoked");
+    });
+  }
 
   @override
   void didChangeDependencies() {
     isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    context.read<LoginBloc>().add(LoginCheckAppleEvent());
     super.didChangeDependencies();
   }
+
+  // void logIn() async {
+  //   final AuthorizationResult result = await TheAppleSignIn.performRequests([
+  //     const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+  //   ]);
+  //   Log.registra('result.status: ${result.status}');
+  //   Log.registra('result credential: ${result.credential}');
+  //   switch (result.status) {
+  //     case AuthorizationStatus.authorized:
+
+  //       // Store user ID
+  //       await const FlutterSecureStorage()
+  //           .write(key: "userId", value: result.credential?.user);
+  //       await const FlutterSecureStorage()
+  //           .write(key: "email", value: result.credential?.email);
+  //       //checkLoggedInState();
+  //       // Navigate to secret page (shhh!)
+  //       //Log.registra('Navegar a página secreta: ${result.credential?.email}');
+
+  //       // Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //       //     builder: (_) => AfterLoginPage(credential: result.credential)));
+  //       break;
+
+  //     case AuthorizationStatus.error:
+  //       Log.registra("Sign in failed: ${result.error?.localizedDescription}");
+  //       setState(() {
+  //         //errorMessage = "Sign in failed";
+  //       });
+  //       break;
+
+  //     case AuthorizationStatus.cancelled:
+  //       Log.registra('User cancelled');
+  //       break;
+  //   }
+  // }
+
+  // void checkLoggedInState() async {
+  //   final userId = await const FlutterSecureStorage().read(key: "userId");
+  //   Log.registra('userId: $userId');
+  //   if (userId == null) {
+  //     Log.registra("No stored user ID");
+  //     return;
+  //   }
+
+  //   final credentialState = await TheAppleSignIn.getCredentialState(userId);
+  //   Log.registra('status: ${credentialState.status}');
+  //   switch (credentialState.status) {
+  //     case CredentialStatus.authorized:
+  //       Log.registra("getCredentialState returned authorized");
+  //       final email = await const FlutterSecureStorage().read(key: "email");
+  //       Log.registra('Email***: $email');
+  //       //context.read<SessionBloc>().add(SessionAppleSignInEvent(email: email!));
+
+  //       context
+  //           .read<LoginBloc>()
+  //           .add(LoginAppleEvent(email: 'softabg@gmail.com'));
+  //       break;
+
+  //     case CredentialStatus.error:
+  //       Log.registra(
+  //           "getCredentialState returned an error: ${credentialState.error?.localizedDescription}");
+  //       break;
+
+  //     case CredentialStatus.revoked:
+  //       Log.registra("getCredentialState returned revoked");
+  //       break;
+
+  //     case CredentialStatus.notFound:
+  //       Log.registra("getCredentialState returned not found");
+  //       break;
+
+  //     case CredentialStatus.transferred:
+  //       Log.registra("getCredentialState returned not transferred");
+  //       break;
+  //   }
+  // }
 
   Widget _emailField() {
     return BlocBuilder<LoginBloc, LoginState>(
@@ -119,20 +210,20 @@ class _LoginState extends State<Login> {
                     }
                   }
                 },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith((states) {
-                    // If the button is pressed, return green, otherwise blue
-                    // if (states.contains(MaterialState.pressed)) {
-                    //   return Colors.green;
-                    // }
-                    // return Colors.blue;
-                    if (state.datosCandidatos) {
-                      return Theme.of(context).primaryColor;
-                    } else {
-                      return Colors.grey;
-                    }
-                  }),
-                ),
+                // style: ButtonStyle(
+                //   backgroundColor: MaterialStateProperty.resolveWith((states) {
+                //     // If the button is pressed, return green, otherwise blue
+                //     // if (states.contains(MaterialState.pressed)) {
+                //     //   return Colors.green;
+                //     // }
+                //     // return Colors.blue;
+                //     if (state.datosCandidatos) {
+                //       return Theme.of(context).primaryColor;
+                //     } else {
+                //       return Colors.grey;
+                //     }
+                //   }),
+                // ),
                 child: const Text('Login'),
               );
       },
@@ -312,22 +403,34 @@ class _LoginState extends State<Login> {
 
   Widget _loginApple() {
     Log.registra('kisweb: $kIsWeb');
-    return kIsWeb
-        ? const SizedBox(
-            height: 0,
-          )
-        : BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-            return state.estado == EstadoLogin.autenticandoApple
-                ? const CircularProgressIndicator()
-                : SignInWithAppleButton(
-                    onPressed: () async {
-                      context.read<LoginBloc>().add(LoginAppleEvent());
+    return FutureBuilder<bool>(
+        future: _isAvailableFuture,
+        builder: (context, isAvailableSnapshot) {
+          if (!isAvailableSnapshot.hasData) {
+            return const Text('Loading...');
+          }
+          return !isAvailableSnapshot.data!
+              ? const SizedBox(
+                  height: 0,
+                )
+              : BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
+                  return state.estado == EstadoLogin.autenticandoApple
+                      ? const CircularProgressIndicator()
+                      : AppleSignInButton(onPressed: () {
+                          context.read<LoginBloc>().add(LoginApple());
+                        }
+                          //logIn,
+                          );
+                  // : SignInWithAppleButton(
+                  //     onPressed: () async {
+                  //       context.read<LoginBloc>().add(LoginAppleEvent());
 
-                      // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                      // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-                    },
-                  );
-          });
+                  //       // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                  //       // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                  //     },
+                  //   );
+                });
+        });
   }
 
   Widget _loginForm(BuildContext context) {
@@ -340,10 +443,12 @@ class _LoginState extends State<Login> {
           child: SingleChildScrollView(
             child: AbsorbPointer(
               absorbing: state.estado == EstadoLogin.autenticandoLocal ||
-                  state.estado == EstadoLogin.autenticandoGoogle,
+                  state.estado == EstadoLogin.autenticandoGoogle ||
+                  state.estado == EstadoLogin.autenticandoApple,
               child: BlocListener<LoginBloc, LoginState>(
                 listener: (context, state) {
                   if (state.estado == EstadoLogin.googleError ||
+                      state.estado == EstadoLogin.appleError ||
                       state.estado == EstadoLogin.localError) {
                     Log.registra(
                         'login error: ${state.mensajeError} ${(state.mensajeError == 'Petición no válida')}');
@@ -459,40 +564,35 @@ class _LoginState extends State<Login> {
       scheduleTimeout(1 * 1000); // 5 seconds.
     }
     return BlocListener<SessionBloc, SessionState>(
-        listener: (context, state) {
-          if (state.isAuthenticated && !navegado) {
-            navegado = true;
-            context.read<PerfilBloc>().add(PerfilCargarEvent());
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const Perfil(),
-              ),
-            );
-          }
-        },
-        child: Scaffold(
-          body: BlocProvider(
-            create: (context) => LoginBloc(
-                hncRepository: context.read<HncRepository>(),
-                session: context.read<SessionBloc>())
-              ..add(CargaCredenciales()),
-            child: BlocListener<LoginBloc, LoginState>(
-              listener: (context, state) {
-                if (state.estado == EstadoLogin.cargadasCredenciales &&
-                    !procesadasCredenciales) {
-                  procesadasCredenciales = true;
-                  _emailController.text = state.email;
-                  _pwdController.text = state.pwd;
-                  setState(() {
-                    Log.registra('setState recordar: ${state.recordar}');
-                    recordar = state.recordar;
-                  });
-                }
-              },
-              child: _loginForm(context),
+      listener: (context, state) {
+        if (state.isAuthenticated && !navegado) {
+          navegado = true;
+          context.read<PerfilBloc>().add(PerfilCargarEvent());
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const Perfil(),
             ),
-          ),
-        ));
+          );
+        }
+      },
+      child: Scaffold(
+        body: BlocListener<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state.estado == EstadoLogin.cargadasCredenciales &&
+                !procesadasCredenciales) {
+              procesadasCredenciales = true;
+              _emailController.text = state.email;
+              _pwdController.text = state.pwd;
+              setState(() {
+                Log.registra('setState recordar: ${state.recordar}');
+                recordar = state.recordar;
+              });
+            }
+          },
+          child: _loginForm(context),
+        ),
+      ),
+    );
   }
 }
