@@ -23,10 +23,12 @@ import '../../politica_privacidad/view/politica.dart';
 //import 'package:html_shim.dart' if (dart.library.html) 'dart:html' show window;
 
 class Login extends StatefulWidget {
-  const Login({Key? key, this.nuevaVersionDisponible = false})
+  const Login(
+      {Key? key, this.nuevaVersionDisponible = false, this.autoLogin = true})
       : super(key: key);
 
   final bool nuevaVersionDisponible;
+  final bool autoLogin;
   @override
   State<Login> createState() => _LoginState();
 }
@@ -47,16 +49,20 @@ class _LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
     //checkLoggedInState();
-
-    TheAppleSignIn.onCredentialRevoked?.listen((_) {
-      Log.registra("Credentials revoked");
-    });
   }
 
   @override
   void didChangeDependencies() {
     isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    context.read<LoginBloc>().add(LoginCheckAppleEvent());
+    if (isIOS) {
+      TheAppleSignIn.onCredentialRevoked?.listen((_) {
+        Log.registra("Credentials revoked");
+      });
+      if (widget.autoLogin) {
+        context.read<LoginBloc>().add(LoginCheckAppleEvent());
+      }
+    }
+
     super.didChangeDependencies();
   }
 

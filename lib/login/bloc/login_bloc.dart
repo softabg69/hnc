@@ -37,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginClose>(_cerrar);
     on<LoginRecordarEvent>(_recordar);
     on<LoginProcesadoError>(_procesadoError);
-    on<LoginAppleEvent>(_loginApple);
+    //on<LoginAppleEvent>(_loginApple);
     on<LoginCheckAppleEvent>(_checkLoggedInState);
     on<LoginApple>(_logInApple);
   }
@@ -172,13 +172,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(state.copyWith(estado: EstadoLogin.procesado));
   }
 
-  FutureOr<void> _checkLoggedInState(
+  FutureOr<bool> _checkLoggedInState(
       LoginCheckAppleEvent event, Emitter<LoginState> emit) async {
     final userId = await const FlutterSecureStorage().read(key: "userId");
     Log.registra('userId: $userId');
     if (userId == null) {
       Log.registra("No stored user ID");
-      return;
+      return false;
     }
 
     final credentialState = await TheAppleSignIn.getCredentialState(userId);
@@ -194,8 +194,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // context
         //     .read<LoginBloc>()
         //     .add(LoginAppleEvent(email: 'softabg@gmail.com'));
-        break;
-
+        return true;
       case CredentialStatus.error:
         Log.registra(
             "getCredentialState returned an error: ${credentialState.error?.localizedDescription}");
@@ -213,12 +212,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         Log.registra("getCredentialState returned not transferred");
         break;
     }
+    return false;
   }
 
   FutureOr<void> _logInApple(LoginApple event, Emitter<LoginState> emit) async {
     final AuthorizationResult result = await TheAppleSignIn.performRequests([
       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
     ]);
+
     Log.registra('result.status: ${result.status}');
     Log.registra('result credential: ${result.credential}');
     switch (result.status) {
