@@ -1,21 +1,24 @@
 import 'dart:async';
+//import 'dart:io';
 //import 'dart:io' show Platform;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:helpncare/perfil/bloc/perfil_bloc.dart';
+import 'package:universal_platform/universal_platform.dart';
 //import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 //import 'package:the_apple_sign_in/scope.dart';
 import '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../registro/view/registro.dart';
+import '../../repository/hnc_repository.dart';
 import '../bloc/login_bloc.dart';
 import 'package:helpncare/bloc/platform/platform_bloc.dart';
 import 'package:helpncare/bloc/session/session_bloc.dart';
 import 'package:helpncare/components/dialog.dart';
-import 'package:helpncare/repository/hnc_repository.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+//import 'package:helpncare/repository/hnc_repository.dart';
+//import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:helpncare/recuperar_password/view/recuperar_pwd.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../perfil/view/perfil.dart';
@@ -42,11 +45,15 @@ class _LoginState extends State<Login> {
   bool procesadasCredenciales = false;
   bool recordar = false;
   bool isIOS = false;
-  final Future<bool> _isAvailableFuture = TheAppleSignIn.isAvailable();
+  Future<bool>? _isAvailableFuture;
 
   @override
   void initState() {
     // TODO: implement initState
+    if (UniversalPlatform.isIOS) {
+      _isAvailableFuture = TheAppleSignIn.isAvailable();
+    }
+    Log.registra('initState login');
     super.initState();
     //checkLoggedInState();
   }
@@ -54,15 +61,18 @@ class _LoginState extends State<Login> {
   @override
   void didChangeDependencies() {
     isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    if (isIOS) {
+    if (UniversalPlatform.isIOS) {
       TheAppleSignIn.onCredentialRevoked?.listen((_) {
         Log.registra("Credentials revoked");
       });
-      if (widget.autoLogin) {
-        context.read<LoginBloc>().add(LoginCheckAppleEvent());
-      }
+      // if (context.read<SessionBloc>().state.estado != EstadoLogin.cerrado) {
+      //   if (widget.autoLogin) {
+      //     context.read<LoginBloc>().add(LoginCheckAppleEvent());
+      //   }
+      // }
     }
-
+    context.read<LoginBloc>().add(CargaCredenciales());
+    Log.registra('terminado didChangeDependencies login');
     super.didChangeDependencies();
   }
 
@@ -407,36 +417,91 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget _loginApple() {
-    Log.registra('kisweb: $kIsWeb');
-    return FutureBuilder<bool>(
-        future: _isAvailableFuture,
-        builder: (context, isAvailableSnapshot) {
-          if (!isAvailableSnapshot.hasData) {
-            return const Text('Loading...');
-          }
-          return !isAvailableSnapshot.data!
-              ? const SizedBox(
-                  height: 0,
-                )
-              : BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-                  return state.estado == EstadoLogin.autenticandoApple
-                      ? const CircularProgressIndicator()
-                      : AppleSignInButton(onPressed: () {
-                          context.read<LoginBloc>().add(LoginApple());
-                        }
-                          //logIn,
-                          );
-                  // : SignInWithAppleButton(
-                  //     onPressed: () async {
-                  //       context.read<LoginBloc>().add(LoginAppleEvent());
+  Widget _btnApple() {
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return Center(
+          child: state.estado == EstadoLogin.autenticandoApple
+              ? const CircularProgressIndicator()
+              : state.estado == EstadoLogin.appleError
+                  ? const Text(
+                      'Error',
+                      style: TextStyle(color: Colors.red),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        context.read<LoginBloc>().add(LoginApple());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: Theme.of(context).primaryColor)),
+                        child: Row(
+                            mainAxisSize:
+                                !isIOS ? MainAxisSize.min : MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                clipBehavior: Clip.antiAlias,
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.asset(
+                                  'assets/images/apple_icon.png',
+                                  width: 30,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const Text('Identifícate con Apple'),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ]),
+                      ),
+                    ),
+        );
+      },
+    );
+  }
 
-                  //       // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-                  //       // after they have been validated with Apple (see `Integration` section for more information on how to do this)
-                  //     },
-                  //   );
-                });
-        });
+  Widget _loginApple() {
+    //Log.registra('kisweb: ${UniversalPlatform.isWeb}');
+    return !UniversalPlatform.isIOS
+        ? const SizedBox(
+            height: 0,
+          )
+        : FutureBuilder<bool>(
+            future: _isAvailableFuture,
+            builder: (context, isAvailableSnapshot) {
+              if (!isAvailableSnapshot.hasData) {
+                return const Text('Cargando...');
+              }
+              return !isAvailableSnapshot.data!
+                  ? const SizedBox(
+                      height: 0,
+                    )
+                  : BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                      return state.estado == EstadoLogin.autenticandoApple
+                          ? const CircularProgressIndicator()
+                          : _btnApple();
+                      // AppleSignInButton(onPressed: () {
+                      //     context.read<LoginBloc>().add(LoginApple());
+                      //   }
+                      //     //logIn,
+                      //     );
+                      // : SignInWithAppleButton(
+                      //     onPressed: () async {
+                      //       context.read<LoginBloc>().add(LoginAppleEvent());
+
+                      //       // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
+                      //       // after they have been validated with Apple (see `Integration` section for more information on how to do this)
+                      //     },
+                      //   );
+                    });
+            });
   }
 
   Widget _loginForm(BuildContext context) {
@@ -497,16 +562,16 @@ class _LoginState extends State<Login> {
                         const SizedBox(height: 20),
                         google(),
                         const SizedBox(height: 15),
-                        kIsWeb
+                        UniversalPlatform.isWeb
                             ? const SizedBox(
                                 height: 0,
                               )
                             : isIOS
-                                ? _loginApple()
+                                ? _btnApple() // _loginApple()
                                 : const SizedBox(
                                     height: 0,
                                   ),
-                        kIsWeb
+                        UniversalPlatform.isWeb
                             ? const SizedBox(
                                 height: 0,
                               )
@@ -516,14 +581,14 @@ class _LoginState extends State<Login> {
                                     height: 0,
                                   ),
                         _recuperarPassword(context),
-                        (kIsWeb
+                        (UniversalPlatform.isWeb
                             ? const SizedBox(height: 10)
                             : const SizedBox(height: 0)),
                         _registrate(context),
-                        kIsWeb
+                        UniversalPlatform.isWeb
                             ? const SizedBox(height: 20)
                             : const SizedBox(height: 0),
-                        kIsWeb
+                        UniversalPlatform.isWeb
                             ? RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(

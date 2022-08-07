@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:helpncare/widgets/una_columna.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../compartido/widgets/cabecera_contenido_compartido.dart';
 import '../components/configuracion.dart';
@@ -14,7 +15,7 @@ class ContenidoStoryCompartido extends StatelessWidget {
 
   Widget imagen(BuildContext context) {
     return InteractiveViewer(
-      maxScale: kIsWeb ? 1 : 5,
+      maxScale: UniversalPlatform.isWeb ? 1 : 5,
       child: Image.network(
         '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
         width: double.infinity,

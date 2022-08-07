@@ -11,6 +11,7 @@ import 'package:helpncare/utils/visualizar_url.dart';
 import 'package:helpncare/widgets/session.dart';
 import 'package:helpncare/widgets/una_columna.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../components/configuracion.dart';
 import '../contenido/view/detalle.dart';
@@ -47,7 +48,7 @@ class ContenidoStory extends StatelessWidget {
       cursor: SystemMouseCursors.click,
       child: esDetalle
           ? InteractiveViewer(
-              maxScale: kIsWeb ? 1 : 5,
+              maxScale: UniversalPlatform.isWeb ? 1 : 5,
               child: Image.network(
                 '${Environment().config!.baseUrlServicios}/data/imagen?id=${contenido.multimedia}',
                 width: double.infinity,

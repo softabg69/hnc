@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpncare/bloc/app_bloc_observer.dart';
@@ -14,9 +14,11 @@ import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:helpncare/repository/service/hnc_service.dart';
 import 'package:helpncare/stories/bloc/stories_bloc.dart';
 import 'package:helpncare/user_stories/bloc/user_stories_bloc.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'compartido/views/compartido.dart';
 //import 'components/log.dart';
+//import 'login/bloc/login_bloc.dart';
 import 'login/bloc/login_bloc.dart';
 import 'login/view/login.dart';
 
@@ -26,7 +28,7 @@ void main() {
     'ENVIRONMENT',
     defaultValue: Environment.DEV,
   );
-  if (kIsWeb) {
+  if (UniversalPlatform.isWeb) {
     urlInicio = Uri.base.toString(); //get complete url
   }
   WidgetsFlutterBinding.ensureInitialized();
@@ -81,6 +83,13 @@ class AppState extends StatelessWidget {
             create: (context) => UserStoriesBloc(
                 hncRepository: context.read<HncRepository>(),
                 session: context.read<SessionBloc>()),
+          ),
+          BlocProvider(
+            create: (context) => LoginBloc(
+              hncRepository: context.read<HncRepository>(),
+              session: context.read<SessionBloc>(),
+              //..add(CargaCredenciales(),
+            ),
           ),
         ],
         child: const MyApp(),
@@ -141,7 +150,8 @@ class MyApp extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 230, 230, 230),
       ),
       home: BlocBuilder<PlatformBloc, PlatformState>(builder: (context, state) {
-        if (kIsWeb && urlInicio.contains("#/compartido?token=")) {
+        if (UniversalPlatform.isWeb &&
+            urlInicio.contains("#/compartido?token=")) {
           return Compartido(
             url: urlInicio,
           );
@@ -161,15 +171,9 @@ class MyApp extends StatelessWidget {
             return _mantenimiento(
                 'La versión que tiene instalada es demasiado antigua. Debe actualizar a una nueva versión para seguir utilizando Helpncare.');
           } else {
-            return BlocProvider(
-              create: (context) => LoginBloc(
-                  hncRepository: context.read<HncRepository>(),
-                  session: context.read<SessionBloc>())
-                ..add(CargaCredenciales()),
-              child: Login(
-                nuevaVersionDisponible: state.resultadoVersion ==
-                    ResultadoComparaVersion.nuevaVersionDisponible,
-              ),
+            return Login(
+              nuevaVersionDisponible: state.resultadoVersion ==
+                  ResultadoComparaVersion.nuevaVersionDisponible,
             );
           }
         }
