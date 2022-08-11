@@ -165,6 +165,7 @@ class CabeceraContenido extends StatelessWidget {
             message: 'Compartir',
             child: IconButton(
               onPressed: () async {
+                Log.registra('Compartir');
                 await compartir(contenido);
               },
               icon: const Icon(Icons.share),

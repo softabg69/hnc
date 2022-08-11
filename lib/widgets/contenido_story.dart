@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import 'package:helpncare/bloc/session/session_bloc.dart';
-import 'package:helpncare/components/dialog.dart';
+//import 'package:helpncare/components/dialog.dart';
 import 'package:helpncare/contenido/widgets/cabecera_contenido.dart';
 import 'package:helpncare/enumerados.dart';
 import 'package:helpncare/tipos.dart';
 import 'package:helpncare/utils/visualizar_url.dart';
-import 'package:helpncare/widgets/session.dart';
+//import 'package:helpncare/widgets/session.dart';
 import 'package:helpncare/widgets/una_columna.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import '../components/configuracion.dart';
+import '../components/log.dart';
 import '../contenido/view/detalle.dart';
 import '../repository/models/contenido.dart';
 
@@ -138,10 +139,14 @@ class ContenidoStory extends StatelessWidget {
                 compartir: (c) async {
                   final String emailC = context.read<SessionBloc>().state.email;
                   final String email = emailC.substring(0, emailC.indexOf('@'));
+                  Log.registra('Share: $email');
+                  final box = context.findRenderObject() as RenderBox?;
                   await Share.share(
                     '${Environment().config!.baseUrlWeb}/#/compartido?token=${contenido.idContenido}',
                     subject:
                         '$email ha compartido contigo un contenido de helpncare',
+                    sharePositionOrigin:
+                        box!.localToGlobal(Offset.zero) & box.size,
                   );
                 },
                 denunciar: (c) async {
