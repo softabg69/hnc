@@ -10,7 +10,7 @@ import 'package:helpncare/components/validaciones.dart';
 import 'package:helpncare/repository/hnc_repository.dart';
 import 'package:helpncare/repository/service/custom_exceptions.dart';
 //import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-//import 'package:the_apple_sign_in/the_apple_sign_in.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../components/log.dart';
 import '../../components/validaciones.dart';
 import '../../enumerados.dart';
@@ -257,82 +257,82 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> _iniciarConApple(
       LoginApple event, Emitter<LoginState> emit) async {
-    // if (await TheAppleSignIn.isAvailable()) {
-    //   final userId = await const FlutterSecureStorage().read(key: "userId");
-    //   Log.registra('userId: $userId');
-    //   if (userId == null) {
-    //     // Todavía no ha accedido
-    //     Log.registra("No stored user ID");
-    //     final AuthorizationResult result =
-    //         await TheAppleSignIn.performRequests([
-    //       const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    //     ]);
-    //     Log.registra('result.status: ${result.status}');
-    //     Log.registra('result credential: ${result.credential}');
-    //     switch (result.status) {
-    //       case AuthorizationStatus.authorized:
-    //         // Store user ID
-    //         await const FlutterSecureStorage()
-    //             .write(key: "userId", value: result.credential?.user);
-    //         await const FlutterSecureStorage()
-    //             .write(key: "email", value: result.credential?.email);
-    //         await _accedeApple(result.credential?.user, emit);
-    //         break;
-    //       case AuthorizationStatus.error:
-    //         Log.registra(
-    //             "Sign in failed: ${result.error?.localizedDescription}");
-    //         break;
+    if (await TheAppleSignIn.isAvailable()) {
+      final userId = await const FlutterSecureStorage().read(key: "userId");
+      Log.registra('userId: $userId');
+      if (userId == null) {
+        // Todavía no ha accedido
+        Log.registra("No stored user ID");
+        final AuthorizationResult result =
+            await TheAppleSignIn.performRequests([
+          const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+        ]);
+        Log.registra('result.status: ${result.status}');
+        Log.registra('result credential: ${result.credential}');
+        switch (result.status) {
+          case AuthorizationStatus.authorized:
+            // Store user ID
+            await const FlutterSecureStorage()
+                .write(key: "userId", value: result.credential?.user);
+            await const FlutterSecureStorage()
+                .write(key: "email", value: result.credential?.email);
+            await _accedeApple(result.credential?.user, emit);
+            break;
+          case AuthorizationStatus.error:
+            Log.registra(
+                "Sign in failed: ${result.error?.localizedDescription}");
+            break;
 
-    //       case AuthorizationStatus.cancelled:
-    //         Log.registra('User cancelled');
-    //         break;
-    //     }
-    //   } else {
-    //     // Ya ha accedido
-    //     await _accedeApple(userId, emit);
-    //   }
-    // }
+          case AuthorizationStatus.cancelled:
+            Log.registra('User cancelled');
+            break;
+        }
+      } else {
+        // Ya ha accedido
+        await _accedeApple(userId, emit);
+      }
+    }
   }
 
   FutureOr<void> _accedeApple(String? userId, Emitter<LoginState> emit) async {
     if (userId == null) return;
 
-    // final credentialState = await TheAppleSignIn.getCredentialState(userId);
-    // Log.registra('status: ${credentialState.status}');
-    // switch (credentialState.status) {
-    //   case CredentialStatus.authorized:
-    //     Log.registra("getCredentialState returned authorized");
-    //     final email = await const FlutterSecureStorage().read(key: "email");
-    //     Log.registra('Email***: $email');
-    //     emit(state.copyWith(estado: EstadoLogin.autenticandoApple));
-    //     try {
-    //       await hncRepository.iniciarApple(email!);
-    //       session.add(SessionAppleSignInEvent(email: email));
-    //       emit(state.copyWith(estado: EstadoLogin.inicial));
-    //     } catch (e) {
-    //       Log.registra('error _login apple');
-    //       emit(state.copyWith(estado: EstadoLogin.appleError));
-    //     }
-    //     break;
-    //   case CredentialStatus.error:
-    //     Log.registra(
-    //         "getCredentialState returned an error: ${credentialState.error?.localizedDescription}");
-    //     emit(state.copyWith(estado: EstadoLogin.appleError));
-    //     break;
+    final credentialState = await TheAppleSignIn.getCredentialState(userId);
+    Log.registra('status: ${credentialState.status}');
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        Log.registra("getCredentialState returned authorized");
+        final email = await const FlutterSecureStorage().read(key: "email");
+        Log.registra('Email***: $email');
+        emit(state.copyWith(estado: EstadoLogin.autenticandoApple));
+        try {
+          await hncRepository.iniciarApple(email!);
+          session.add(SessionAppleSignInEvent(email: email));
+          emit(state.copyWith(estado: EstadoLogin.inicial));
+        } catch (e) {
+          Log.registra('error _login apple');
+          emit(state.copyWith(estado: EstadoLogin.appleError));
+        }
+        break;
+      case CredentialStatus.error:
+        Log.registra(
+            "getCredentialState returned an error: ${credentialState.error?.localizedDescription}");
+        emit(state.copyWith(estado: EstadoLogin.appleError));
+        break;
 
-    //   case CredentialStatus.revoked:
-    //     Log.registra("getCredentialState returned revoked");
-    //     await const FlutterSecureStorage().delete(key: "userId");
-    //     emit(state.copyWith(estado: EstadoLogin.appleError));
-    //     break;
-    //   case CredentialStatus.notFound:
-    //     Log.registra("getCredentialState returned not found");
-    //     emit(state.copyWith(estado: EstadoLogin.appleError));
-    //     break;
-    //   case CredentialStatus.transferred:
-    //     Log.registra("getCredentialState returned not transferred");
-    //     emit(state.copyWith(estado: EstadoLogin.appleError));
-    //     break;
-    // }
+      case CredentialStatus.revoked:
+        Log.registra("getCredentialState returned revoked");
+        await const FlutterSecureStorage().delete(key: "userId");
+        emit(state.copyWith(estado: EstadoLogin.appleError));
+        break;
+      case CredentialStatus.notFound:
+        Log.registra("getCredentialState returned not found");
+        emit(state.copyWith(estado: EstadoLogin.appleError));
+        break;
+      case CredentialStatus.transferred:
+        Log.registra("getCredentialState returned not transferred");
+        emit(state.copyWith(estado: EstadoLogin.appleError));
+        break;
+    }
   }
 }

@@ -44,7 +44,7 @@ dependencies:
   # sign_in_with_apple: ^4.0.0
   flutter_secure_storage: ^5.0.2
   dart_jsonwebtoken: ^2.4.1
-  #the_apple_sign_in: ^1.1.1
+  the_apple_sign_in: ^1.1.1
   universal_platform: ^1.0.0+1
   # html_shim: ^0.0.2
 
