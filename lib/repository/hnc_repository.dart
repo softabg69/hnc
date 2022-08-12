@@ -47,7 +47,17 @@ class HncRepository {
 
   Future<String> politica() async {
     final resp = await service.politica();
-    return resp["politica"];
+    return resp["texto"];
+  }
+
+  Future<String> condiciones() async {
+    final resp = await service.condiciones();
+    return resp["texto"];
+  }
+
+  Future<String> cookies() async {
+    final resp = await service.cookies();
+    return resp["texto"];
   }
 
   Future<void> recuperarPwd(String email) async {
@@ -161,6 +171,10 @@ class HncRepository {
     final body = {};
     body['idContenido'] = idContenido;
     await service.denunciarContenido(json.encode(body));
+  }
+
+  Future bajaUsuario() async {
+    await service.bajaUsuario();
   }
 
   Future validaCredencialApple(String autorizationCode) async {

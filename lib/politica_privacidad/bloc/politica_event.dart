@@ -7,3 +7,7 @@ abstract class PoliticaEvent extends Equatable {
 }
 
 class PoliticaRequestDataEvent extends PoliticaEvent {}
+
+class CondicionesRequestDataEvent extends PoliticaEvent {}
+
+class CookiesRequestDataEvent extends PoliticaEvent {}

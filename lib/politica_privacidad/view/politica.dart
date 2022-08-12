@@ -8,9 +8,9 @@ import '../bloc/politica_bloc.dart';
 import '../../repository/hnc_repository.dart';
 
 class Politica extends StatefulWidget {
-  const Politica({Key? key}) : super(key: key);
+  const Politica({Key? key, required this.id}) : super(key: key);
   static const routeName = "/politicaprivacidad";
-
+  final int id;
   @override
   _PoliticaState createState() => _PoliticaState();
 }
@@ -26,10 +26,18 @@ class _PoliticaState extends State<Politica> {
     return BlocProvider(
       create: (context) => PoliticaBloc(
         hncRepository: context.read<HncRepository>(),
-      )..add(PoliticaRequestDataEvent()),
+      )..add(widget.id == 1
+          ? PoliticaRequestDataEvent()
+          : widget.id == 2
+              ? CondicionesRequestDataEvent()
+              : CookiesRequestDataEvent()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Política de privacidad'),
+          title: widget.id == 1
+              ? const Text('Política de privacidad')
+              : widget.id == 2
+                  ? const Text('Condiciones de uso')
+                  : const Text('Política de cookies'),
         ),
         body: BlocBuilder<PoliticaBloc, PoliticaState>(
           builder: (context, state) {

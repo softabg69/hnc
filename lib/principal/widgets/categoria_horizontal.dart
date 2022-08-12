@@ -29,8 +29,21 @@ class CategoriaHorizontal extends StatelessWidget {
           //print("switch");
           //categoria.cambiaSeleccionada(context, categoria.id);
         },
-        secondary: Image.network(
-            "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}"),
+        secondary: Container(
+          width: 50.0,
+          height: 50.0,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.contain,
+              image: Image.network(
+                      "${Environment().config!.baseUrlServicios}/data/avatarCategoria?id=${categoria.avatar}")
+                  .image,
+            ),
+          ),
+
+          //Image.memory(categoria.bytes()),
+        ),
       ),
     );
   }

@@ -112,7 +112,15 @@ class HncService {
       };
 
   Future<dynamic> politica() async {
-    return await _get('/data/politica', null);
+    return await _get('/data/textolegal?id=1', null);
+  }
+
+  Future<dynamic> condiciones() async {
+    return await _get('/data/textolegal?id=2', null);
+  }
+
+  Future<dynamic> cookies() async {
+    return await _get('/data/textolegal?id=3', null);
   }
 
   Future<dynamic> autenticar(String token) async {
@@ -206,6 +214,11 @@ class HncService {
   Future denunciarContenido(String body) async {
     Log.registra('denuncia contenido');
     await _post('/data/DenunciarContenido', body, headersToken);
+  }
+
+  Future bajaUsuario() async {
+    Log.registra('baja usuario');
+    await _post('/data/baja', '', headersToken);
   }
 
   Future validarApple(String code) async {

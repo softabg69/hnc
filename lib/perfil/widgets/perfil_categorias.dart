@@ -4,7 +4,7 @@ import 'package:helpncare/components/configuracion.dart';
 import 'package:helpncare/repository/models/categoria.dart';
 import 'package:helpncare/widgets/una_columna.dart';
 
-import '../../components/log.dart';
+//import '../../components/log.dart';
 import '../bloc/perfil_bloc.dart';
 
 class PerfilCategorias extends StatelessWidget {

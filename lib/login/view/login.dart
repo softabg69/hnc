@@ -12,7 +12,7 @@ import 'package:universal_platform/universal_platform.dart';
 import '../../components/log.dart';
 import '../../enumerados.dart';
 import '../../registro/view/registro.dart';
-import '../../repository/hnc_repository.dart';
+//import '../../repository/hnc_repository.dart';
 import '../bloc/login_bloc.dart';
 import 'package:helpncare/bloc/platform/platform_bloc.dart';
 import 'package:helpncare/bloc/session/session_bloc.dart';
@@ -364,7 +364,9 @@ class _LoginState extends State<Login> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => const Politica(),
+                builder: (BuildContext context) => const Politica(
+                  id: 1,
+                ),
               ),
             );
           },

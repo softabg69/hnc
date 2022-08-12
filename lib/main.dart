@@ -1,6 +1,7 @@
 //import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helpncare/baja/bloc/baja_bloc.dart';
 import 'package:helpncare/bloc/app_bloc_observer.dart';
 import 'package:helpncare/bloc/memoria_contenido.dart/bloc/memoria_contenido_bloc.dart';
 import 'package:helpncare/bloc/platform/platform_bloc.dart';
@@ -91,6 +92,9 @@ class AppState extends StatelessWidget {
               //..add(CargaCredenciales(),
             ),
           ),
+          BlocProvider(
+              create: (context) =>
+                  BajaBloc(hncRepository: context.read<HncRepository>())),
         ],
         child: const MyApp(),
       ),

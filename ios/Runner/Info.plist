@@ -38,11 +38,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Puedes utilizar la cámara para publicar la imagen</string>
+	<string>La aplicación permite incorporar una imagen asociada a un nuevo contenido. Puedes utilizar la cámara para capturar la imagen a publicar.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Puede utilizar la grabación de video/audio para publicar un contenido</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Puedes utilizar la galería para publicar la imagen</string>
+	<string>La aplicación permite incorporar una imagen asociada a un nuevo contenido. Puedes utilizar la galería de imágenes para seleccionar la imagen a publicar.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

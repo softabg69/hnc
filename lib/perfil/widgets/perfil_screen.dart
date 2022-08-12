@@ -1,11 +1,16 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:helpncare/perfil/widgets/perfil_avatar.dart';
 import 'package:helpncare/perfil/widgets/perfil_categorias.dart';
 import 'package:helpncare/perfil/widgets/perfil_usuario.dart';
+//import 'package:http/http.dart';
+import 'package:helpncare/widgets/una_columna.dart';
+import '../../baja/view/baja.dart';
 import '../../components/dialog.dart';
 import '../../components/log.dart';
 import '../../enumerados.dart';
+import '../../politica_privacidad/view/politica.dart';
 import '../bloc/perfil_bloc.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -94,11 +99,120 @@ class _PerfilScreenState extends State<PerfilScreen> {
                   ),
           ),
           SliverToBoxAdapter(
+            child: visibleMayor18
+                ? UnaColumna(
+                    child: SizedBox(
+                      width: 400,
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Al registrarte, aceptas nuestras ',
+                            children: [
+                              TextSpan(
+                                  text: 'Condiciones',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Politica(
+                                            id: 2,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              const TextSpan(
+                                  text:
+                                      '. Obtén más información sobre cómo recopilamos, usamos y compartimos tu información en la '),
+                              TextSpan(
+                                  text: 'Política de privacidad',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Politica(
+                                            id: 1,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              const TextSpan(
+                                  text:
+                                      ', así como el uso que hacemos de las cookies y tecnologías similares en nuestra '),
+                              TextSpan(
+                                  text: 'Política de cookies',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Politica(
+                                            id: 3,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              const TextSpan(text: '.'),
+                            ]),
+                      ),
+                    ),
+                  )
+                : const SizedBox(height: 0),
+          ),
+          SliverToBoxAdapter(
             child: SizedBox(
               height: visibleMayor18 ? 15 : 0,
             ),
           ),
           const PerfilCategorias(),
+          !visibleMayor18
+              ? SliverToBoxAdapter(
+                  child: UnaColumna(
+                    child: Center(
+                      child: SizedBox(
+                        width: 400,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Dialogs.continuarCancelar(
+                                        context,
+                                        'Baja',
+                                        'Darse de baja en helpncare',
+                                        '¿Seguro que deseas darte de baja en helpncare? Todos tus contenidos serán eliminados.',
+                                        () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const Baja()),
+                                      );
+                                    });
+                                  },
+                                  child: const Text('Darse de baja')),
+                            ]),
+                      ),
+                    ),
+                  ),
+                )
+              : const SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 10,
+                  ),
+                ),
         ],
       ),
     );
